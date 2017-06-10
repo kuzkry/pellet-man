@@ -1,0 +1,155 @@
+#include "game.h"
+
+#include <QTextStream>
+#include <sstream>
+#include "blinky.h"
+#include "pinky.h"
+#include "inky.h"
+#include "clyde.h"
+
+Game::Game()
+{
+    createAndInitScene();
+    createScore();
+    createLivesCounter();
+    deployNodes();
+    deployRegularPellets();
+    deploySuperPellets();
+    createPlayer();
+    createGhosts();
+}
+
+void Game::createAndInitScene()
+{
+    // create the scene
+    scene = std::unique_ptr<QGraphicsScene>(new QGraphicsScene());
+    scene->setSceneRect(0,0,450,480); // make the scene 450x480 instead of infinity by infinity (default)
+    setBackgroundBrush(QBrush(QImage(":/sprites/sprites/map.jpg")));
+    /* make the newly created scene the scene to visualize
+     * (since Game is a QGraphicsView Widget, it can be used to visualize scenes) */
+    setScene(scene.get());
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setFixedSize(450,480);
+}
+
+void Game::createGhosts()
+{
+    // creating ghosts
+    enemies.emplace_back(new Blinky(*player, nodes));
+    scene->addItem(enemies[0].get());
+    enemies.emplace_back(new Pinky(*player, nodes));
+    scene->addItem(enemies[1].get());
+    enemies.emplace_back(new Inky(*player, nodes, dynamic_cast<Blinky&>(*enemies[0])));
+    scene->addItem(enemies[2].get());
+    enemies.emplace_back(new Clyde(*player, nodes));
+    scene->addItem(enemies[3].get());
+}
+
+inline void Game::createLivesCounter()
+{
+    livesCounter = std::unique_ptr<LivesCounter>(new LivesCounter());
+    livesCounter->setPos(livesCounter->x() + scene->width() - 62, livesCounter->y());
+    scene->addItem(livesCounter.get());
+}
+
+void Game::createPlayer()
+{
+    // create the player
+    player = std::unique_ptr<Player>(new Player(nodes, score, livesCounter, pellets, superPellets, *this, enemies));
+    // unfortunately player must get the reference to this game in order to call close function
+
+    // make the player focusable and set it to be the current focus
+    player->setFlag(QGraphicsItem::ItemIsFocusable);
+    player->setFocus();
+    // add the player to the scene
+    scene->addItem(player.get());
+}
+
+inline void Game::createScore()
+{
+    score = std::unique_ptr<Score>(new Score());
+    scene->addItem(score.get());
+}
+
+void Game::deployNodes()
+{
+    //node values (position x, position y, upward, leftward, downward, rightward)
+    QFile file(":/coordinates/coordinates/nodesCoordinates.txt");
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        class fileOpenFailure{}; //does not really matter but the game must load without this file
+        throw fileOpenFailure();
+    }
+
+    QTextStream in(&file);
+    while (!in.atEnd())
+    {
+        QString line = in.readLine();
+        if(line.startsWith("//") || line.isEmpty()) continue;
+        /* so skip a line if it is either a commentary or an empty one */
+        std::istringstream convertingStream(line.toStdString());
+        int x, y;
+        bool movements[4];
+        convertingStream >> x >> y;
+        for(short unsigned int i = 0; i < 4; ++i) convertingStream >> movements[i];
+
+        //then fill the vector and add to the scene
+        nodes.push_back(new Node(x, y, movements[0], movements[1], movements[2], movements[3]));
+        scene->addItem(nodes.back());
+    }
+    file.close();
+}
+
+void Game::deployRegularPellets()
+{
+    QFile file(":/coordinates/coordinates/regularPelletsCoordinates.txt");
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        class fileOpenFailure{}; //does not really matter but the game must not load without this file
+        throw fileOpenFailure();
+    }
+
+    QTextStream in(&file);
+    while (!in.atEnd())
+    {
+        QString line = in.readLine();
+        if(line.startsWith("//") || line.isEmpty()) continue;
+        /* so skip a line if it is either a commentary or an empty one */
+        std::istringstream convertingStream(line.toStdString());
+        int x, y;
+        convertingStream >> x >> y;
+
+        //then fill the vector and add to the scene
+        pellets.push_back(new Pellet(x, y));
+        scene->addItem(pellets.back());
+        show();
+    }
+    file.close();
+}
+
+void Game::deploySuperPellets()
+{
+    QFile file(":/coordinates/coordinates/superPelletsCoordinates.txt");
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        class fileOpenFailure{}; //does not really matter but the game must not load without this file
+        throw fileOpenFailure();
+    }
+
+    QTextStream in(&file);
+    while (!in.atEnd())
+    {
+        QString line = in.readLine();
+        if(line.startsWith("//") || line.isEmpty()) continue;
+        /* so skip a line if it is either a commentary or an empty one */
+        std::istringstream convertingStream(line.toStdString());
+        int x, y;
+        convertingStream >> x >> y;
+
+        //then fill the vector and add to the scene
+        superPellets.push_back(new SuperPellet(x, y));
+        scene->addItem(superPellets.back());
+    }
+    file.close();
+}

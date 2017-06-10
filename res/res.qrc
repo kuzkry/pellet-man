@@ -1,0 +1,56 @@
+<RCC>
+    <qresource prefix="/sprites">
+        <file>sprites/cghost1.png</file>
+        <file>sprites/cghost2.png</file>
+        <file>sprites/cghostD1.png</file>
+        <file>sprites/cghostD2.png</file>
+        <file>sprites/cghostL1.png</file>
+        <file>sprites/cghostL2.png</file>
+        <file>sprites/cghostU1.png</file>
+        <file>sprites/cghostU2.png</file>
+        <file>sprites/leavethisplace1.png</file>
+        <file>sprites/leavethisplace2.png</file>
+        <file>sprites/oghost1.png</file>
+        <file>sprites/oghost2.png</file>
+        <file>sprites/oghostD1.png</file>
+        <file>sprites/oghostD2.png</file>
+        <file>sprites/oghostL1.png</file>
+        <file>sprites/oghostL2.png</file>
+        <file>sprites/oghostU1.png</file>
+        <file>sprites/oghostU2.png</file>
+        <file>sprites/pacmiddown.png</file>
+        <file>sprites/pacmidleft.png</file>
+        <file>sprites/pacmidright.png</file>
+        <file>sprites/pacmidup.png</file>
+        <file>sprites/pacopendown.png</file>
+        <file>sprites/pacopenleft.png</file>
+        <file>sprites/pacopenright.png</file>
+        <file>sprites/pacopenup.png</file>
+        <file>sprites/pellet.png</file>
+        <file>sprites/pghost1.png</file>
+        <file>sprites/pghost2.png</file>
+        <file>sprites/pghostD1.png</file>
+        <file>sprites/pghostD2.png</file>
+        <file>sprites/pghostL1.png</file>
+        <file>sprites/pghostL2.png</file>
+        <file>sprites/pghostU1.png</file>
+        <file>sprites/pghostU2.png</file>
+        <file>sprites/rghost1.png</file>
+        <file>sprites/rghost2.png</file>
+        <file>sprites/rghostD1.png</file>
+        <file>sprites/rghostD2.png</file>
+        <file>sprites/rghostL1.png</file>
+        <file>sprites/rghostL2.png</file>
+        <file>sprites/rghostU1.png</file>
+        <file>sprites/rghostU2.png</file>
+        <file>sprites/superpellet.png</file>
+        <file>sprites/zombieghost1.png</file>
+        <file>sprites/zombieghost2.png</file>
+        <file>sprites/map.jpg</file>
+    </qresource>
+    <qresource prefix="/coordinates">
+        <file>coordinates/nodesCoordinates.txt</file>
+        <file>coordinates/regularPelletsCoordinates.txt</file>
+        <file>coordinates/superPelletsCoordinates.txt</file>
+    </qresource>
+</RCC>

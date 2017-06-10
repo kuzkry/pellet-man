@@ -1,0 +1,8 @@
+// This is a commentary line. Everything after // is ignored.
+// Pattern:
+//     first two numbers are x and y coordinates
+
+23 53
+408 50
+23 351
+408 348
