@@ -11,3 +11,9 @@ It has to be compiled on the user's machine.
 
 - Qt framework (libraries used: Qt5Widgets Qt5Gui, Qt5Core) [tested on 5.12 version]
 - C++11 compiler
+
+### License
+
+This project consists of two licenses which can be found under:
+1. */res/sprites/LICENSE.md* (concerns content of /res/sprites/)
+2. */LICENSE.md* (anything else)
