@@ -3,11 +3,12 @@
 
 #include <QGraphicsPixmapItem>
 #include <QPointF>
+#include <QPixmap>
 
 class Pellet : public QGraphicsPixmapItem
 {
-public:
-    Pellet(QPointF pos);
+protected:
+    Pellet(QPointF pos, QPixmap pixmap);
 };
 
 #endif // PELLET_H

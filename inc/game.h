@@ -8,7 +8,7 @@
 #include "node.h"
 #include "score.h"
 #include "livescounter.h"
-#include "pellet.h"
+#include "regularpellet.h"
 #include "superpellet.h"
 #include "enemy.h"
 
@@ -31,7 +31,7 @@ private:
     QGraphicsScene scene;
     std::unique_ptr<Player> player;
     std::vector<Node*> nodes;
-    std::vector<Pellet*> pellets;
+    std::vector<RegularPellet*> regularPellets;
     std::vector<SuperPellet*> superPellets;
     Score score;
     LivesCounter livesCounter;

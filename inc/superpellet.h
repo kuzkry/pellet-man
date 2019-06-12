@@ -1,10 +1,9 @@
 #ifndef SUPERPELLET_H
 #define SUPERPELLET_H
 
-#include <QGraphicsPixmapItem>
-#include <QPointF>
+#include "pellet.h"
 
-class SuperPellet : public QGraphicsPixmapItem
+class SuperPellet : public Pellet
 {
 public:
     SuperPellet(QPointF pos);

@@ -35,6 +35,7 @@ SOURCES += \
     src/pellet.cpp \
     src/pinky.cpp \
     src/player.cpp \
+    src/regularpellet.cpp \
     src/score.cpp \
     src/superpellet.cpp
 
@@ -50,6 +51,7 @@ HEADERS += \
     inc/pellet.h \
     inc/pinky.h \
     inc/player.h \
+    inc/regularpellet.h \
     inc/score.h \
     inc/superpellet.h
 

@@ -54,7 +54,7 @@ inline void Game::createLivesCounter()
 void Game::createPlayer()
 {
     // create the player
-    player = std::unique_ptr<Player>(new Player(nodes, score, livesCounter, pellets, superPellets, *this, enemies));
+    player = std::unique_ptr<Player>(new Player(nodes, score, livesCounter, regularPellets, superPellets, *this, enemies));
     // unfortunately player must get the reference to this game in order to call close function
 
     // make the player focusable and set it to be the current focus
@@ -118,8 +118,8 @@ void Game::deployRegularPellets()
         convertingStream >> x >> y;
 
         //then fill the vector and add to the scene
-        pellets.push_back(new Pellet({x, y}));
-        scene.addItem(pellets.back());
+        regularPellets.push_back(new RegularPellet({x, y}));
+        scene.addItem(regularPellets.back());
         show();
     }
     file.close();

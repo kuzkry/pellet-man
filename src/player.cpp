@@ -8,7 +8,7 @@
 #include "pinky.h"
 #include "inky.h"
 #include "clyde.h"
-#include "pellet.h"
+#include "regularpellet.h"
 #include "superpellet.h"
 
 template <class myType>
@@ -17,12 +17,12 @@ typename std::vector<myType>::const_iterator findInVector(const std::vector<myTy
 Player::Player(const std::vector<Node*> &nodes,
                Score &score,
                LivesCounter &livesCounter,
-               std::vector<Pellet*> &pellets,
+               std::vector<RegularPellet*> &regularPellets,
                std::vector<SuperPellet*> &superPellets,
                const Game &game,
                const std::vector<Enemy*> &enemies)
     :
-      Character(nodes), score(score), livesCounter(livesCounter), pellets(pellets), superPellets(superPellets),
+      Character(nodes), score(score), livesCounter(livesCounter), regularPellets(regularPellets), superPellets(superPellets),
       game(game), enemies(enemies), initialDelay(1000), movementTime(9), animationTime(100)
 {
     QObject::connect(&initialDelayTimer, SIGNAL(timeout()), this, SLOT(allowToMove()));
@@ -39,12 +39,12 @@ void Player::checkCollisionWithPelletsAndGhosts()
     // if one of the colliding items is Pac-Man, destroy that dot
     for(int i = 0; i < allItems.size(); ++i)
     {
-        if(typeid(*(allItems[i])) == typeid(Pellet))
+        if(typeid(*(allItems[i])) == typeid(RegularPellet))
         {
             score.little_increase(); // increase the score by 10
 
             // remove from a vector
-            pellets.erase(findInVector(pellets,reinterpret_cast<void*>(allItems[i])));
+            regularPellets.erase(findInVector(regularPellets,reinterpret_cast<void*>(allItems[i])));
 
             // remove them from the scene (still on the heap)
             scene()->removeItem(allItems[i]);
@@ -98,7 +98,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
             }
         }
     }
-    if(!pellets.size() && !superPellets.size())
+    if(!regularPellets.size() && !superPellets.size())
     {
         prepareToEndGame(victory);
     }

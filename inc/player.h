@@ -4,7 +4,7 @@
 #include <QKeyEvent>
 #include "score.h"
 #include "livescounter.h"
-#include "pellet.h"
+#include "regularpellet.h"
 #include "superpellet.h"
 #include "character.h"
 #include "enemy.h"
@@ -18,7 +18,7 @@ public:
     Player(const std::vector<Node*> &nodes,
            Score &score,
            LivesCounter &livesCounter,
-           std::vector<Pellet*> &pellets,
+           std::vector<RegularPellet*> &regularPellets,
            std::vector<SuperPellet*> &superPellets,
            const Game &game,
            const std::vector<Enemy*> &enemies);
@@ -48,7 +48,7 @@ private:
     MovementDirection pendingDirection;
     Score &score;
     LivesCounter &livesCounter;
-    std::vector<Pellet*> &pellets;
+    std::vector<RegularPellet*> &regularPellets;
     std::vector<SuperPellet*> &superPellets;
     QTimer animationTimer;
     const Game &game;
