@@ -28,14 +28,14 @@ private:
     void deployNodes();
     void deployRegularPellets();
     void deploySuperPellets();
-    std::unique_ptr<QGraphicsScene> scene;
+    QGraphicsScene scene;
     std::unique_ptr<Player> player;
     std::vector<Node*> nodes;
     std::vector<Pellet*> pellets;
     std::vector<SuperPellet*> superPellets;
-    std::unique_ptr<Score> score;
-    std::unique_ptr<LivesCounter> livesCounter;
-    std::vector<std::unique_ptr<Enemy>> enemies;
+    Score score;
+    LivesCounter livesCounter;
+    std::vector<Enemy*> enemies;
 };
 
 #endif // GAME_H

@@ -22,8 +22,8 @@ void Enemy::checkPositionWithRespectToNodes()
 void Enemy::enableRunawayState()
 {
     frightened = true;
-    frightenedModeTimer->start(runAwayTime);
-    blinkingModeTimer->start(runAwayTime - blinkingInterval);
+    frightenedModeTimer.start(runAwayTime);
+    blinkingModeTimer.start(runAwayTime - blinkingInterval);
 }
 
 void Enemy::init()
@@ -31,12 +31,12 @@ void Enemy::init()
     disable();
     setInitialPixmap();
     setPos(210, 210);
-    QObject::disconnect(movementTimer.get(), SIGNAL(timeout()), this, SLOT(move()));
-    QObject::connect(initialDelayTimer.get(), SIGNAL(timeout()), this, SLOT(releaseFromGhostHouse()));
+    QObject::disconnect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
+    QObject::connect(&initialDelayTimer, SIGNAL(timeout()), this, SLOT(releaseFromGhostHouse()));
     currentDirection = up;
     moving = frightened = blinking = false;
     startInitialDelayTimer();
-    movementTimer->start(movementTime);
+    movementTimer.start(movementTime);
 }
 
 Character::MovementDirection Enemy::chooseMostSuitableTurnOption(

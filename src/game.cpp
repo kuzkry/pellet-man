@@ -22,12 +22,11 @@ Game::Game()
 void Game::createAndInitScene()
 {
     // create the scene
-    scene = std::unique_ptr<QGraphicsScene>(new QGraphicsScene());
-    scene->setSceneRect(0,0,450,480); // make the scene 450x480 instead of infinity by infinity (default)
+    scene.setSceneRect(0,0,450,480); // make the scene 450x480 instead of infinity by infinity (default)
     setBackgroundBrush(QBrush(QImage(":/sprites/sprites/map.jpg")));
     /* make the newly created scene the scene to visualize
      * (since Game is a QGraphicsView Widget, it can be used to visualize scenes) */
-    setScene(scene.get());
+    setScene(&scene);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setFixedSize(450,480);
@@ -37,20 +36,19 @@ void Game::createGhosts()
 {
     // creating ghosts
     enemies.emplace_back(new Blinky(*player, nodes));
-    scene->addItem(enemies[0].get());
+    scene.addItem(enemies[0]);
     enemies.emplace_back(new Pinky(*player, nodes));
-    scene->addItem(enemies[1].get());
+    scene.addItem(enemies[1]);
     enemies.emplace_back(new Inky(*player, nodes, dynamic_cast<Blinky&>(*enemies[0])));
-    scene->addItem(enemies[2].get());
+    scene.addItem(enemies[2]);
     enemies.emplace_back(new Clyde(*player, nodes));
-    scene->addItem(enemies[3].get());
+    scene.addItem(enemies[3]);
 }
 
 inline void Game::createLivesCounter()
 {
-    livesCounter = std::unique_ptr<LivesCounter>(new LivesCounter());
-    livesCounter->setPos(livesCounter->x() + scene->width() - 62, livesCounter->y());
-    scene->addItem(livesCounter.get());
+    livesCounter.setPos(livesCounter.x() + scene.width() - 62, livesCounter.y());
+    scene.addItem(&livesCounter);
 }
 
 void Game::createPlayer()
@@ -63,13 +61,12 @@ void Game::createPlayer()
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
     // add the player to the scene
-    scene->addItem(player.get());
+    scene.addItem(player.get());
 }
 
 inline void Game::createScore()
 {
-    score = std::unique_ptr<Score>(new Score());
-    scene->addItem(score.get());
+    scene.addItem(&score);
 }
 
 void Game::deployNodes()
@@ -96,7 +93,7 @@ void Game::deployNodes()
 
         //then fill the vector and add to the scene
         nodes.push_back(new Node(x, y, movements[0], movements[1], movements[2], movements[3]));
-        scene->addItem(nodes.back());
+        scene.addItem(nodes.back());
     }
     file.close();
 }
@@ -122,7 +119,7 @@ void Game::deployRegularPellets()
 
         //then fill the vector and add to the scene
         pellets.push_back(new Pellet(x, y));
-        scene->addItem(pellets.back());
+        scene.addItem(pellets.back());
         show();
     }
     file.close();
@@ -149,7 +146,7 @@ void Game::deploySuperPellets()
 
         //then fill the vector and add to the scene
         superPellets.push_back(new SuperPellet(x, y));
-        scene->addItem(superPellets.back());
+        scene.addItem(superPellets.back());
     }
     file.close();
 }

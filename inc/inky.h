@@ -13,7 +13,7 @@ private:
     MovementDirection makeTurnDecision(std::map<MovementDirection, bool> &possibleMovements, bool frightened);
     void startInitialDelayTimer()
     {
-        initialDelayTimer->start(initialDelay);
+        initialDelayTimer.start(initialDelay);
     }
     void setInitialPixmap()
     {

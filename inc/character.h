@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QGraphicsPixmapItem>
 #include <QTimer>
-#include <memory>
 #include <vector>
 #include "node.h"
 
@@ -30,8 +29,8 @@ protected:
 
     const std::vector<Node*> &nodes;
     MovementDirection currentDirection;
-    std::unique_ptr<QTimer> initialDelayTimer;
-    std::unique_ptr<QTimer> movementTimer;
+    QTimer initialDelayTimer;
+    QTimer movementTimer;
     bool moving;
     // positions are already inherited (use x() or y())
 protected slots:

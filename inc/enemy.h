@@ -3,7 +3,6 @@
 
 #include <map>
 #include "character.h"
-#include "player.h"
 
 class Player;
 
@@ -15,10 +14,10 @@ public:
     void checkPositionWithRespectToNodes();
     void disable()
     {
-        initialDelayTimer->stop();
-        movementTimer->stop();
-        frightenedModeTimer->stop();
-        blinkingModeTimer->stop();
+        initialDelayTimer.stop();
+        movementTimer.stop();
+        frightenedModeTimer.stop();
+        blinkingModeTimer.stop();
     }
     void enableRunawayState();
     void init();
@@ -55,8 +54,8 @@ protected:
 
     const Player &player;
     bool frightened, blinking;
-    std::unique_ptr<QTimer> frightenedModeTimer;
-    std::unique_ptr<QTimer> blinkingModeTimer;
+    QTimer frightenedModeTimer;
+    QTimer blinkingModeTimer;
     unsigned short int movementTime, singleBlinkTime, blinkingInterval, runAwayTime;
 private:
     virtual void startInitialDelayTimer() = 0;

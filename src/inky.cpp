@@ -1,17 +1,14 @@
 #include "inky.h"
+#include "player.h"
 #include <cmath>
 #include <cstdlib>
 
 Inky::Inky(const Player &player, const std::vector<Node*> &nodes, const Blinky &blinky)
     : Enemy(player, nodes), blinky(blinky), initialDelay(2600)
 {
-    initialDelayTimer = std::unique_ptr<QTimer>(new QTimer());
-    movementTimer = std::unique_ptr<QTimer>(new QTimer());
-    frightenedModeTimer = std::unique_ptr<QTimer>(new QTimer());
-    blinkingModeTimer = std::unique_ptr<QTimer>(new QTimer());
-    QObject::connect(movementTimer.get(), SIGNAL(timeout()), this, SLOT(change()));
-    QObject::connect(frightenedModeTimer.get(), SIGNAL(timeout()), this, SLOT(disableRunawayState()));
-    QObject::connect(blinkingModeTimer.get(), SIGNAL(timeout()), this, SLOT(blink()));
+    QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(change()));
+    QObject::connect(&frightenedModeTimer, SIGNAL(timeout()), this, SLOT(disableRunawayState()));
+    QObject::connect(&blinkingModeTimer, SIGNAL(timeout()), this, SLOT(blink()));
     init();
 }
 
@@ -58,9 +55,9 @@ Inky::MovementDirection Inky::makeTurnDecision(
 
 void Inky::allowToMove()
 {
-    initialDelayTimer->stop();
-    QObject::disconnect(initialDelayTimer.get(), SIGNAL(timeout()), this, 0);
-    QObject::connect(movementTimer.get(), SIGNAL(timeout()), this, SLOT(move()));
+    initialDelayTimer.stop();
+    QObject::disconnect(&initialDelayTimer, SIGNAL(timeout()), this, 0);
+    QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
     moving = true;
     currentDirection = rand() % 2 ? right : left;
 }
@@ -68,7 +65,7 @@ void Inky::allowToMove()
 void Inky::blink()
 {
     blinking = !blinking;
-    blinkingModeTimer->start(singleBlinkTime);
+    blinkingModeTimer.start(singleBlinkTime);
 }
 
 void Inky::change()
@@ -100,7 +97,7 @@ void Inky::change()
     }
     else
     {
-        if (blinking || frightenedModeTimer->remainingTime() > blinkingInterval)
+        if (blinking || frightenedModeTimer.remainingTime() > blinkingInterval)
         {
             if(!phase) setPixmap(QPixmap(":/sprites/sprites/zombieghost1.png").scaled(26, 26));
             else setPixmap(QPixmap(":/sprites/sprites/zombieghost2.png").scaled(26, 26));
@@ -117,8 +114,8 @@ void Inky::change()
 
 void Inky::disableRunawayState()
 {
-    frightenedModeTimer->stop();
-    blinkingModeTimer->stop();
+    frightenedModeTimer.stop();
+    blinkingModeTimer.stop();
     blinking = frightened = false;
 }
 
@@ -150,7 +147,7 @@ void Inky::move()
 
 void Inky::releaseFromGhostHouse()
 {
-    initialDelayTimer->start(movementTime);
+    initialDelayTimer.start(movementTime);
     if(y() == 168 && x() == 210)
     {
         allowToMove();

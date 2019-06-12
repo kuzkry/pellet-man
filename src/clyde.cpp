@@ -1,16 +1,13 @@
 #include "clyde.h"
+#include "player.h"
 #include <cmath>
 #include <cstdlib>
 
 Clyde::Clyde(const Player &player, const std::vector<Node*> &nodes) : Enemy(player, nodes), initialDelay(3100)
 {
-    initialDelayTimer = std::unique_ptr<QTimer>(new QTimer());
-    movementTimer = std::unique_ptr<QTimer>(new QTimer());
-    frightenedModeTimer = std::unique_ptr<QTimer>(new QTimer());
-    blinkingModeTimer = std::unique_ptr<QTimer>(new QTimer());
-    QObject::connect(movementTimer.get(), SIGNAL(timeout()), this, SLOT(change()));
-    QObject::connect(frightenedModeTimer.get(), SIGNAL(timeout()), this, SLOT(disableRunawayState()));
-    QObject::connect(blinkingModeTimer.get(), SIGNAL(timeout()), this, SLOT(blink()));
+    QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(change()));
+    QObject::connect(&frightenedModeTimer, SIGNAL(timeout()), this, SLOT(disableRunawayState()));
+    QObject::connect(&blinkingModeTimer, SIGNAL(timeout()), this, SLOT(blink()));
     init();
 }
 
@@ -46,10 +43,10 @@ Clyde::MovementDirection Clyde::makeTurnDecision(
 
 void Clyde::allowToMove()
 {
-    initialDelayTimer->stop();
-    QObject::disconnect(initialDelayTimer.get(), SIGNAL(timeout()), this, 0);
-    QObject::connect(movementTimer.get(), SIGNAL(timeout()), this, SLOT(move()));
-    movementTimer->start(movementTime);
+    initialDelayTimer.stop();
+    QObject::disconnect(&initialDelayTimer, SIGNAL(timeout()), this, 0);
+    QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
+    movementTimer.start(movementTime);
     moving = true;
     currentDirection = rand() % 2 ? right : left;
 }
@@ -57,7 +54,7 @@ void Clyde::allowToMove()
 void Clyde::blink()
 {
     blinking = !blinking;
-    blinkingModeTimer->start(singleBlinkTime);
+    blinkingModeTimer.start(singleBlinkTime);
 }
 
 void Clyde::change()
@@ -89,7 +86,7 @@ void Clyde::change()
     }
     else
     {
-        if (blinking || frightenedModeTimer->remainingTime() > blinkingInterval)
+        if (blinking || frightenedModeTimer.remainingTime() > blinkingInterval)
         {
             if(!phase) setPixmap(QPixmap(":/sprites/sprites/zombieghost1.png").scaled(26, 26));
             else setPixmap(QPixmap(":/sprites/sprites/zombieghost2.png").scaled(26, 26));
@@ -106,8 +103,8 @@ void Clyde::change()
 
 void Clyde::disableRunawayState()
 {
-    frightenedModeTimer->stop();
-    blinkingModeTimer->stop();
+    frightenedModeTimer.stop();
+    blinkingModeTimer.stop();
     blinking = frightened = false;
 }
 
@@ -139,7 +136,7 @@ void Clyde::move()
 
 void Clyde::releaseFromGhostHouse()
 {
-    initialDelayTimer->start(movementTime);
+    initialDelayTimer.start(movementTime);
     if(y() == 168 && x() == 210)
     {
         allowToMove();

@@ -15,22 +15,19 @@ template <class myType>
 typename std::vector<myType>::const_iterator findInVector(const std::vector<myType> &vector, void *itemToBeFound);
 
 Player::Player(const std::vector<Node*> &nodes,
-               std::unique_ptr<Score> &score,
-               std::unique_ptr<LivesCounter> &livesCounter,
+               Score &score,
+               LivesCounter &livesCounter,
                std::vector<Pellet*> &pellets,
                std::vector<SuperPellet*> &superPellets,
                const Game &game,
-               const std::vector<std::unique_ptr<Enemy>> &enemies)
+               const std::vector<Enemy*> &enemies)
     :
       Character(nodes), score(score), livesCounter(livesCounter), pellets(pellets), superPellets(superPellets),
       game(game), enemies(enemies), initialDelay(1000), movementTime(9), animationTime(100)
 {
-    initialDelayTimer = std::unique_ptr<QTimer>(new QTimer());
-    movementTimer = std::unique_ptr<QTimer>(new QTimer());
-    animationTimer = std::unique_ptr<QTimer>(new QTimer());
-    QObject::connect(initialDelayTimer.get(), SIGNAL(timeout()), this, SLOT(allowToMove()));
-    QObject::connect(movementTimer.get(), SIGNAL(timeout()), this, SLOT(move()));
-    QObject::connect(animationTimer.get(), SIGNAL(timeout()), this, SLOT(chompingAnimation()));
+    QObject::connect(&initialDelayTimer, SIGNAL(timeout()), this, SLOT(allowToMove()));
+    QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
+    QObject::connect(&animationTimer, SIGNAL(timeout()), this, SLOT(chompingAnimation()));
     init();
 }
 
@@ -44,7 +41,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
     {
         if(typeid(*(allItems[i])) == typeid(Pellet))
         {
-            score->little_increase(); // increase the score by 10
+            score.little_increase(); // increase the score by 10
 
             // remove from a vector
             pellets.erase(findInVector(pellets,reinterpret_cast<void*>(allItems[i])));
@@ -57,7 +54,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
         }
         else if(typeid(*(allItems[i])) == typeid(SuperPellet))
         {
-            score->big_increase(); // increase the score by 50
+            score.big_increase(); // increase the score by 50
 
             // remove from a vector
             superPellets.erase(findInVector(superPellets,reinterpret_cast<void*>(allItems[i])));
@@ -71,32 +68,32 @@ void Player::checkCollisionWithPelletsAndGhosts()
             // checking if any of enemies is frightened (if not, that means that player will not get extra points
             if(!isAnyOfEnemiesFrightened())
             {
-                score->resetMultiplier();
+                score.resetMultiplier();
             }
 
             //frighten enemies - requires getting rid of const to call enableRunawayState
-            std::for_each(const_cast<std::vector<std::unique_ptr<Enemy>>&>(enemies).begin(),
-                          const_cast<std::vector<std::unique_ptr<Enemy>>&>(enemies).end(),
-                          [](std::unique_ptr<Enemy> &ptrToEnemy){ptrToEnemy->enableRunawayState();});
+            std::for_each(const_cast<std::vector<Enemy*>&>(enemies).begin(),
+                          const_cast<std::vector<Enemy*>&>(enemies).end(),
+                          [](Enemy *ptrToEnemy){ptrToEnemy->enableRunawayState();});
         }
         else if(typeid(*(allItems[i])) == typeid(Blinky) || typeid(*(allItems[i])) == typeid(Pinky)
                 || typeid(*(allItems[i])) == typeid(Inky) || typeid(*(allItems[i])) == typeid(Clyde))
         {
             if(!dynamic_cast<Enemy*>(allItems[i])->isFrightened())
             {
-                livesCounter->decrease();
-                if(livesCounter->getLives() == 0) prepareToEndGame(lossOfLives);
+                livesCounter.decrease();
+                if(livesCounter.getLives() == 0) prepareToEndGame(lossOfLives);
                 else
                 {
-                    std::for_each(const_cast<std::vector<std::unique_ptr<Enemy>>&>(enemies).begin(),
-                                  const_cast<std::vector<std::unique_ptr<Enemy>>&>(enemies).end(),
-                                  [](std::unique_ptr<Enemy> &ptrToEnemy){ptrToEnemy->init();});
+                    std::for_each(const_cast<std::vector<Enemy*>&>(enemies).begin(),
+                                  const_cast<std::vector<Enemy*>&>(enemies).end(),
+                                  [](Enemy* ptrToEnemy){ptrToEnemy->init();});
                     init();
                 }
             }
             else
             {
-                score->huge_increase();
+                score.huge_increase();
                 dynamic_cast<Enemy*>(allItems[i])->init();
             }
         }
@@ -157,13 +154,13 @@ void Player::init()
     setPos(210, 347);
     currentDirection = pendingDirection = left;
     moving = false;
-    initialDelayTimer->start(initialDelay);
-    animationTimer->start(animationTime);
+    initialDelayTimer.start(initialDelay);
+    animationTimer.start(animationTime);
 }
 
 bool Player::isAnyOfEnemiesFrightened() const
 {
-    for(std::vector<std::unique_ptr<Enemy>>::const_iterator it = enemies.cbegin(); it != enemies.cend(); ++it)
+    for(std::vector<Enemy*>::const_iterator it = enemies.cbegin(); it != enemies.cend(); ++it)
     {
         if((*it)->isFrightened()) return true;
     }
@@ -206,9 +203,9 @@ void Player::prepareToEndGame(Player::QuitReason reason) const
 
     // disable all timers (disablesMovements)
     const_cast<Player*>(this)->disable(); // another way is to make timers mutable
-    std::for_each(const_cast<std::vector<std::unique_ptr<Enemy>>&>(enemies).begin(),
-                  const_cast<std::vector<std::unique_ptr<Enemy>>&>(enemies).end(),
-                  [](std::unique_ptr<Enemy> &ptrToEnemy){ptrToEnemy->disable();});
+    std::for_each(const_cast<std::vector<Enemy*>&>(enemies).begin(),
+                  const_cast<std::vector<Enemy*>&>(enemies).end(),
+                  [](Enemy* ptrToEnemy){ptrToEnemy->disable();});
 
     QTimer::singleShot(3000, this, SLOT(endGame()));
 }
@@ -221,8 +218,8 @@ inline void Player::setMovement(const Player::MovementDirection newDirection, bo
 
 void Player::allowToMove()
 {
-    initialDelayTimer->stop();
-    movementTimer->start(movementTime);
+    initialDelayTimer.stop();
+    movementTimer.start(movementTime);
     moving = true;
 }
 
