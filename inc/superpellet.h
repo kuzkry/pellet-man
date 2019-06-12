@@ -2,11 +2,12 @@
 #define SUPERPELLET_H
 
 #include <QGraphicsPixmapItem>
+#include <QPointF>
 
 class SuperPellet : public QGraphicsPixmapItem
 {
 public:
-    SuperPellet(int x, int y);
+    SuperPellet(QPointF pos);
 };
 
 #endif // SUPERPELLET_H

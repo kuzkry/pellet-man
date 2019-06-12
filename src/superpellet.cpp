@@ -1,7 +1,7 @@
 #include "superpellet.h"
 
-SuperPellet::SuperPellet(int x, int y)
+SuperPellet::SuperPellet(QPointF const pos)
 {
-    setX(x); setY(y);
+    setPos(pos);
     setPixmap(QPixmap(":/sprites/sprites/superpellet.png").scaled(16,16));
 }

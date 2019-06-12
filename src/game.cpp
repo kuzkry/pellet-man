@@ -114,11 +114,11 @@ void Game::deployRegularPellets()
         if(line.startsWith("//") || line.isEmpty()) continue;
         /* so skip a line if it is either a commentary or an empty one */
         std::istringstream convertingStream(line.toStdString());
-        int x, y;
+        qreal x, y;
         convertingStream >> x >> y;
 
         //then fill the vector and add to the scene
-        pellets.push_back(new Pellet(x, y));
+        pellets.push_back(new Pellet({x, y}));
         scene.addItem(pellets.back());
         show();
     }
@@ -141,11 +141,11 @@ void Game::deploySuperPellets()
         if(line.startsWith("//") || line.isEmpty()) continue;
         /* so skip a line if it is either a commentary or an empty one */
         std::istringstream convertingStream(line.toStdString());
-        int x, y;
+        qreal x, y;
         convertingStream >> x >> y;
 
         //then fill the vector and add to the scene
-        superPellets.push_back(new SuperPellet(x, y));
+        superPellets.push_back(new SuperPellet({x, y}));
         scene.addItem(superPellets.back());
     }
     file.close();

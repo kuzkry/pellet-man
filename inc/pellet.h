@@ -2,11 +2,12 @@
 #define PELLET_H
 
 #include <QGraphicsPixmapItem>
+#include <QPointF>
 
 class Pellet : public QGraphicsPixmapItem
 {
 public:
-    Pellet(int x, int y);
+    Pellet(QPointF pos);
 };
 
 #endif // PELLET_H
