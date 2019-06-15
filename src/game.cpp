@@ -73,7 +73,7 @@ void Game::deployNodes()
 {
     //node values (position x, position y, upward, leftward, downward, rightward)
     QFile file(":/coordinates/coordinates/nodesCoordinates.txt");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         class fileOpenFailure{}; //does not really matter but the game must load without this file
         throw fileOpenFailure();
@@ -83,13 +83,15 @@ void Game::deployNodes()
     while (!in.atEnd())
     {
         QString line = in.readLine();
-        if(line.startsWith("//") || line.isEmpty()) continue;
+        if (line.startsWith("//") || line.isEmpty())
+            continue;
         /* so skip a line if it is either a commentary or an empty one */
         std::istringstream convertingStream(line.toStdString());
         int x, y;
         bool movements[4];
         convertingStream >> x >> y;
-        for(short unsigned int i = 0; i < 4; ++i) convertingStream >> movements[i];
+        for (short unsigned int i = 0; i < 4; ++i)
+            convertingStream >> movements[i];
 
         //then fill the vector and add to the scene
         nodes.push_back(new Node(x, y, movements[0], movements[1], movements[2], movements[3]));
@@ -101,7 +103,7 @@ void Game::deployNodes()
 void Game::deployRegularPellets()
 {
     QFile file(":/coordinates/coordinates/regularPelletsCoordinates.txt");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         class fileOpenFailure{}; //does not really matter but the game must not load without this file
         throw fileOpenFailure();
@@ -111,7 +113,8 @@ void Game::deployRegularPellets()
     while (!in.atEnd())
     {
         QString line = in.readLine();
-        if(line.startsWith("//") || line.isEmpty()) continue;
+        if (line.startsWith("//") || line.isEmpty())
+            continue;
         /* so skip a line if it is either a commentary or an empty one */
         std::istringstream convertingStream(line.toStdString());
         qreal x, y;
@@ -128,7 +131,7 @@ void Game::deployRegularPellets()
 void Game::deploySuperPellets()
 {
     QFile file(":/coordinates/coordinates/superPelletsCoordinates.txt");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         class fileOpenFailure{}; //does not really matter but the game must not load without this file
         throw fileOpenFailure();
@@ -138,7 +141,8 @@ void Game::deploySuperPellets()
     while (!in.atEnd())
     {
         QString line = in.readLine();
-        if(line.startsWith("//") || line.isEmpty()) continue;
+        if (line.startsWith("//") || line.isEmpty())
+            continue;
         /* so skip a line if it is either a commentary or an empty one */
         std::istringstream convertingStream(line.toStdString());
         qreal x, y;

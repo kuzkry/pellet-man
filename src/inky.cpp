@@ -19,13 +19,18 @@ Inky::MovementDirection Inky::makeTurnDecision(
 {
     int relativePlayerX = player.x(), relativePlayerY = player.y(), playerEnemyOffsetX, playerEnemyOffsetY;
 
-    if(!frightened)
+    if (!frightened)
     {
         unsigned int futurePlayerPositionOffset = player.pixmap().width() * 2;
-        if(player.getCurrentDirection() == LEFT) relativePlayerX -= futurePlayerPositionOffset;
-        else if(player.getCurrentDirection() == RIGHT) relativePlayerX += futurePlayerPositionOffset;
-        else if(player.getCurrentDirection() == UP) relativePlayerY -= futurePlayerPositionOffset;
-        else if(player.getCurrentDirection() == DOWN) relativePlayerY += futurePlayerPositionOffset;
+        if (player.getCurrentDirection() == LEFT)
+            relativePlayerX -= futurePlayerPositionOffset;
+        else if (player.getCurrentDirection() == RIGHT)
+            relativePlayerX += futurePlayerPositionOffset;
+        else if (player.getCurrentDirection() == UP)
+            relativePlayerY -= futurePlayerPositionOffset;
+        else if (player.getCurrentDirection() == DOWN)
+            relativePlayerY += futurePlayerPositionOffset;
+
         playerEnemyOffsetX = abs(relativePlayerX - blinky.x()) * 2;
         playerEnemyOffsetY = abs(relativePlayerY - blinky.y()) * 2;
     }
@@ -41,16 +46,12 @@ Inky::MovementDirection Inky::makeTurnDecision(
         {pow((relativePlayerX > x() ? playerEnemyOffsetX - 1 : playerEnemyOffsetX + 1), 2) + pow(playerEnemyOffsetY, 2), RIGHT}};
     /* those directions are in the following order: up, left, down, right */
 
-    if(!frightened)
-    {
+    if (!frightened)
         std::qsort(binder, 4, sizeof(DistanceAndDirectionBinder),
                    sortDistanceAndDirectionBindersInAscendingOrder);
-    }
     else
-    {
         std::qsort(binder, 4, sizeof(DistanceAndDirectionBinder),
                    sortDistanceAndDirectionBindersInDescendingOrder);
-    }
 
     return chooseMostSuitableTurnOption(possibleMovements, binder);
 }
@@ -74,40 +75,52 @@ void Inky::change()
 {
     static bool phase = false;
 
-    if(!frightened)
+    if (!frightened)
     {
-        if(currentDirection == LEFT)
+        if (currentDirection == LEFT)
         {
-            if(!phase) setPixmap(QPixmap(":/sprites/sprites/cghostL1.png").scaled(26, 26));
-            else setPixmap(QPixmap(":/sprites/sprites/cghostL2.png").scaled(26, 26));
+            if (!phase)
+                setPixmap(QPixmap(":/sprites/sprites/cghostL1.png").scaled(26, 26));
+            else
+                setPixmap(QPixmap(":/sprites/sprites/cghostL2.png").scaled(26, 26));
         }
-        else if(currentDirection == RIGHT)
+        else if (currentDirection == RIGHT)
         {
-            if(!phase) setPixmap(QPixmap(":/sprites/sprites/cghost1.png").scaled(26, 26));
-            else setPixmap(QPixmap(":/sprites/sprites/cghost2.png").scaled(26, 26));
+            if (!phase)
+                setPixmap(QPixmap(":/sprites/sprites/cghost1.png").scaled(26, 26));
+            else
+                setPixmap(QPixmap(":/sprites/sprites/cghost2.png").scaled(26, 26));
         }
-        else if(currentDirection == UP)
+        else if (currentDirection == UP)
         {
-            if(!phase) setPixmap(QPixmap(":/sprites/sprites/cghostU1.png").scaled(26, 26));
-            else setPixmap(QPixmap(":/sprites/sprites/cghostU2.png").scaled(26, 26));
+            if (!phase)
+                setPixmap(QPixmap(":/sprites/sprites/cghostU1.png").scaled(26, 26));
+            else
+                setPixmap(QPixmap(":/sprites/sprites/cghostU2.png").scaled(26, 26));
         }
-        else if(currentDirection == DOWN)
+        else if (currentDirection == DOWN)
         {
-            if(!phase) setPixmap(QPixmap(":/sprites/sprites/cghostD1.png").scaled(26, 26));
-            else setPixmap(QPixmap(":/sprites/sprites/cghostD2.png").scaled(26, 26));
+            if (!phase)
+                setPixmap(QPixmap(":/sprites/sprites/cghostD1.png").scaled(26, 26));
+            else
+                setPixmap(QPixmap(":/sprites/sprites/cghostD2.png").scaled(26, 26));
         }
     }
     else
     {
         if (blinking || frightenedModeTimer.remainingTime() > blinkingInterval)
         {
-            if(!phase) setPixmap(QPixmap(":/sprites/sprites/zombieghost1.png").scaled(26, 26));
-            else setPixmap(QPixmap(":/sprites/sprites/zombieghost2.png").scaled(26, 26));
+            if (!phase)
+                setPixmap(QPixmap(":/sprites/sprites/zombieghost1.png").scaled(26, 26));
+            else
+                setPixmap(QPixmap(":/sprites/sprites/zombieghost2.png").scaled(26, 26));
         }
         else
         {
-            if(!phase) setPixmap(QPixmap(":/sprites/sprites/leavethisplace1.png").scaled(26, 26));
-            else setPixmap(QPixmap(":/sprites/sprites/leavethisplace2.png").scaled(26, 26));
+            if (!phase)
+                setPixmap(QPixmap(":/sprites/sprites/leavethisplace1.png").scaled(26, 26));
+            else
+                setPixmap(QPixmap(":/sprites/sprites/leavethisplace2.png").scaled(26, 26));
         }
     }
 
@@ -126,7 +139,7 @@ void Inky::move()
     checkPositionWithRespectToNodes();
 
     //moving a ghost
-    switch(currentDirection)
+    switch (currentDirection)
     {
     case LEFT:
         setPos(x() - 1, y());
@@ -143,19 +156,17 @@ void Inky::move()
     }
 
     //teleporting on the edges of a map
-    if(x() + this->pixmap().width() < 0) setPos(450, y());
-    else if(x() > 450) setPos(-this->pixmap().width(), y());
+    if (x() + this->pixmap().width() < 0)
+        setPos(450, y());
+    else if (x() > 450)
+        setPos(-this->pixmap().width(), y());
 }
 
 void Inky::releaseFromGhostHouse()
 {
     initialDelayTimer.start(movementTime);
-    if(y() == 168 && x() == 210)
-    {
+    if (y() == 168 && x() == 210)
         allowToMove();
-    }
     else
-    {
         setPos(x(), y() - 1);
-    }
 }

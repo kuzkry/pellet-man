@@ -44,9 +44,9 @@ void Player::checkCollisionWithPelletsAndGhosts()
     QList<QGraphicsItem*> allItems = collidingItems();
 
     // if one of the colliding items is Pac-Man, destroy that dot
-    for(int i = 0; i < allItems.size(); ++i)
+    for (int i = 0; i < allItems.size(); ++i)
     {
-        if(typeid(*(allItems[i])) == typeid(RegularPellet))
+        if (typeid(*(allItems[i])) == typeid(RegularPellet))
         {
             score.little_increase(); // increase the score by 10
 
@@ -59,7 +59,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
             // delete them from the heap to save memory
             delete allItems[i];
         }
-        else if(typeid(*(allItems[i])) == typeid(SuperPellet))
+        else if (typeid(*(allItems[i])) == typeid(SuperPellet))
         {
             score.big_increase(); // increase the score by 50
 
@@ -73,23 +73,22 @@ void Player::checkCollisionWithPelletsAndGhosts()
             delete allItems[i];
 
             // checking if any of enemies is frightened (if not, that means that player will not get extra points
-            if(!isAnyOfEnemiesFrightened())
-            {
+            if (!isAnyOfEnemiesFrightened())
                 score.resetMultiplier();
-            }
 
             //frighten enemies - requires getting rid of const to call enableRunawayState
             std::for_each(const_cast<std::vector<Enemy*>&>(enemies).begin(),
                           const_cast<std::vector<Enemy*>&>(enemies).end(),
                           [](Enemy* ptrToEnemy){ptrToEnemy->enableRunawayState();});
         }
-        else if(typeid(*(allItems[i])) == typeid(Blinky) || typeid(*(allItems[i])) == typeid(Pinky)
+        else if (typeid(*(allItems[i])) == typeid(Blinky) || typeid(*(allItems[i])) == typeid(Pinky)
                 || typeid(*(allItems[i])) == typeid(Inky) || typeid(*(allItems[i])) == typeid(Clyde))
         {
-            if(!dynamic_cast<Enemy*>(allItems[i])->isFrightened())
+            if (!dynamic_cast<Enemy*>(allItems[i])->isFrightened())
             {
                 livesCounter.decrease();
-                if(livesCounter.getLives() == 0) prepareToEndGame(DEFEAT);
+                if (livesCounter.getLives() == 0)
+                    prepareToEndGame(DEFEAT);
                 else
                 {
                     std::for_each(const_cast<std::vector<Enemy*>&>(enemies).begin(),
@@ -105,32 +104,30 @@ void Player::checkCollisionWithPelletsAndGhosts()
             }
         }
     }
-    if(!regularPellets.size() && !superPellets.size())
-    {
+    if (!regularPellets.size() && !superPellets.size())
         prepareToEndGame(VICTORY);
-    }
 }
 
 void Player::checkPositionWithRespectToNodes()
 {
-    for(std::vector<Node*>::const_iterator it = nodes.cbegin();; it++)
+    for (std::vector<Node*>::const_iterator it = nodes.cbegin();; it++)
     {
-        if(it == nodes.cend()) /* there is the last iteration of a list,
+        if (it == nodes.cend()) /* there is the last iteration of a list,
         nothing happened but at least check along the player's movement line */
         {
-            if(currentDirection == UP || currentDirection == DOWN)
+            if (currentDirection == UP || currentDirection == DOWN)
             {
-                if(pendingDirection == UP || pendingDirection == DOWN)
+                if (pendingDirection == UP || pendingDirection == DOWN)
                     setMovement(pendingDirection);
             }
-            else if(currentDirection == LEFT || currentDirection == RIGHT)
+            else if (currentDirection == LEFT || currentDirection == RIGHT)
             {
-                if(pendingDirection == LEFT || pendingDirection == RIGHT)
+                if (pendingDirection == LEFT || pendingDirection == RIGHT)
                     setMovement(pendingDirection);
             }
             break;
         }
-        if(isInNode(**it)) //player is in a node
+        if (isInNode(**it)) //player is in a node
         {
             std::map<MovementDirection, bool> movementPossibleFromTheNode;
 
@@ -139,15 +136,16 @@ void Player::checkPositionWithRespectToNodes()
             movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(DOWN, (*it)->possibleDownward));
             movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(RIGHT, (*it)->possibleRightward));
 
-            if(movementPossibleFromTheNode.find(pendingDirection)->second) //check if a pending move can be performed
+            if (movementPossibleFromTheNode.find(pendingDirection)->second) //check if a pending move can be performed
             {
                 setMovement(pendingDirection);
             }
-            else if(movementPossibleFromTheNode.find(currentDirection)->second) //check if Pac-Man can continue in his current direction
+            else if (movementPossibleFromTheNode.find(currentDirection)->second) //check if Pac-Man can continue in his current direction
             {
                 // do nothing
             }
-            else setMovement(currentDirection, false); // Why currentMove? He's going to be stopped anyway
+            else
+                setMovement(currentDirection, false); // Why currentMove? He's going to be stopped anyway
 
             break;
         }
@@ -167,9 +165,10 @@ void Player::init()
 
 bool Player::isAnyOfEnemiesFrightened() const
 {
-    for(std::vector<Enemy*>::const_iterator it = enemies.cbegin(); it != enemies.cend(); ++it)
+    for (std::vector<Enemy*>::const_iterator it = enemies.cbegin(); it != enemies.cend(); ++it)
     {
-        if((*it)->isFrightened()) return true;
+        if ((*it)->isFrightened())
+            return true;
     }
     return false;
 }
@@ -177,21 +176,26 @@ bool Player::isAnyOfEnemiesFrightened() const
 void Player::keyPressEvent(QKeyEvent* event)
 {
     // move the player left and right
-    if(event->key() == Qt::Key_Left) pendingDirection = LEFT;
-    else if(event->key() == Qt::Key_Right) pendingDirection = RIGHT;
-    else if(event->key() == Qt::Key_Up) pendingDirection = UP;
-    else if(event->key() == Qt::Key_Down) pendingDirection = DOWN;
-    else if(event->key() == Qt::Key_Escape) prepareToEndGame(PRESSED_ESC);
+    if (event->key() == Qt::Key_Left)
+        pendingDirection = LEFT;
+    else if (event->key() == Qt::Key_Right)
+        pendingDirection = RIGHT;
+    else if (event->key() == Qt::Key_Up)
+        pendingDirection = UP;
+    else if (event->key() == Qt::Key_Down)
+        pendingDirection = DOWN;
+    else if (event->key() == Qt::Key_Escape)
+        prepareToEndGame(PRESSED_ESC);
 }
 
 void Player::prepareToEndGame(Player::QuitReason reason) const
 {
-    if(reason == PRESSED_ESC)
+    if (reason == PRESSED_ESC)
     {
         endGame();
         return;
     }
-    else if(reason == VICTORY)
+    else if (reason == VICTORY)
     {
         QGraphicsTextItem* text = new QGraphicsTextItem("YOU WIN!");
         text->setPos(120, 210);
@@ -199,7 +203,7 @@ void Player::prepareToEndGame(Player::QuitReason reason) const
         text->setFont(QFont("times", 34));
         scene()->addItem(text);
     }
-    else if(reason == DEFEAT)
+    else if (reason == DEFEAT)
     {
         QGraphicsTextItem*  text = new QGraphicsTextItem("YOU LOSE!");
         text->setPos(120, 210);
@@ -234,26 +238,34 @@ void Player::chompingAnimation()
 {
     static bool phase = false;
 
-    if(currentDirection == LEFT)
+    if (currentDirection == LEFT)
     {
-        if(!phase) setPixmap(QPixmap(":/sprites/sprites/pacopenleft.png"));
-        else setPixmap(QPixmap(":/sprites/sprites/pacmidleft.png"));
+        if (!phase)
+            setPixmap(QPixmap(":/sprites/sprites/pacopenleft.png"));
+        else
+            setPixmap(QPixmap(":/sprites/sprites/pacmidleft.png"));
     }
-    else if(currentDirection == RIGHT)
+    else if (currentDirection == RIGHT)
     {
-        if(!phase) setPixmap(QPixmap(":/sprites/sprites/pacopenright.png"));
-        else setPixmap(QPixmap(":/sprites/sprites/pacmidright.png"));
+        if (!phase)
+            setPixmap(QPixmap(":/sprites/sprites/pacopenright.png"));
+        else
+            setPixmap(QPixmap(":/sprites/sprites/pacmidright.png"));
     }
-    else if(currentDirection == UP)
+    else if (currentDirection == UP)
     {
-        if(!phase) setPixmap(QPixmap(":/sprites/sprites/pacopenup.png"));
-        else setPixmap(QPixmap(":/sprites/sprites/pacmidup.png"));
+        if (!phase)
+            setPixmap(QPixmap(":/sprites/sprites/pacopenup.png"));
+        else
+            setPixmap(QPixmap(":/sprites/sprites/pacmidup.png"));
 
     }
-    else if(currentDirection == DOWN)
+    else if (currentDirection == DOWN)
     {
-        if(!phase) setPixmap(QPixmap(":/sprites/sprites/pacopendown.png"));
-        else setPixmap(QPixmap(":/sprites/sprites/pacmiddown.png"));
+        if (!phase)
+            setPixmap(QPixmap(":/sprites/sprites/pacopendown.png"));
+        else
+            setPixmap(QPixmap(":/sprites/sprites/pacmiddown.png"));
     }
 
     phase =! phase;
@@ -269,9 +281,9 @@ void Player::move()
     checkPositionWithRespectToNodes(); //meaning: check collisions with enemies or being in nodes
 
     //moving Pac-Man
-    if(moving)
+    if (moving)
     {
-        switch(currentDirection)
+        switch (currentDirection)
         {
         case LEFT:
             setPos(x() - 1, y());
@@ -289,8 +301,10 @@ void Player::move()
     }
 
     //teleporting on the edges of a map
-    if(x() + this->pixmap().width() < 0) setPos(450, y());
-    else if(x() > 450) setPos(-this->pixmap().width(), y());
+    if (x() + this->pixmap().width() < 0)
+        setPos(450, y());
+    else if (x() > 450)
+        setPos(-this->pixmap().width(), y());
 
     checkCollisionWithPelletsAndGhosts();
 }
@@ -299,9 +313,8 @@ template <class myType>
 typename std::vector<myType>::const_iterator findInVector(std::vector<myType> const& vector, void* itemToBeFound)
 {
     typename std::vector<myType>::const_iterator it = vector.begin();
-    while(*it != itemToBeFound)
-    {
+    while (*it != itemToBeFound)
         it++;
-    }
+
     return it;
 }

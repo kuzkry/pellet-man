@@ -39,13 +39,11 @@ protected:
               direction(direction) {}
         bool operator<(DistanceAndDirectionBinder const& ref) const
         {
-            if(distance < ref.distance) return true;
-            return false;
+            return distance < ref.distance;
         }
         bool operator>(DistanceAndDirectionBinder const& ref) const
         {
-            if(distance > ref.distance) return true;
-            return false;
+            return distance > ref.distance; 
         }
         float const distance;
         MovementDirection const direction;

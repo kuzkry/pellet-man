@@ -20,7 +20,7 @@ protected:
     virtual void init() = 0;
     bool isInNode(Node const& node)
     {
-        if(x() == node.x && y() == node.y)
+        if (x() == node.x && y() == node.y)
         {
             return true;
         }
