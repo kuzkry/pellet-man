@@ -30,7 +30,7 @@ SOURCES += \
     src/enemy.cpp \
     src/game.cpp \
     src/inky.cpp \
-    src/livescounter.cpp \
+    src/lifecounter.cpp \
     src/main.cpp \
     src/pellet.cpp \
     src/pinky.cpp \
@@ -46,7 +46,7 @@ HEADERS += \
     inc/enemy.h \
     inc/game.h \
     inc/inky.h \
-    inc/livescounter.h \
+    inc/lifecounter.h \
     inc/node.h \
     inc/pellet.h \
     inc/pinky.h \

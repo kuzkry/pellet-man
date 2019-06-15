@@ -11,7 +11,7 @@ Game::Game()
 {
     createAndInitScene();
     createScore();
-    createLivesCounter();
+    createLifeCounter();
     deployNodes();
     deployRegularPellets();
     deploySuperPellets();
@@ -45,16 +45,16 @@ void Game::createGhosts()
     scene.addItem(enemies[3]);
 }
 
-inline void Game::createLivesCounter()
+inline void Game::createLifeCounter()
 {
-    livesCounter.setPos(livesCounter.x() + scene.width() - 62, livesCounter.y());
-    scene.addItem(&livesCounter);
+    lifeCounter.setPos(lifeCounter.x() + scene.width() - 62, lifeCounter.y());
+    scene.addItem(&lifeCounter);
 }
 
 void Game::createPlayer()
 {
     // create the player
-    player = std::unique_ptr<Player>(new Player(nodes, score, livesCounter, regularPellets, superPellets, *this, enemies));
+    player = std::unique_ptr<Player>(new Player(nodes, score, lifeCounter, regularPellets, superPellets, *this, enemies));
     // unfortunately player must get the reference to this game in order to call close function
 
     // make the player focusable and set it to be the current focus

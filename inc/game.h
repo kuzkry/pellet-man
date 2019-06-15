@@ -7,7 +7,7 @@
 #include "player.h"
 #include "node.h"
 #include "score.h"
-#include "livescounter.h"
+#include "lifecounter.h"
 #include "regularpellet.h"
 #include "superpellet.h"
 #include "enemy.h"
@@ -22,7 +22,7 @@ public:
 private:
     void createAndInitScene();
     void createGhosts();
-    void createLivesCounter();
+    void createLifeCounter();
     void createPlayer();
     void createScore();
     void deployNodes();
@@ -34,7 +34,7 @@ private:
     std::vector<RegularPellet*> regularPellets;
     std::vector<SuperPellet*> superPellets;
     Score score;
-    LivesCounter livesCounter;
+    LifeCounter lifeCounter;
     std::vector<Enemy*> enemies;
 };
 

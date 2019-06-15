@@ -16,13 +16,13 @@ typename std::vector<myType>::const_iterator findInVector(const std::vector<myTy
 
 Player::Player(const std::vector<Node*> &nodes,
                Score &score,
-               LivesCounter &livesCounter,
+               LifeCounter &lifeCounter,
                std::vector<RegularPellet*> &regularPellets,
                std::vector<SuperPellet*> &superPellets,
                const Game &game,
                const std::vector<Enemy*> &enemies)
     :
-      Character(nodes), score(score), livesCounter(livesCounter), regularPellets(regularPellets), superPellets(superPellets),
+      Character(nodes), score(score), lifeCounter(lifeCounter), regularPellets(regularPellets), superPellets(superPellets),
       game(game), enemies(enemies), initialDelay(1000), movementTime(9), animationTime(100)
 {
     QObject::connect(&initialDelayTimer, SIGNAL(timeout()), this, SLOT(allowToMove()));
@@ -81,8 +81,8 @@ void Player::checkCollisionWithPelletsAndGhosts()
         {
             if(!dynamic_cast<Enemy*>(allItems[i])->isFrightened())
             {
-                livesCounter.decrease();
-                if(livesCounter.getLives() == 0) prepareToEndGame(lossOfLives);
+                lifeCounter.decrease();
+                if(lifeCounter.getLives() == 0) prepareToEndGame(lossOfLives);
                 else
                 {
                     std::for_each(const_cast<std::vector<Enemy*>&>(enemies).begin(),

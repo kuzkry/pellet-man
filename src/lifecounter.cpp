@@ -1,11 +1,11 @@
-#include "livescounter.h"
+#include "lifecounter.h"
 #include "game.h"
 #include "player.h"
 #include <QFont>
 #include <QGraphicsScene>
 #include <QTimer>
 
-LivesCounter::LivesCounter()
+LifeCounter::LifeCounter()
 {
     // initialize lives to 0
     lives = 3;
@@ -16,7 +16,7 @@ LivesCounter::LivesCounter()
     setFont(QFont("times",12));
 }
 
-void LivesCounter::decrease()
+void LifeCounter::decrease()
 {
     --lives;
     setPlainText(QString("Lives: ") + QString::number(lives));

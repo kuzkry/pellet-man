@@ -1,12 +1,12 @@
-#ifndef LIVESCOUNTER_H
-#define LIVESCOUNTER_H
+#ifndef LIFECOUNTER_H
+#define LIFECOUNTER_H
 
 #include <QGraphicsTextItem>
 
-class LivesCounter : public QGraphicsTextItem
+class LifeCounter : public QGraphicsTextItem
 {
 public:
-    LivesCounter();
+    LifeCounter();
     void decrease();
     int getLives() const
     {
@@ -16,4 +16,4 @@ private:
     int lives;
 };
 
-#endif // LIVESCOUNTER_H
+#endif // LIFECOUNTER_H
