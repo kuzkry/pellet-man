@@ -110,7 +110,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
 
 void Player::checkPositionWithRespectToNodes()
 {
-    for (std::vector<Node*>::const_iterator it = nodes.cbegin();; it++)
+    for (std::vector<Node*>::const_iterator it = nodes.cbegin();; ++it)
     {
         if (it == nodes.cend()) /* there is the last iteration of a list,
         nothing happened but at least check along the player's movement line */
