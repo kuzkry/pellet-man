@@ -43,7 +43,7 @@ protected:
         }
         bool operator>(DistanceAndDirectionBinder const& ref) const
         {
-            return distance > ref.distance; 
+            return !(*this < ref);
         }
         float const distance;
         MovementDirection const direction;
