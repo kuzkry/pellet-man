@@ -89,7 +89,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
             if(!dynamic_cast<Enemy*>(allItems[i])->isFrightened())
             {
                 livesCounter.decrease();
-                if(livesCounter.getLives() == 0) prepareToEndGame(LOSS_OF_LIVES);
+                if(livesCounter.getLives() == 0) prepareToEndGame(DEFEAT);
                 else
                 {
                     std::for_each(const_cast<std::vector<Enemy*>&>(enemies).begin(),
@@ -199,7 +199,7 @@ void Player::prepareToEndGame(Player::QuitReason reason) const
         text->setFont(QFont("times", 34));
         scene()->addItem(text);
     }
-    else if(reason == LOSS_OF_LIVES)
+    else if(reason == DEFEAT)
     {
         QGraphicsTextItem*  text = new QGraphicsTextItem("YOU LOSE!");
         text->setPos(120, 210);
