@@ -16,8 +16,10 @@ Clyde::Clyde(Player const& player, std::vector<Node*> const& nodes)
 Clyde::MovementDirection Clyde::makeTurnDecision(
         std::map<MovementDirection, bool>& possibleMovements, bool frightened)
 {
-    int playerX = player.x(), playerY = player.y();
-    unsigned int playerEnemyOffsetX = abs(playerX - x()), playerEnemyOffsetY = abs(playerY - y());
+    int playerX = player.x(),
+        playerY = player.y();
+    unsigned int playerEnemyOffsetX = abs(playerX - x()),
+                 playerEnemyOffsetY = abs(playerY - y());
     DistanceAndDirectionBinder binder[4] = {
         {pow((playerY > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + pow(playerEnemyOffsetX, 2), UP},
         {pow((playerX > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + pow(playerEnemyOffsetY, 2), LEFT},

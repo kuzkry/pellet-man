@@ -16,7 +16,8 @@ Pinky::Pinky(Player const& player, std::vector<Node*> const& nodes)
 Pinky::MovementDirection Pinky::makeTurnDecision(
         std::map<MovementDirection, bool>& possibleMovements, bool frightened)
 {
-    int relativePlayerX = player.x(), relativePlayerY = player.y();
+    int relativePlayerX = player.x(),
+        relativePlayerY = player.y();
 
     if (!frightened)
     {
@@ -32,7 +33,7 @@ Pinky::MovementDirection Pinky::makeTurnDecision(
     }
 
     unsigned int playerEnemyOffsetX = abs(relativePlayerX - x()),
-            playerEnemyOffsetY = abs(relativePlayerY - y());
+                 playerEnemyOffsetY = abs(relativePlayerY - y());
     DistanceAndDirectionBinder binder[4] = {
         {pow((relativePlayerY > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + pow(playerEnemyOffsetX, 2), UP},
         {pow((relativePlayerX > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + pow(playerEnemyOffsetY, 2), LEFT},
