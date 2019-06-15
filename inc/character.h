@@ -10,7 +10,7 @@
 class Character : public QObject, public QGraphicsPixmapItem
 {
 public:
-    Character(const std::vector<Node*>& nodes) : nodes(nodes) {}
+    Character(std::vector<Node*> const& nodes) : nodes(nodes) {}
     virtual ~Character() {}
 protected:
     enum MovementDirection{up,left,down,right};
@@ -18,7 +18,7 @@ protected:
     virtual void checkPositionWithRespectToNodes() = 0;
     virtual void disable() = 0;
     virtual void init() = 0;
-    bool isInNode(const Node& node)
+    bool isInNode(Node const& node)
     {
         if(x() == node.x && y() == node.y)
         {
@@ -27,7 +27,7 @@ protected:
         return false;
     }
 
-    const std::vector<Node*>& nodes;
+    std::vector<Node*> const& nodes;
     MovementDirection currentDirection;
     QTimer initialDelayTimer;
     QTimer movementTimer;

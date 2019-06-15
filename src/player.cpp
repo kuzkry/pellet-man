@@ -12,15 +12,15 @@
 #include "superpellet.h"
 
 template <class myType>
-typename std::vector<myType>::const_iterator findInVector(const std::vector<myType>& vector, void* itemToBeFound);
+typename std::vector<myType>::const_iterator findInVector(std::vector<myType> const& vector, void* itemToBeFound);
 
-Player::Player(const std::vector<Node*>& nodes,
+Player::Player(std::vector<Node*> const& nodes,
                Score& score,
                LivesCounter& livesCounter,
                std::vector<RegularPellet*>& regularPellets,
                std::vector<SuperPellet*>& superPellets,
-               const Game& game,
-               const std::vector<Enemy*>& enemies)
+               Game const& game,
+               std::vector<Enemy*> const& enemies)
     :
       Character(nodes), score(score), livesCounter(livesCounter), regularPellets(regularPellets), superPellets(superPellets),
       game(game), enemies(enemies), initialDelay(1000), movementTime(9), animationTime(100)
@@ -210,7 +210,7 @@ void Player::prepareToEndGame(Player::QuitReason reason) const
     QTimer::singleShot(3000, this, SLOT(endGame()));
 }
 
-inline void Player::setMovement(const Player::MovementDirection newDirection, bool movementPossibility)
+inline void Player::setMovement(Player::MovementDirection const newDirection, bool movementPossibility)
 {
     currentDirection = newDirection;
     moving = movementPossibility;
@@ -289,7 +289,7 @@ void Player::move()
 }
 
 template <class myType>
-typename std::vector<myType>::const_iterator findInVector(const std::vector<myType>& vector, void* itemToBeFound)
+typename std::vector<myType>::const_iterator findInVector(std::vector<myType> const& vector, void* itemToBeFound)
 {
     typename std::vector<myType>::const_iterator it = vector.begin();
     while(*it != itemToBeFound)

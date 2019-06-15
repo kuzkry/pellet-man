@@ -3,7 +3,7 @@
 #include <cmath>
 #include <cstdlib>
 
-Pinky::Pinky(const Player& player, const std::vector<Node*>& nodes) : Enemy(player, nodes), initialDelay(2100)
+Pinky::Pinky(Player const& player, std::vector<Node*> const& nodes) : Enemy(player, nodes), initialDelay(2100)
 {
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(change()));
     QObject::connect(&frightenedModeTimer, SIGNAL(timeout()), this, SLOT(disableRunawayState()));

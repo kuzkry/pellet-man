@@ -41,7 +41,7 @@ void Enemy::init()
 
 Character::MovementDirection Enemy::chooseMostSuitableTurnOption(
         std::map<MovementDirection, bool>& possibleMovements,
-        const Enemy::DistanceAndDirectionBinder* binder) const
+        Enemy::DistanceAndDirectionBinder const* binder) const
 {
     for(unsigned short int i = 0; i < 4; ++i)
     {
@@ -53,26 +53,26 @@ Character::MovementDirection Enemy::chooseMostSuitableTurnOption(
     return MovementDirection(up); // this is not going to be returned anyway
 }
 
-int Enemy::sortDistanceAndDirectionBindersInAscendingOrder(const void* p1, const void* p2)
+int Enemy::sortDistanceAndDirectionBindersInAscendingOrder(void const* p1, void const* p2)
 {
-    if(*(reinterpret_cast<const DistanceAndDirectionBinder*>(p1)) < *(reinterpret_cast<const DistanceAndDirectionBinder*>(p2)))
+    if(*(reinterpret_cast<DistanceAndDirectionBinder const*>(p1)) < *(reinterpret_cast<DistanceAndDirectionBinder const*>(p2)))
     {
         return -1;
     }
-    else if(*(reinterpret_cast<const DistanceAndDirectionBinder*>(p1)) > *(reinterpret_cast<const DistanceAndDirectionBinder*>(p2)))
+    else if(*(reinterpret_cast<DistanceAndDirectionBinder const*>(p1)) > *(reinterpret_cast<DistanceAndDirectionBinder const*>(p2)))
     {
         return 1;
     }
     return 0;
 }
 
-int Enemy::sortDistanceAndDirectionBindersInDescendingOrder(const void* p1, const void* p2)
+int Enemy::sortDistanceAndDirectionBindersInDescendingOrder(void const* p1, void const* p2)
 {
-    if(*(reinterpret_cast<const DistanceAndDirectionBinder*>(p1)) < *(reinterpret_cast<const DistanceAndDirectionBinder*>(p2)))
+    if(*(reinterpret_cast<DistanceAndDirectionBinder const*>(p1)) < *(reinterpret_cast<DistanceAndDirectionBinder const*>(p2)))
     {
         return 1;
     }
-    else if(*(reinterpret_cast<const DistanceAndDirectionBinder*>(p1)) > *(reinterpret_cast<const DistanceAndDirectionBinder*>(p2)))
+    else if(*(reinterpret_cast<DistanceAndDirectionBinder const*>(p1)) > *(reinterpret_cast<DistanceAndDirectionBinder const*>(p2)))
     {
         return -1;
     }

@@ -15,13 +15,13 @@ class Player : public Character
 {
     Q_OBJECT
 public:
-    Player(const std::vector<Node*>& nodes,
+    Player(std::vector<Node*> const& nodes,
            Score& score,
            LivesCounter& livesCounter,
            std::vector<RegularPellet*>& regularPellets,
            std::vector<SuperPellet*>& superPellets,
-           const Game& game,
-           const std::vector<Enemy*>& enemies);
+           Game const& game,
+           std::vector<Enemy*> const& enemies);
     //last two are const to avoid inattentively usages of this (have to const_cast though)
     MovementDirection getCurrentDirection() const
     {
@@ -42,7 +42,7 @@ private:
     bool isAnyOfEnemiesFrightened() const;
     void keyPressEvent(QKeyEvent* event);
     void prepareToEndGame(QuitReason reason) const;
-    void setMovement(const MovementDirection newDirection, bool movementPossibility = true);
+    void setMovement(MovementDirection const newDirection, bool movementPossibility = true);
     /* presumptive boolean value is true to spare the programmer's keyboard */
 
     MovementDirection pendingDirection;
@@ -51,8 +51,8 @@ private:
     std::vector<RegularPellet*>& regularPellets;
     std::vector<SuperPellet*>& superPellets;
     QTimer animationTimer;
-    const Game& game;
-    const std::vector<Enemy*>& enemies;
+    Game const& game;
+    std::vector<Enemy*> const& enemies;
     unsigned short int initialDelay, movementTime, animationTime;
     bool moving;
 private slots:

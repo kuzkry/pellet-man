@@ -7,7 +7,7 @@ class Pinky : public Enemy
 {
     Q_OBJECT
 public:
-    Pinky(const Player& player, const std::vector<Node*>& nodes);
+    Pinky(Player const& player, std::vector<Node*> const& nodes);
 private:
     MovementDirection makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened);
     void startInitialDelayTimer()

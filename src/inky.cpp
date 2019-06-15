@@ -3,7 +3,7 @@
 #include <cmath>
 #include <cstdlib>
 
-Inky::Inky(const Player& player, const std::vector<Node*>& nodes, const Blinky& blinky)
+Inky::Inky(Player const& player, std::vector<Node*> const& nodes, Blinky const& blinky)
     : Enemy(player, nodes), blinky(blinky), initialDelay(2600)
 {
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(change()));
