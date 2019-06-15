@@ -4,7 +4,7 @@ void Enemy::checkPositionWithRespectToNodes()
 {
     for(std::vector<Node*>::const_iterator it = nodes.cbegin(); it != nodes.cend(); it++)
     {
-        if(isInNode(**it)) // red ghost is in the node
+        if(isInNode(**it))
         {
             std::map<MovementDirection, bool> movementPossibleFromTheNode;
 
