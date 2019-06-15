@@ -110,7 +110,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
 
 void Player::checkPositionWithRespectToNodes()
 {
-    for (std::vector<Node*>::const_iterator it = nodes.cbegin();; ++it)
+    for (auto it = nodes.cbegin();; ++it)
     {
         if (it == nodes.cend()) /* there is the last iteration of a list,
         nothing happened but at least check along the player's movement line */
@@ -165,7 +165,7 @@ void Player::init()
 
 bool Player::isAnyOfEnemiesFrightened() const
 {
-    for (std::vector<Enemy*>::const_iterator it = enemies.cbegin(); it != enemies.cend(); ++it)
+    for (auto it = enemies.cbegin(); it != enemies.cend(); ++it)
     {
         if ((*it)->isFrightened())
             return true;
@@ -312,7 +312,7 @@ void Player::move()
 template <class myType>
 typename std::vector<myType>::const_iterator findInVector(std::vector<myType> const& vector, void* itemToBeFound)
 {
-    typename std::vector<myType>::const_iterator it = vector.begin();
+    auto it = vector.cbegin();
     while (*it != itemToBeFound)
         it++;
 
