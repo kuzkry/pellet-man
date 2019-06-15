@@ -22,14 +22,14 @@ Game::Game()
 void Game::createAndInitScene()
 {
     // create the scene
-    scene.setSceneRect(0,0,450,480); // make the scene 450x480 instead of infinity by infinity (default)
+    scene.setSceneRect(0, 0, 450, 480); // make the scene 450x480 instead of infinity by infinity (default)
     setBackgroundBrush(QBrush(QImage(":/sprites/sprites/map.jpg")));
     /* make the newly created scene the scene to visualize
      * (since Game is a QGraphicsView Widget, it can be used to visualize scenes) */
     setScene(&scene);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setFixedSize(450,480);
+    setFixedSize(450, 480);
 }
 
 void Game::createGhosts()

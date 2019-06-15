@@ -51,7 +51,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
             score.little_increase(); // increase the score by 10
 
             // remove from a vector
-            regularPellets.erase(findInVector(regularPellets,reinterpret_cast<void*>(allItems[i])));
+            regularPellets.erase(findInVector(regularPellets, reinterpret_cast<void*>(allItems[i])));
 
             // remove them from the scene (still on the heap)
             scene()->removeItem(allItems[i]);
@@ -64,7 +64,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
             score.big_increase(); // increase the score by 50
 
             // remove from a vector
-            superPellets.erase(findInVector(superPellets,reinterpret_cast<void*>(allItems[i])));
+            superPellets.erase(findInVector(superPellets, reinterpret_cast<void*>(allItems[i])));
 
             // remove them from the scene (still on the heap)
             scene()->removeItem(allItems[i]);
@@ -194,17 +194,17 @@ void Player::prepareToEndGame(Player::QuitReason reason) const
     else if(reason == victory)
     {
         QGraphicsTextItem* text = new QGraphicsTextItem("YOU WIN!");
-        text->setPos(120,210);
+        text->setPos(120, 210);
         text->setDefaultTextColor(Qt::red);
-        text->setFont(QFont("times",34));
+        text->setFont(QFont("times", 34));
         scene()->addItem(text);
     }
     else if(reason == lossOfLives)
     {
         QGraphicsTextItem*  text = new QGraphicsTextItem("YOU LOSE!");
-        text->setPos(120,210);
+        text->setPos(120, 210);
         text->setDefaultTextColor(Qt::red);
-        text->setFont(QFont("times",34));
+        text->setFont(QFont("times", 34));
         scene()->addItem(text);
     }
 
@@ -283,7 +283,7 @@ void Player::move()
             setPos(x(), y() - 1);
             break;
         case down:
-            setPos(x(),y() + 1);
+            setPos(x(), y() + 1);
             break;
         }
     }

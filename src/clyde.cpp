@@ -127,7 +127,7 @@ void Clyde::move()
         setPos(x(), y() - 1);
         break;
     case down:
-        setPos(x(),y() + 1);
+        setPos(x(), y() + 1);
         break;
     }
 
@@ -145,6 +145,6 @@ void Clyde::releaseFromGhostHouse()
     }
     else
     {
-        setPos(x(),y() - 1);
+        setPos(x(), y() - 1);
     }
 }

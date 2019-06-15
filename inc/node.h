@@ -15,7 +15,7 @@ struct Node : public QGraphicsRectItem
           possibleDownward(possibleDownward),
           possibleRightward(possibleRightward) {}
 
-    int x,y;
+    int x, y;
     bool possibleUpward, possibleLeftward, possibleDownward, possibleRightward;
 };
 

@@ -6,7 +6,7 @@ Score::Score() : multiplier(0), score(0)
     // draw the text
     setPlainText(QString("Score: ") + QString::number(score)); // Score: 0
     setDefaultTextColor(Qt::white);
-    setFont(QFont("times",12));
+    setFont(QFont("times", 12));
 }
 
 void Score::big_increase()
