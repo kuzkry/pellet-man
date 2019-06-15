@@ -3,7 +3,9 @@
 #include <cmath>
 #include <cstdlib>
 
-Blinky::Blinky(Player const& player, std::vector<Node*> const& nodes) : Enemy(player, nodes), initialDelay(1600)
+Blinky::Blinky(Player const& player, std::vector<Node*> const& nodes)
+    : Enemy(player, nodes),
+      initialDelay(1600)
 {
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(change()));
     QObject::connect(&frightenedModeTimer, SIGNAL(timeout()), this, SLOT(disableRunawayState()));

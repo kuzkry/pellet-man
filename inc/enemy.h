@@ -9,8 +9,13 @@ class Player;
 class Enemy : public Character
 {
 public:
-    Enemy(Player const& player, std::vector<Node*> const& nodes) : Character(nodes), player(player),
-        movementTime(10), singleBlinkTime(20 * movementTime), blinkingInterval(2000), runAwayTime(8000) {}
+    Enemy(Player const& player, std::vector<Node*> const& nodes)
+        : Character(nodes),
+          player(player),
+          movementTime(10),
+          singleBlinkTime(20 * movementTime),
+          blinkingInterval(2000),
+          runAwayTime(8000) {}
     void checkPositionWithRespectToNodes();
     void disable()
     {
@@ -30,7 +35,8 @@ protected:
     struct DistanceAndDirectionBinder
     {
         DistanceAndDirectionBinder(double distance, MovementDirection direction)
-            : distance(distance), direction(direction) {}
+            : distance(distance),
+              direction(direction) {}
         bool operator<(DistanceAndDirectionBinder const& ref) const
         {
             if(distance < ref.distance) return true;

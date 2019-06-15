@@ -3,7 +3,9 @@
 #include <cmath>
 #include <cstdlib>
 
-Clyde::Clyde(Player const& player, std::vector<Node*> const& nodes) : Enemy(player, nodes), initialDelay(3100)
+Clyde::Clyde(Player const& player, std::vector<Node*> const& nodes)
+    : Enemy(player, nodes),
+      initialDelay(3100)
 {
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(change()));
     QObject::connect(&frightenedModeTimer, SIGNAL(timeout()), this, SLOT(disableRunawayState()));

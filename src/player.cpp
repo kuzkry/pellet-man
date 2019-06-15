@@ -21,9 +21,16 @@ Player::Player(std::vector<Node*> const& nodes,
                std::vector<SuperPellet*>& superPellets,
                Game const& game,
                std::vector<Enemy*> const& enemies)
-    :
-      Character(nodes), score(score), livesCounter(livesCounter), regularPellets(regularPellets), superPellets(superPellets),
-      game(game), enemies(enemies), initialDelay(1000), movementTime(9), animationTime(100)
+    : Character(nodes),
+      score(score),
+      livesCounter(livesCounter),
+      regularPellets(regularPellets),
+      superPellets(superPellets),
+      game(game),
+      enemies(enemies),
+      initialDelay(1000),
+      movementTime(9),
+      animationTime(100)
 {
     QObject::connect(&initialDelayTimer, SIGNAL(timeout()), this, SLOT(allowToMove()));
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
