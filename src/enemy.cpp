@@ -55,11 +55,11 @@ Character::MovementDirection Enemy::chooseMostSuitableTurnOption(
 
 int Enemy::sortDistanceAndDirectionBindersInAscendingOrder(void const* p1, void const* p2)
 {
-    if(*(reinterpret_cast<DistanceAndDirectionBinder const*>(p1)) < *(reinterpret_cast<DistanceAndDirectionBinder const*>(p2)))
+    if(*(static_cast<DistanceAndDirectionBinder const*>(p1)) < *(static_cast<DistanceAndDirectionBinder const*>(p2)))
     {
         return -1;
     }
-    else if(*(reinterpret_cast<DistanceAndDirectionBinder const*>(p1)) > *(reinterpret_cast<DistanceAndDirectionBinder const*>(p2)))
+    else if(*(static_cast<DistanceAndDirectionBinder const*>(p1)) > *(static_cast<DistanceAndDirectionBinder const*>(p2)))
     {
         return 1;
     }
@@ -68,11 +68,11 @@ int Enemy::sortDistanceAndDirectionBindersInAscendingOrder(void const* p1, void 
 
 int Enemy::sortDistanceAndDirectionBindersInDescendingOrder(void const* p1, void const* p2)
 {
-    if(*(reinterpret_cast<DistanceAndDirectionBinder const*>(p1)) < *(reinterpret_cast<DistanceAndDirectionBinder const*>(p2)))
+    if(*(static_cast<DistanceAndDirectionBinder const*>(p1)) < *(static_cast<DistanceAndDirectionBinder const*>(p2)))
     {
         return 1;
     }
-    else if(*(reinterpret_cast<DistanceAndDirectionBinder const*>(p1)) > *(reinterpret_cast<DistanceAndDirectionBinder const*>(p2)))
+    else if(*(static_cast<DistanceAndDirectionBinder const*>(p1)) > *(static_cast<DistanceAndDirectionBinder const*>(p2)))
     {
         return -1;
     }

@@ -51,7 +51,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
             score.little_increase(); // increase the score by 10
 
             // remove from a vector
-            regularPellets.erase(findInVector(regularPellets, reinterpret_cast<void*>(allItems[i])));
+            regularPellets.erase(findInVector(regularPellets, static_cast<void*>(allItems[i])));
 
             // remove them from the scene (still on the heap)
             scene()->removeItem(allItems[i]);
@@ -64,7 +64,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
             score.big_increase(); // increase the score by 50
 
             // remove from a vector
-            superPellets.erase(findInVector(superPellets, reinterpret_cast<void*>(allItems[i])));
+            superPellets.erase(findInVector(superPellets, static_cast<void*>(allItems[i])));
 
             // remove them from the scene (still on the heap)
             scene()->removeItem(allItems[i]);
