@@ -217,7 +217,7 @@ void Player::prepareToEndGame(Player::QuitReason reason) const
     QTimer::singleShot(3000, this, SLOT(endGame()));
 }
 
-inline void Player::setMovement(Player::MovementDirection const newDirection, bool movementPossibility)
+void Player::setMovement(Player::MovementDirection const newDirection, bool movementPossibility)
 {
     currentDirection = newDirection;
     moving = movementPossibility;

@@ -45,7 +45,7 @@ void Game::createGhosts()
     scene.addItem(enemies[3]);
 }
 
-inline void Game::createLivesCounter()
+void Game::createLivesCounter()
 {
     livesCounter.setPos(livesCounter.x() + scene.width() - 62, livesCounter.y());
     scene.addItem(&livesCounter);
@@ -64,7 +64,7 @@ void Game::createPlayer()
     scene.addItem(player.get());
 }
 
-inline void Game::createScore()
+void Game::createScore()
 {
     scene.addItem(&score);
 }
