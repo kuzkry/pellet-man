@@ -3,7 +3,7 @@
 #include <cmath>
 #include <cstdlib>
 
-Clyde::Clyde(const Player &player, const std::vector<Node*> &nodes) : Enemy(player, nodes), initialDelay(3100)
+Clyde::Clyde(const Player& player, const std::vector<Node*>& nodes) : Enemy(player, nodes), initialDelay(3100)
 {
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(change()));
     QObject::connect(&frightenedModeTimer, SIGNAL(timeout()), this, SLOT(disableRunawayState()));
@@ -12,7 +12,7 @@ Clyde::Clyde(const Player &player, const std::vector<Node*> &nodes) : Enemy(play
 }
 
 Clyde::MovementDirection Clyde::makeTurnDecision(
-        std::map<MovementDirection, bool> &possibleMovements, bool frightened)
+        std::map<MovementDirection, bool>& possibleMovements, bool frightened)
 {
     int playerX = player.x(), playerY = player.y();
     unsigned int playerEnemyOffsetX = abs(playerX - x()), playerEnemyOffsetY = abs(playerY - y());

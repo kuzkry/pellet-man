@@ -3,7 +3,7 @@
 #include <cmath>
 #include <cstdlib>
 
-Pinky::Pinky(const Player &player, const std::vector<Node*> &nodes) : Enemy(player, nodes), initialDelay(2100)
+Pinky::Pinky(const Player& player, const std::vector<Node*>& nodes) : Enemy(player, nodes), initialDelay(2100)
 {
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(change()));
     QObject::connect(&frightenedModeTimer, SIGNAL(timeout()), this, SLOT(disableRunawayState()));
@@ -12,7 +12,7 @@ Pinky::Pinky(const Player &player, const std::vector<Node*> &nodes) : Enemy(play
 }
 
 Pinky::MovementDirection Pinky::makeTurnDecision(
-        std::map<MovementDirection, bool> &possibleMovements, bool frightened)
+        std::map<MovementDirection, bool>& possibleMovements, bool frightened)
 {
     int relativePlayerX = player.x(), relativePlayerY = player.y();
 

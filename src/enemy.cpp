@@ -40,8 +40,8 @@ void Enemy::init()
 }
 
 Character::MovementDirection Enemy::chooseMostSuitableTurnOption(
-        std::map<MovementDirection, bool> &possibleMovements,
-        const Enemy::DistanceAndDirectionBinder *binder) const
+        std::map<MovementDirection, bool>& possibleMovements,
+        const Enemy::DistanceAndDirectionBinder* binder) const
 {
     for(unsigned short int i = 0; i < 4; ++i)
     {
@@ -53,7 +53,7 @@ Character::MovementDirection Enemy::chooseMostSuitableTurnOption(
     return MovementDirection(up); // this is not going to be returned anyway
 }
 
-int Enemy::sortDistanceAndDirectionBindersInAscendingOrder(const void *p1, const void *p2)
+int Enemy::sortDistanceAndDirectionBindersInAscendingOrder(const void* p1, const void* p2)
 {
     if(*(reinterpret_cast<const DistanceAndDirectionBinder*>(p1)) < *(reinterpret_cast<const DistanceAndDirectionBinder*>(p2)))
     {
@@ -66,7 +66,7 @@ int Enemy::sortDistanceAndDirectionBindersInAscendingOrder(const void *p1, const
     return 0;
 }
 
-int Enemy::sortDistanceAndDirectionBindersInDescendingOrder(const void *p1, const void *p2)
+int Enemy::sortDistanceAndDirectionBindersInDescendingOrder(const void* p1, const void* p2)
 {
     if(*(reinterpret_cast<const DistanceAndDirectionBinder*>(p1)) < *(reinterpret_cast<const DistanceAndDirectionBinder*>(p2)))
     {

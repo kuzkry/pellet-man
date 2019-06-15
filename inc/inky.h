@@ -8,9 +8,9 @@ class Inky : public Enemy
 {
     Q_OBJECT
 public:
-    Inky(const Player &player, const std::vector<Node*> &nodes, const Blinky &blinky);
+    Inky(const Player& player, const std::vector<Node*>& nodes, const Blinky& blinky);
 private:
-    MovementDirection makeTurnDecision(std::map<MovementDirection, bool> &possibleMovements, bool frightened);
+    MovementDirection makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened);
     void startInitialDelayTimer()
     {
         initialDelayTimer.start(initialDelay);
@@ -20,7 +20,7 @@ private:
         setPixmap(QPixmap(":/sprites/sprites/cghostU1.png").scaled(26, 26));
     }
 
-    const Blinky &blinky;
+    const Blinky& blinky;
     unsigned short int initialDelay;
 private slots:
     void allowToMove();

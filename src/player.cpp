@@ -12,15 +12,15 @@
 #include "superpellet.h"
 
 template <class myType>
-typename std::vector<myType>::const_iterator findInVector(const std::vector<myType> &vector, void *itemToBeFound);
+typename std::vector<myType>::const_iterator findInVector(const std::vector<myType>& vector, void* itemToBeFound);
 
-Player::Player(const std::vector<Node*> &nodes,
-               Score &score,
-               LivesCounter &livesCounter,
-               std::vector<RegularPellet*> &regularPellets,
-               std::vector<SuperPellet*> &superPellets,
-               const Game &game,
-               const std::vector<Enemy*> &enemies)
+Player::Player(const std::vector<Node*>& nodes,
+               Score& score,
+               LivesCounter& livesCounter,
+               std::vector<RegularPellet*>& regularPellets,
+               std::vector<SuperPellet*>& superPellets,
+               const Game& game,
+               const std::vector<Enemy*>& enemies)
     :
       Character(nodes), score(score), livesCounter(livesCounter), regularPellets(regularPellets), superPellets(superPellets),
       game(game), enemies(enemies), initialDelay(1000), movementTime(9), animationTime(100)
@@ -74,7 +74,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
             //frighten enemies - requires getting rid of const to call enableRunawayState
             std::for_each(const_cast<std::vector<Enemy*>&>(enemies).begin(),
                           const_cast<std::vector<Enemy*>&>(enemies).end(),
-                          [](Enemy *ptrToEnemy){ptrToEnemy->enableRunawayState();});
+                          [](Enemy* ptrToEnemy){ptrToEnemy->enableRunawayState();});
         }
         else if(typeid(*(allItems[i])) == typeid(Blinky) || typeid(*(allItems[i])) == typeid(Pinky)
                 || typeid(*(allItems[i])) == typeid(Inky) || typeid(*(allItems[i])) == typeid(Clyde))
@@ -167,7 +167,7 @@ bool Player::isAnyOfEnemiesFrightened() const
     return false;
 }
 
-void Player::keyPressEvent(QKeyEvent *event)
+void Player::keyPressEvent(QKeyEvent* event)
 {
     // move the player left and right
     if(event->key() == Qt::Key_Left) pendingDirection = left;
@@ -186,7 +186,7 @@ void Player::prepareToEndGame(Player::QuitReason reason) const
     }
     else if(reason == victory)
     {
-        QGraphicsTextItem *text = new QGraphicsTextItem("YOU WIN!");
+        QGraphicsTextItem* text = new QGraphicsTextItem("YOU WIN!");
         text->setPos(120,210);
         text->setDefaultTextColor(Qt::red);
         text->setFont(QFont("times",34));
@@ -194,7 +194,7 @@ void Player::prepareToEndGame(Player::QuitReason reason) const
     }
     else if(reason == lossOfLives)
     {
-        QGraphicsTextItem * text = new QGraphicsTextItem("YOU LOSE!");
+        QGraphicsTextItem*  text = new QGraphicsTextItem("YOU LOSE!");
         text->setPos(120,210);
         text->setDefaultTextColor(Qt::red);
         text->setFont(QFont("times",34));
@@ -289,7 +289,7 @@ void Player::move()
 }
 
 template <class myType>
-typename std::vector<myType>::const_iterator findInVector(const std::vector<myType> &vector, void *itemToBeFound)
+typename std::vector<myType>::const_iterator findInVector(const std::vector<myType>& vector, void* itemToBeFound)
 {
     typename std::vector<myType>::const_iterator it = vector.begin();
     while(*it != itemToBeFound)

@@ -9,7 +9,7 @@ class Player;
 class Enemy : public Character
 {
 public:
-    Enemy(const Player &player, const std::vector<Node*> &nodes) : Character(nodes), player(player),
+    Enemy(const Player& player, const std::vector<Node*>& nodes) : Character(nodes), player(player),
         movementTime(10), singleBlinkTime(20 * movementTime), blinkingInterval(2000), runAwayTime(8000) {}
     void checkPositionWithRespectToNodes();
     void disable()
@@ -31,12 +31,12 @@ protected:
     {
         DistanceAndDirectionBinder(double distance, MovementDirection direction)
             : distance(distance), direction(direction) {}
-        bool operator<(const DistanceAndDirectionBinder &ref) const
+        bool operator<(const DistanceAndDirectionBinder& ref) const
         {
             if(distance < ref.distance) return true;
             return false;
         }
-        bool operator>(const DistanceAndDirectionBinder &ref) const
+        bool operator>(const DistanceAndDirectionBinder& ref) const
         {
             if(distance > ref.distance) return true;
             return false;
@@ -45,14 +45,14 @@ protected:
         const MovementDirection direction;
     };
 
-    MovementDirection chooseMostSuitableTurnOption(std::map<MovementDirection, bool> &possibleMovements,
-                                                   const DistanceAndDirectionBinder *binder) const;
+    MovementDirection chooseMostSuitableTurnOption(std::map<MovementDirection, bool>& possibleMovements,
+                                                   const DistanceAndDirectionBinder* binder) const;
     virtual MovementDirection makeTurnDecision(
-            std::map<MovementDirection, bool> &possibleMovements, bool frightened) = 0;
-    static int sortDistanceAndDirectionBindersInAscendingOrder(const void *p1, const void *p2);
-    static int sortDistanceAndDirectionBindersInDescendingOrder(const void *p1, const void *p2);
+            std::map<MovementDirection, bool>& possibleMovements, bool frightened) = 0;
+    static int sortDistanceAndDirectionBindersInAscendingOrder(const void* p1, const void* p2);
+    static int sortDistanceAndDirectionBindersInDescendingOrder(const void* p1, const void* p2);
 
-    const Player &player;
+    const Player& player;
     bool frightened, blinking;
     QTimer frightenedModeTimer;
     QTimer blinkingModeTimer;

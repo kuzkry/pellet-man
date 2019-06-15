@@ -3,7 +3,7 @@
 #include <cmath>
 #include <cstdlib>
 
-Inky::Inky(const Player &player, const std::vector<Node*> &nodes, const Blinky &blinky)
+Inky::Inky(const Player& player, const std::vector<Node*>& nodes, const Blinky& blinky)
     : Enemy(player, nodes), blinky(blinky), initialDelay(2600)
 {
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(change()));
@@ -13,7 +13,7 @@ Inky::Inky(const Player &player, const std::vector<Node*> &nodes, const Blinky &
 }
 
 Inky::MovementDirection Inky::makeTurnDecision(
-        std::map<MovementDirection, bool> &possibleMovements, bool frightened)
+        std::map<MovementDirection, bool>& possibleMovements, bool frightened)
 {
     int relativePlayerX = player.x(), relativePlayerY = player.y(), playerEnemyOffsetX, playerEnemyOffsetY;
 

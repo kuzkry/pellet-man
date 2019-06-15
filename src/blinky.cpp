@@ -3,7 +3,7 @@
 #include <cmath>
 #include <cstdlib>
 
-Blinky::Blinky(const Player &player, const std::vector<Node*> &nodes) : Enemy(player, nodes), initialDelay(1600)
+Blinky::Blinky(const Player& player, const std::vector<Node*>& nodes) : Enemy(player, nodes), initialDelay(1600)
 {
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(change()));
     QObject::connect(&frightenedModeTimer, SIGNAL(timeout()), this, SLOT(disableRunawayState()));
@@ -12,7 +12,7 @@ Blinky::Blinky(const Player &player, const std::vector<Node*> &nodes) : Enemy(pl
 }
 
 Blinky::MovementDirection Blinky::makeTurnDecision(
-        std::map<MovementDirection, bool> &possibleMovements, bool frightened)
+        std::map<MovementDirection, bool>& possibleMovements, bool frightened)
 {
     unsigned int playerEnemyOffsetX = abs(player.x() - x()), playerEnemyOffsetY = abs(player.y() - y());
     DistanceAndDirectionBinder binder[4] = {

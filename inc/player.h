@@ -15,13 +15,13 @@ class Player : public Character
 {
     Q_OBJECT
 public:
-    Player(const std::vector<Node*> &nodes,
-           Score &score,
-           LivesCounter &livesCounter,
-           std::vector<RegularPellet*> &regularPellets,
-           std::vector<SuperPellet*> &superPellets,
-           const Game &game,
-           const std::vector<Enemy*> &enemies);
+    Player(const std::vector<Node*>& nodes,
+           Score& score,
+           LivesCounter& livesCounter,
+           std::vector<RegularPellet*>& regularPellets,
+           std::vector<SuperPellet*>& superPellets,
+           const Game& game,
+           const std::vector<Enemy*>& enemies);
     //last two are const to avoid inattentively usages of this (have to const_cast though)
     MovementDirection getCurrentDirection() const
     {
@@ -40,19 +40,19 @@ private:
     }
     void init();
     bool isAnyOfEnemiesFrightened() const;
-    void keyPressEvent(QKeyEvent * event);
+    void keyPressEvent(QKeyEvent* event);
     void prepareToEndGame(QuitReason reason) const;
     void setMovement(const MovementDirection newDirection, bool movementPossibility = true);
     /* presumptive boolean value is true to spare the programmer's keyboard */
 
     MovementDirection pendingDirection;
-    Score &score;
-    LivesCounter &livesCounter;
-    std::vector<RegularPellet*> &regularPellets;
-    std::vector<SuperPellet*> &superPellets;
+    Score& score;
+    LivesCounter& livesCounter;
+    std::vector<RegularPellet*>& regularPellets;
+    std::vector<SuperPellet*>& superPellets;
     QTimer animationTimer;
-    const Game &game;
-    const std::vector<Enemy*> &enemies;
+    const Game& game;
+    const std::vector<Enemy*>& enemies;
     unsigned short int initialDelay, movementTime, animationTime;
     bool moving;
 private slots:

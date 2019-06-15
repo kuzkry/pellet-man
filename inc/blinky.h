@@ -7,9 +7,9 @@ class Blinky : public Enemy
 {
     Q_OBJECT
 public:
-    Blinky(const Player &player, const std::vector<Node*> &nodes);
+    Blinky(const Player& player, const std::vector<Node*>& nodes);
 private:
-    MovementDirection makeTurnDecision(std::map<MovementDirection, bool> &possibleMovements, bool frightened);
+    MovementDirection makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened);
     void startInitialDelayTimer()
     {
         initialDelayTimer.start(initialDelay);
