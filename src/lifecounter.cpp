@@ -19,5 +19,6 @@ LifeCounter::LifeCounter()
 void LifeCounter::decrease()
 {
     --lives;
-    setPlainText(QString("Lives: ") + QString::number(lives));
+    QString const str = lives != 1 ? "Lives: " : "Life: ";
+    setPlainText(str + QString::number(lives));
 }
