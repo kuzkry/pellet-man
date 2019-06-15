@@ -89,7 +89,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
             if(!dynamic_cast<Enemy*>(allItems[i])->isFrightened())
             {
                 livesCounter.decrease();
-                if(livesCounter.getLives() == 0) prepareToEndGame(lossOfLives);
+                if(livesCounter.getLives() == 0) prepareToEndGame(LOSS_OF_LIVES);
                 else
                 {
                     std::for_each(const_cast<std::vector<Enemy*>&>(enemies).begin(),
@@ -107,7 +107,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
     }
     if(!regularPellets.size() && !superPellets.size())
     {
-        prepareToEndGame(victory);
+        prepareToEndGame(VICTORY);
     }
 }
 
@@ -118,14 +118,14 @@ void Player::checkPositionWithRespectToNodes()
         if(it == nodes.cend()) /* there is the last iteration of a list,
         nothing happened but at least check along the player's movement line */
         {
-            if(currentDirection == up || currentDirection == down)
+            if(currentDirection == UP || currentDirection == DOWN)
             {
-                if(pendingDirection == up || pendingDirection == down)
+                if(pendingDirection == UP || pendingDirection == DOWN)
                     setMovement(pendingDirection);
             }
-            else if(currentDirection == left || currentDirection == right)
+            else if(currentDirection == LEFT || currentDirection == RIGHT)
             {
-                if(pendingDirection == left || pendingDirection == right)
+                if(pendingDirection == LEFT || pendingDirection == RIGHT)
                     setMovement(pendingDirection);
             }
             break;
@@ -134,10 +134,10 @@ void Player::checkPositionWithRespectToNodes()
         {
             std::map<MovementDirection, bool> movementPossibleFromTheNode;
 
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(up, (*it)->possibleUpward));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(left, (*it)->possibleLeftward));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(down, (*it)->possibleDownward));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(right, (*it)->possibleRightward));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(UP, (*it)->possibleUpward));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(LEFT, (*it)->possibleLeftward));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(DOWN, (*it)->possibleDownward));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(RIGHT, (*it)->possibleRightward));
 
             if(movementPossibleFromTheNode.find(pendingDirection)->second) //check if a pending move can be performed
             {
@@ -159,7 +159,7 @@ void Player::init()
     disable();
     setPixmap(QPixmap(":/sprites/sprites/pacopenleft.png"));
     setPos(210, 347);
-    currentDirection = pendingDirection = left;
+    currentDirection = pendingDirection = LEFT;
     moving = false;
     initialDelayTimer.start(initialDelay);
     animationTimer.start(animationTime);
@@ -177,21 +177,21 @@ bool Player::isAnyOfEnemiesFrightened() const
 void Player::keyPressEvent(QKeyEvent* event)
 {
     // move the player left and right
-    if(event->key() == Qt::Key_Left) pendingDirection = left;
-    else if(event->key() == Qt::Key_Right) pendingDirection = right;
-    else if(event->key() == Qt::Key_Up) pendingDirection = up;
-    else if(event->key() == Qt::Key_Down) pendingDirection = down;
-    else if(event->key() == Qt::Key_Escape) prepareToEndGame(pressedEsc);
+    if(event->key() == Qt::Key_Left) pendingDirection = LEFT;
+    else if(event->key() == Qt::Key_Right) pendingDirection = RIGHT;
+    else if(event->key() == Qt::Key_Up) pendingDirection = UP;
+    else if(event->key() == Qt::Key_Down) pendingDirection = DOWN;
+    else if(event->key() == Qt::Key_Escape) prepareToEndGame(PRESSED_ESC);
 }
 
 void Player::prepareToEndGame(Player::QuitReason reason) const
 {
-    if(reason == pressedEsc)
+    if(reason == PRESSED_ESC)
     {
         endGame();
         return;
     }
-    else if(reason == victory)
+    else if(reason == VICTORY)
     {
         QGraphicsTextItem* text = new QGraphicsTextItem("YOU WIN!");
         text->setPos(120, 210);
@@ -199,7 +199,7 @@ void Player::prepareToEndGame(Player::QuitReason reason) const
         text->setFont(QFont("times", 34));
         scene()->addItem(text);
     }
-    else if(reason == lossOfLives)
+    else if(reason == LOSS_OF_LIVES)
     {
         QGraphicsTextItem*  text = new QGraphicsTextItem("YOU LOSE!");
         text->setPos(120, 210);
@@ -234,23 +234,23 @@ void Player::chompingAnimation()
 {
     static bool phase = false;
 
-    if(currentDirection == left)
+    if(currentDirection == LEFT)
     {
         if(!phase) setPixmap(QPixmap(":/sprites/sprites/pacopenleft.png"));
         else setPixmap(QPixmap(":/sprites/sprites/pacmidleft.png"));
     }
-    else if(currentDirection == right)
+    else if(currentDirection == RIGHT)
     {
         if(!phase) setPixmap(QPixmap(":/sprites/sprites/pacopenright.png"));
         else setPixmap(QPixmap(":/sprites/sprites/pacmidright.png"));
     }
-    else if(currentDirection == up)
+    else if(currentDirection == UP)
     {
         if(!phase) setPixmap(QPixmap(":/sprites/sprites/pacopenup.png"));
         else setPixmap(QPixmap(":/sprites/sprites/pacmidup.png"));
 
     }
-    else if(currentDirection == down)
+    else if(currentDirection == DOWN)
     {
         if(!phase) setPixmap(QPixmap(":/sprites/sprites/pacopendown.png"));
         else setPixmap(QPixmap(":/sprites/sprites/pacmiddown.png"));
@@ -273,16 +273,16 @@ void Player::move()
     {
         switch(currentDirection)
         {
-        case left:
+        case LEFT:
             setPos(x() - 1, y());
             break;
-        case right:
+        case RIGHT:
             setPos(x() + 1, y());
             break;
-        case up:
+        case UP:
             setPos(x(), y() - 1);
             break;
-        case down:
+        case DOWN:
             setPos(x(), y() + 1);
             break;
         }

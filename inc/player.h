@@ -28,7 +28,7 @@ public:
         return currentDirection;
     }
 private:
-    enum QuitReason{pressedEsc, lossOfLives, victory};
+    enum QuitReason{PRESSED_ESC, LOSS_OF_LIVES, VICTORY};
 
     void checkCollisionWithPelletsAndGhosts();
     void checkPositionWithRespectToNodes();

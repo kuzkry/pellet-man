@@ -13,7 +13,7 @@ public:
     Character(std::vector<Node*> const& nodes) : nodes(nodes) {}
     virtual ~Character() {}
 protected:
-    enum MovementDirection{up, left, down, right};
+    enum MovementDirection{UP, LEFT, DOWN, RIGHT};
 
     virtual void checkPositionWithRespectToNodes() = 0;
     virtual void disable() = 0;

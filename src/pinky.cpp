@@ -21,19 +21,19 @@ Pinky::MovementDirection Pinky::makeTurnDecision(
     if(!frightened)
     {
         unsigned int futurePlayerPositionOffset = player.pixmap().width() * 4;
-        if(player.getCurrentDirection() == left) relativePlayerX -= futurePlayerPositionOffset;
-        else if(player.getCurrentDirection() == right) relativePlayerX += futurePlayerPositionOffset;
-        else if(player.getCurrentDirection() == up) relativePlayerY -= futurePlayerPositionOffset;
-        else if(player.getCurrentDirection() == down) relativePlayerY += futurePlayerPositionOffset;
+        if(player.getCurrentDirection() == LEFT) relativePlayerX -= futurePlayerPositionOffset;
+        else if(player.getCurrentDirection() == RIGHT) relativePlayerX += futurePlayerPositionOffset;
+        else if(player.getCurrentDirection() == UP) relativePlayerY -= futurePlayerPositionOffset;
+        else if(player.getCurrentDirection() == DOWN) relativePlayerY += futurePlayerPositionOffset;
     }
 
     unsigned int playerEnemyOffsetX = abs(relativePlayerX - x()),
             playerEnemyOffsetY = abs(relativePlayerY - y());
     DistanceAndDirectionBinder binder[4] = {
-        {pow((relativePlayerY > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + pow(playerEnemyOffsetX, 2), up},
-        {pow((relativePlayerX > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + pow(playerEnemyOffsetY, 2), left},
-        {pow((relativePlayerY > y() ? playerEnemyOffsetY - 1 : playerEnemyOffsetY + 1), 2) + pow(playerEnemyOffsetX, 2), down},
-        {pow((relativePlayerX > x() ? playerEnemyOffsetX - 1 : playerEnemyOffsetX + 1), 2) + pow(playerEnemyOffsetY, 2), right}};
+        {pow((relativePlayerY > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + pow(playerEnemyOffsetX, 2), UP},
+        {pow((relativePlayerX > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + pow(playerEnemyOffsetY, 2), LEFT},
+        {pow((relativePlayerY > y() ? playerEnemyOffsetY - 1 : playerEnemyOffsetY + 1), 2) + pow(playerEnemyOffsetX, 2), DOWN},
+        {pow((relativePlayerX > x() ? playerEnemyOffsetX - 1 : playerEnemyOffsetX + 1), 2) + pow(playerEnemyOffsetY, 2), RIGHT}};
     /* those directions are in the following order: up, left, down, right */
 
     if(!frightened)
@@ -56,7 +56,7 @@ void Pinky::allowToMove()
     QObject::disconnect(&initialDelayTimer, SIGNAL(timeout()), this, 0);
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
     moving = true;
-    currentDirection = rand() % 2 ? right : left;
+    currentDirection = rand() % 2 ? RIGHT : LEFT;
 }
 
 void Pinky::blink()
@@ -71,22 +71,22 @@ void Pinky::change()
 
     if(!frightened)
     {
-        if(currentDirection == left)
+        if(currentDirection == LEFT)
         {
             if(!phase) setPixmap(QPixmap(":/sprites/sprites/pghostL1.png").scaled(26, 26));
             else setPixmap(QPixmap(":/sprites/sprites/pghostL2.png").scaled(26, 26));
         }
-        else if(currentDirection == right)
+        else if(currentDirection == RIGHT)
         {
             if(!phase) setPixmap(QPixmap(":/sprites/sprites/pghost1.png").scaled(26, 26));
             else setPixmap(QPixmap(":/sprites/sprites/pghost2.png").scaled(26, 26));
         }
-        else if(currentDirection == up)
+        else if(currentDirection == UP)
         {
             if(!phase) setPixmap(QPixmap(":/sprites/sprites/pghostU1.png").scaled(26, 26));
             else setPixmap(QPixmap(":/sprites/sprites/pghostU2.png").scaled(26, 26));
         }
-        else if(currentDirection == down)
+        else if(currentDirection == DOWN)
         {
             if(!phase) setPixmap(QPixmap(":/sprites/sprites/pghostD1.png").scaled(26, 26));
             else setPixmap(QPixmap(":/sprites/sprites/pghostD2.png").scaled(26, 26));
@@ -123,16 +123,16 @@ void Pinky::move()
     //moving a ghost
     switch(currentDirection)
     {
-    case left:
+    case LEFT:
         setPos(x() - 1, y());
         break;
-    case right:
+    case RIGHT:
         setPos(x() + 1, y());
         break;
-    case up:
+    case UP:
         setPos(x(), y() - 1);
         break;
-    case down:
+    case DOWN:
         setPos(x(), y () + 1);
         break;
     }
