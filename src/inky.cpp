@@ -158,10 +158,10 @@ void Inky::move()
     }
 
     //teleporting on the edges of a map
-    if (x() + this->pixmap().width() < 0)
+    if (x() + pixmap().width() < 0)
         setPos(450, y());
     else if (x() > 450)
-        setPos(-this->pixmap().width(), y());
+        setPos(-pixmap().width(), y());
 }
 
 void Inky::releaseFromGhostHouse()
