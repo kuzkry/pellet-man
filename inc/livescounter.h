@@ -7,6 +7,7 @@ class LivesCounter : public QGraphicsTextItem
 {
 public:
     LivesCounter();
+
     void decrease();
     int getLives() const
     {

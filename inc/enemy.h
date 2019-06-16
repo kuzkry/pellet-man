@@ -10,6 +10,7 @@ class Enemy : public Character
 {
 public:
     Enemy(Player const& player, std::vector<Node*> const& nodes);
+
     void checkPositionWithRespectToNodes();
     void disable()
     {

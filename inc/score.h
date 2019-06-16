@@ -7,6 +7,7 @@ class Score: public QGraphicsTextItem
 {
 public:
     Score();
+
     void big_increase();
     void huge_increase();
     void little_increase();

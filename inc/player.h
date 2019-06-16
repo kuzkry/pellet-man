@@ -23,6 +23,7 @@ public:
            Game const& game,
            std::vector<Enemy*> const& enemies);
     //last two are const to avoid inattentively usages of this (have to const_cast though)
+
     MovementDirection getCurrentDirection() const
     {
         return currentDirection;
