@@ -9,13 +9,7 @@ class Player;
 class Enemy : public Character
 {
 public:
-    Enemy(Player const& player, std::vector<Node*> const& nodes)
-        : Character(nodes),
-          player(player),
-          movementTime(10),
-          singleBlinkTime(20 * movementTime),
-          blinkingInterval(2000),
-          runAwayTime(8000) {}
+    Enemy(Player const& player, std::vector<Node*> const& nodes);
     void checkPositionWithRespectToNodes();
     void disable()
     {

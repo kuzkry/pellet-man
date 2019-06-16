@@ -1,5 +1,13 @@
 #include "enemy.h"
 
+Enemy::Enemy(Player const& player, std::vector<Node*> const& nodes)
+    : Character(nodes),
+      player(player),
+      movementTime(10),
+      singleBlinkTime(20 * movementTime),
+      blinkingInterval(2000),
+      runAwayTime(8000) {}
+
 void Enemy::checkPositionWithRespectToNodes()
 {
     for (auto it = nodes.cbegin(); it != nodes.cend(); ++it)
