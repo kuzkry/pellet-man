@@ -24,13 +24,13 @@ Inky::MovementDirection Inky::makeTurnDecision(
     if (!frightened)
     {
         unsigned int futurePlayerPositionOffset = player.pixmap().width() * 2;
-        if (player.getCurrentDirection() == LEFT)
+        if (player.getCurrentDirection() == MovementDirection::LEFT)
             relativePlayerX -= futurePlayerPositionOffset;
-        else if (player.getCurrentDirection() == RIGHT)
+        else if (player.getCurrentDirection() == MovementDirection::RIGHT)
             relativePlayerX += futurePlayerPositionOffset;
-        else if (player.getCurrentDirection() == UP)
+        else if (player.getCurrentDirection() == MovementDirection::UP)
             relativePlayerY -= futurePlayerPositionOffset;
-        else if (player.getCurrentDirection() == DOWN)
+        else if (player.getCurrentDirection() == MovementDirection::DOWN)
             relativePlayerY += futurePlayerPositionOffset;
 
         playerEnemyOffsetX = abs(relativePlayerX - blinky.x()) * 2;
@@ -42,10 +42,10 @@ Inky::MovementDirection Inky::makeTurnDecision(
         playerEnemyOffsetY = abs(relativePlayerY - y());
     }
     DistanceAndDirectionBinder binder[4] = {
-        {pow((relativePlayerY > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + pow(playerEnemyOffsetX, 2), UP},
-        {pow((relativePlayerX > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + pow(playerEnemyOffsetY, 2), LEFT},
-        {pow((relativePlayerY > y() ? playerEnemyOffsetY - 1 : playerEnemyOffsetY + 1), 2) + pow(playerEnemyOffsetX, 2), DOWN},
-        {pow((relativePlayerX > x() ? playerEnemyOffsetX - 1 : playerEnemyOffsetX + 1), 2) + pow(playerEnemyOffsetY, 2), RIGHT}};
+        {pow((relativePlayerY > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + pow(playerEnemyOffsetX, 2), MovementDirection::UP},
+        {pow((relativePlayerX > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + pow(playerEnemyOffsetY, 2), MovementDirection::LEFT},
+        {pow((relativePlayerY > y() ? playerEnemyOffsetY - 1 : playerEnemyOffsetY + 1), 2) + pow(playerEnemyOffsetX, 2), MovementDirection::DOWN},
+        {pow((relativePlayerX > x() ? playerEnemyOffsetX - 1 : playerEnemyOffsetX + 1), 2) + pow(playerEnemyOffsetY, 2), MovementDirection::RIGHT}};
     /* those directions are in the following order: up, left, down, right */
 
     if (!frightened)
@@ -64,7 +64,7 @@ void Inky::allowToMove()
     QObject::disconnect(&initialDelayTimer, SIGNAL(timeout()), this, 0);
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
     moving = true;
-    currentDirection = rand() % 2 ? RIGHT : LEFT;
+    currentDirection = rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
 }
 
 void Inky::blink()
@@ -79,28 +79,28 @@ void Inky::change()
 
     if (!frightened)
     {
-        if (currentDirection == LEFT)
+        if (currentDirection == MovementDirection::LEFT)
         {
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/cghostL1.png").scaled(26, 26));
             else
                 setPixmap(QPixmap(":/sprites/sprites/cghostL2.png").scaled(26, 26));
         }
-        else if (currentDirection == RIGHT)
+        else if (currentDirection == MovementDirection::RIGHT)
         {
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/cghost1.png").scaled(26, 26));
             else
                 setPixmap(QPixmap(":/sprites/sprites/cghost2.png").scaled(26, 26));
         }
-        else if (currentDirection == UP)
+        else if (currentDirection == MovementDirection::UP)
         {
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/cghostU1.png").scaled(26, 26));
             else
                 setPixmap(QPixmap(":/sprites/sprites/cghostU2.png").scaled(26, 26));
         }
-        else if (currentDirection == DOWN)
+        else if (currentDirection == MovementDirection::DOWN)
         {
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/cghostD1.png").scaled(26, 26));
@@ -143,16 +143,16 @@ void Inky::move()
     //moving a ghost
     switch (currentDirection)
     {
-    case LEFT:
+    case MovementDirection::LEFT:
         setPos(x() - 1, y());
         break;
-    case RIGHT:
+    case MovementDirection::RIGHT:
         setPos(x() + 1, y());
         break;
-    case UP:
+    case MovementDirection::UP:
         setPos(x(), y() - 1);
         break;
-    case DOWN:
+    case MovementDirection::DOWN:
         setPos(x(), y() + 1);
         break;
     }

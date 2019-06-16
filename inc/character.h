@@ -14,7 +14,7 @@ public:
     virtual ~Character() {}
 
 protected:
-    enum MovementDirection{UP, LEFT, DOWN, RIGHT};
+    enum class MovementDirection{UP, LEFT, DOWN, RIGHT};
 
     virtual void checkPositionWithRespectToNodes() = 0;
     virtual void disable() = 0;

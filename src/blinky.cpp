@@ -19,10 +19,10 @@ Blinky::MovementDirection Blinky::makeTurnDecision(
     unsigned int playerEnemyOffsetX = abs(player.x() - x()),
                  playerEnemyOffsetY = abs(player.y() - y());
     DistanceAndDirectionBinder binder[4] = {
-        {pow((player.y() > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + pow(playerEnemyOffsetX, 2), UP},
-        {pow((player.x() > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + pow(playerEnemyOffsetY, 2), LEFT},
-        {pow((player.y() > y() ? playerEnemyOffsetY - 1 : playerEnemyOffsetY + 1), 2) + pow(playerEnemyOffsetX, 2), DOWN},
-        {pow((player.x() > x() ? playerEnemyOffsetX - 1 : playerEnemyOffsetX + 1), 2) + pow(playerEnemyOffsetY, 2), RIGHT}};
+        {pow((player.y() > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + pow(playerEnemyOffsetX, 2), MovementDirection::UP},
+        {pow((player.x() > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + pow(playerEnemyOffsetY, 2), MovementDirection::LEFT},
+        {pow((player.y() > y() ? playerEnemyOffsetY - 1 : playerEnemyOffsetY + 1), 2) + pow(playerEnemyOffsetX, 2), MovementDirection::DOWN},
+        {pow((player.x() > x() ? playerEnemyOffsetX - 1 : playerEnemyOffsetX + 1), 2) + pow(playerEnemyOffsetY, 2), MovementDirection::RIGHT}};
     /* those directions are in the following order: up, left, down, right */
 
     if (!frightened)
@@ -41,7 +41,7 @@ void Blinky::allowToMove()
     QObject::disconnect(&initialDelayTimer, SIGNAL(timeout()), this, 0);
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
     moving = true;
-    currentDirection = rand() % 2 ? RIGHT : LEFT;
+    currentDirection = rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
 }
 
 void Blinky::blink()
@@ -56,28 +56,28 @@ void Blinky::change()
 
     if (!frightened)
     {
-        if (currentDirection == LEFT)
+        if (currentDirection == MovementDirection::LEFT)
         {
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/rghostL1.png").scaled(26, 26));
             else
                 setPixmap(QPixmap(":/sprites/sprites/rghostL2.png").scaled(26, 26));
         }
-        else if (currentDirection == RIGHT)
+        else if (currentDirection == MovementDirection::RIGHT)
         {
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/rghost1.png").scaled(26, 26));
             else
                 setPixmap(QPixmap(":/sprites/sprites/rghost2.png").scaled(26, 26));
         }
-        else if (currentDirection == UP)
+        else if (currentDirection == MovementDirection::UP)
         {
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/rghostU1.png").scaled(26, 26));
             else
                 setPixmap(QPixmap(":/sprites/sprites/rghostU2.png").scaled(26, 26));
         }
-        else if (currentDirection == DOWN)
+        else if (currentDirection == MovementDirection::DOWN)
         {
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/rghostD1.png").scaled(26, 26));
@@ -120,16 +120,16 @@ void Blinky::move()
     //moving a ghost
     switch (currentDirection)
     {
-    case LEFT:
+    case MovementDirection::LEFT:
         setPos(x() - 1, y());
         break;
-    case RIGHT:
+    case MovementDirection::RIGHT:
         setPos(x() + 1, y());
         break;
-    case UP:
+    case MovementDirection::UP:
         setPos(x(), y() - 1);
         break;
-    case DOWN:
+    case MovementDirection::DOWN:
         setPos(x(), y() + 1);
         break;
     }

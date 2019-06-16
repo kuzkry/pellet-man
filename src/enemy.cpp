@@ -8,10 +8,10 @@ void Enemy::checkPositionWithRespectToNodes()
         {
             std::map<MovementDirection, bool> movementPossibleFromTheNode;
 
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(UP, (currentDirection == DOWN ? false : (*it)->possibleUpward)));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(LEFT, (currentDirection == RIGHT ? false : (*it)->possibleLeftward)));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(DOWN, (currentDirection == UP ? false : (*it)->possibleDownward)));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(RIGHT, (currentDirection == LEFT ? false : (*it)->possibleRightward)));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::UP, (currentDirection == MovementDirection::DOWN ? false : (*it)->possibleUpward)));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::LEFT, (currentDirection == MovementDirection::RIGHT ? false : (*it)->possibleLeftward)));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::DOWN, (currentDirection == MovementDirection::UP ? false : (*it)->possibleDownward)));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::RIGHT, (currentDirection == MovementDirection::LEFT ? false : (*it)->possibleRightward)));
 
             currentDirection = makeTurnDecision(movementPossibleFromTheNode, false/*frightened*/);
             break;
@@ -33,7 +33,7 @@ void Enemy::init()
     setPos(210, 210);
     QObject::disconnect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
     QObject::connect(&initialDelayTimer, SIGNAL(timeout()), this, SLOT(releaseFromGhostHouse()));
-    currentDirection = UP;
+    currentDirection = MovementDirection::UP;
     moving = frightened = blinking = false;
     startInitialDelayTimer();
     movementTimer.start(movementTime);
@@ -48,7 +48,7 @@ Character::MovementDirection Enemy::chooseMostSuitableTurnOption(
         if (possibleMovements.find(binder[i].direction)->second)
             return binder[i].direction;
     }
-    return MovementDirection(UP); // this is not going to be returned anyway
+    return MovementDirection::UP; // this is not going to be returned anyway
 }
 
 int Enemy::sortDistanceAndDirectionBindersInAscendingOrder(void const* p1, void const* p2)

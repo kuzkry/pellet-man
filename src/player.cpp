@@ -115,14 +115,14 @@ void Player::checkPositionWithRespectToNodes()
         if (it == nodes.cend()) /* there is the last iteration of a list,
         nothing happened but at least check along the player's movement line */
         {
-            if (currentDirection == UP || currentDirection == DOWN)
+            if (currentDirection == MovementDirection::UP || currentDirection == MovementDirection::DOWN)
             {
-                if (pendingDirection == UP || pendingDirection == DOWN)
+                if (pendingDirection == MovementDirection::UP || pendingDirection == MovementDirection::DOWN)
                     setMovement(pendingDirection);
             }
-            else if (currentDirection == LEFT || currentDirection == RIGHT)
+            else if (currentDirection == MovementDirection::LEFT || currentDirection == MovementDirection::RIGHT)
             {
-                if (pendingDirection == LEFT || pendingDirection == RIGHT)
+                if (pendingDirection == MovementDirection::LEFT || pendingDirection == MovementDirection::RIGHT)
                     setMovement(pendingDirection);
             }
             break;
@@ -131,10 +131,10 @@ void Player::checkPositionWithRespectToNodes()
         {
             std::map<MovementDirection, bool> movementPossibleFromTheNode;
 
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(UP, (*it)->possibleUpward));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(LEFT, (*it)->possibleLeftward));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(DOWN, (*it)->possibleDownward));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(RIGHT, (*it)->possibleRightward));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::UP, (*it)->possibleUpward));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::LEFT, (*it)->possibleLeftward));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::DOWN, (*it)->possibleDownward));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::RIGHT, (*it)->possibleRightward));
 
             if (movementPossibleFromTheNode.find(pendingDirection)->second) //check if a pending move can be performed
             {
@@ -157,7 +157,7 @@ void Player::init()
     disable();
     setPixmap(QPixmap(":/sprites/sprites/pacopenleft.png"));
     setPos(210, 347);
-    currentDirection = pendingDirection = LEFT;
+    currentDirection = pendingDirection = MovementDirection::LEFT;
     moving = false;
     initialDelayTimer.start(initialDelay);
     animationTimer.start(animationTime);
@@ -177,13 +177,13 @@ void Player::keyPressEvent(QKeyEvent* event)
 {
     // move the player left and right
     if (event->key() == Qt::Key_Left)
-        pendingDirection = LEFT;
+        pendingDirection = MovementDirection::LEFT;
     else if (event->key() == Qt::Key_Right)
-        pendingDirection = RIGHT;
+        pendingDirection = MovementDirection::RIGHT;
     else if (event->key() == Qt::Key_Up)
-        pendingDirection = UP;
+        pendingDirection = MovementDirection::UP;
     else if (event->key() == Qt::Key_Down)
-        pendingDirection = DOWN;
+        pendingDirection = MovementDirection::DOWN;
     else if (event->key() == Qt::Key_Escape)
         prepareToEndGame(PRESSED_ESC);
 }
@@ -238,21 +238,21 @@ void Player::chompingAnimation()
 {
     static bool phase = false;
 
-    if (currentDirection == LEFT)
+    if (currentDirection == MovementDirection::LEFT)
     {
         if (!phase)
             setPixmap(QPixmap(":/sprites/sprites/pacopenleft.png"));
         else
             setPixmap(QPixmap(":/sprites/sprites/pacmidleft.png"));
     }
-    else if (currentDirection == RIGHT)
+    else if (currentDirection == MovementDirection::RIGHT)
     {
         if (!phase)
             setPixmap(QPixmap(":/sprites/sprites/pacopenright.png"));
         else
             setPixmap(QPixmap(":/sprites/sprites/pacmidright.png"));
     }
-    else if (currentDirection == UP)
+    else if (currentDirection == MovementDirection::UP)
     {
         if (!phase)
             setPixmap(QPixmap(":/sprites/sprites/pacopenup.png"));
@@ -260,7 +260,7 @@ void Player::chompingAnimation()
             setPixmap(QPixmap(":/sprites/sprites/pacmidup.png"));
 
     }
-    else if (currentDirection == DOWN)
+    else if (currentDirection == MovementDirection::DOWN)
     {
         if (!phase)
             setPixmap(QPixmap(":/sprites/sprites/pacopendown.png"));
@@ -285,16 +285,16 @@ void Player::move()
     {
         switch (currentDirection)
         {
-        case LEFT:
+        case MovementDirection::LEFT:
             setPos(x() - 1, y());
             break;
-        case RIGHT:
+        case MovementDirection::RIGHT:
             setPos(x() + 1, y());
             break;
-        case UP:
+        case MovementDirection::UP:
             setPos(x(), y() - 1);
             break;
-        case DOWN:
+        case MovementDirection::DOWN:
             setPos(x(), y() + 1);
             break;
         }
