@@ -31,6 +31,7 @@ public:
         return frightened;
     }
     virtual void setInitialPixmap() = 0;
+
 protected:
     struct DistanceAndDirectionBinder
     {
@@ -45,6 +46,7 @@ protected:
         {
             return !(*this < ref);
         }
+
         float const distance;
         MovementDirection const direction;
     };
@@ -61,8 +63,10 @@ protected:
     QTimer frightenedModeTimer;
     QTimer blinkingModeTimer;
     unsigned short int movementTime, singleBlinkTime, blinkingInterval, runAwayTime;
+
 private:
     virtual void startInitialDelayTimer() = 0;
+
 protected slots:
     virtual void blink() = 0;
     virtual void change() = 0;

@@ -19,6 +19,7 @@ class Game : public QGraphicsView
 {
 public:
     Game();
+
 private:
     void createAndInitScene();
     void createGhosts();

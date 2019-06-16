@@ -27,6 +27,7 @@ public:
     {
         return currentDirection;
     }
+
 private:
     enum QuitReason{PRESSED_ESC, DEFEAT, VICTORY};
 
@@ -55,6 +56,7 @@ private:
     std::vector<Enemy*> const& enemies;
     unsigned short int initialDelay, movementTime, animationTime;
     bool moving;
+
 private slots:
     void allowToMove();
     void chompingAnimation();

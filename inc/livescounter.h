@@ -12,6 +12,7 @@ public:
     {
         return lives;
     }
+
 private:
     int lives;
 };

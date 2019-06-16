@@ -12,6 +12,7 @@ class Character : public QObject, public QGraphicsPixmapItem
 public:
     Character(std::vector<Node*> const& nodes) : nodes(nodes) {}
     virtual ~Character() {}
+
 protected:
     enum MovementDirection{UP, LEFT, DOWN, RIGHT};
 
@@ -33,6 +34,7 @@ protected:
     QTimer movementTimer;
     bool moving;
     // positions are already inherited (use x() or y())
+
 protected slots:
     virtual void allowToMove() = 0;
     virtual void move() = 0;
