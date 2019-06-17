@@ -35,13 +35,6 @@ void Enemy::disable()
     blinkingModeTimer.stop();
 }
 
-void Enemy::enableRunawayState()
-{
-    frightened = true;
-    frightenedModeTimer.start(runAwayTime);
-    blinkingModeTimer.start(runAwayTime - blinkingInterval);
-}
-
 void Enemy::init()
 {
     disable();
@@ -53,6 +46,13 @@ void Enemy::init()
     moving = frightened = blinking = false;
     startInitialDelayTimer();
     movementTimer.start(movementTime);
+}
+
+void Enemy::enableRunawayState()
+{
+    frightened = true;
+    frightenedModeTimer.start(runAwayTime);
+    blinkingModeTimer.start(runAwayTime - blinkingInterval);
 }
 
 Character::MovementDirection Enemy::chooseMostSuitableTurnOption(

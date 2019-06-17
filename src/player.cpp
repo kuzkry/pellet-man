@@ -38,6 +38,83 @@ Player::Player(std::vector<Node*> const& nodes,
     init();
 }
 
+void Player::checkPositionWithRespectToNodes()
+{
+    for (auto it = nodes.cbegin();; ++it)
+    {
+        if (it == nodes.cend()) /* there is the last iteration of a list,
+        nothing happened but at least check along the player's movement line */
+        {
+            if (currentDirection == MovementDirection::UP || currentDirection == MovementDirection::DOWN)
+            {
+                if (pendingDirection == MovementDirection::UP || pendingDirection == MovementDirection::DOWN)
+                    setMovement(pendingDirection);
+            }
+            else if (currentDirection == MovementDirection::LEFT || currentDirection == MovementDirection::RIGHT)
+            {
+                if (pendingDirection == MovementDirection::LEFT || pendingDirection == MovementDirection::RIGHT)
+                    setMovement(pendingDirection);
+            }
+            break;
+        }
+        if (isInNode(**it)) //player is in a node
+        {
+            std::map<MovementDirection, bool> movementPossibleFromTheNode;
+
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::UP, (*it)->possibleUpward));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::LEFT, (*it)->possibleLeftward));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::DOWN, (*it)->possibleDownward));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::RIGHT, (*it)->possibleRightward));
+
+            if (movementPossibleFromTheNode.find(pendingDirection)->second) //check if a pending move can be performed
+            {
+                setMovement(pendingDirection);
+            }
+            else if (movementPossibleFromTheNode.find(currentDirection)->second) //check if Pac-Man can continue in his current direction
+            {
+                // do nothing
+            }
+            else
+                setMovement(currentDirection, false); // Why currentMove? He's going to be stopped anyway
+
+            break;
+        }
+    }
+}
+
+void Player::disable()
+{
+    initialDelayTimer.stop();
+    animationTimer.stop();
+    movementTimer.stop();
+}
+
+void Player::init()
+{
+    disable();
+    setPixmap(QPixmap(":/sprites/sprites/pacopenleft.png"));
+    setPos(210, 347);
+    currentDirection = pendingDirection = MovementDirection::LEFT;
+    moving = false;
+    initialDelayTimer.start(initialDelay);
+    animationTimer.start(animationTime);
+}
+
+void Player::keyPressEvent(QKeyEvent* event)
+{
+    // move the player left and right
+    if (event->key() == Qt::Key_Left)
+        pendingDirection = MovementDirection::LEFT;
+    else if (event->key() == Qt::Key_Right)
+        pendingDirection = MovementDirection::RIGHT;
+    else if (event->key() == Qt::Key_Up)
+        pendingDirection = MovementDirection::UP;
+    else if (event->key() == Qt::Key_Down)
+        pendingDirection = MovementDirection::DOWN;
+    else if (event->key() == Qt::Key_Escape)
+        prepareToEndGame(PRESSED_ESC);
+}
+
 void Player::checkCollisionWithPelletsAndGhosts()
 {
     // get a list of all the items currently colliding with all dots and enemies
@@ -108,68 +185,6 @@ void Player::checkCollisionWithPelletsAndGhosts()
         prepareToEndGame(VICTORY);
 }
 
-void Player::checkPositionWithRespectToNodes()
-{
-    for (auto it = nodes.cbegin();; ++it)
-    {
-        if (it == nodes.cend()) /* there is the last iteration of a list,
-        nothing happened but at least check along the player's movement line */
-        {
-            if (currentDirection == MovementDirection::UP || currentDirection == MovementDirection::DOWN)
-            {
-                if (pendingDirection == MovementDirection::UP || pendingDirection == MovementDirection::DOWN)
-                    setMovement(pendingDirection);
-            }
-            else if (currentDirection == MovementDirection::LEFT || currentDirection == MovementDirection::RIGHT)
-            {
-                if (pendingDirection == MovementDirection::LEFT || pendingDirection == MovementDirection::RIGHT)
-                    setMovement(pendingDirection);
-            }
-            break;
-        }
-        if (isInNode(**it)) //player is in a node
-        {
-            std::map<MovementDirection, bool> movementPossibleFromTheNode;
-
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::UP, (*it)->possibleUpward));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::LEFT, (*it)->possibleLeftward));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::DOWN, (*it)->possibleDownward));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::RIGHT, (*it)->possibleRightward));
-
-            if (movementPossibleFromTheNode.find(pendingDirection)->second) //check if a pending move can be performed
-            {
-                setMovement(pendingDirection);
-            }
-            else if (movementPossibleFromTheNode.find(currentDirection)->second) //check if Pac-Man can continue in his current direction
-            {
-                // do nothing
-            }
-            else
-                setMovement(currentDirection, false); // Why currentMove? He's going to be stopped anyway
-
-            break;
-        }
-    }
-}
-
-void Player::disable()
-{
-    initialDelayTimer.stop();
-    animationTimer.stop();
-    movementTimer.stop();
-}
-
-void Player::init()
-{
-    disable();
-    setPixmap(QPixmap(":/sprites/sprites/pacopenleft.png"));
-    setPos(210, 347);
-    currentDirection = pendingDirection = MovementDirection::LEFT;
-    moving = false;
-    initialDelayTimer.start(initialDelay);
-    animationTimer.start(animationTime);
-}
-
 bool Player::isAnyOfEnemiesFrightened() const
 {
     for (auto it = enemies.cbegin(); it != enemies.cend(); ++it)
@@ -178,21 +193,6 @@ bool Player::isAnyOfEnemiesFrightened() const
             return true;
     }
     return false;
-}
-
-void Player::keyPressEvent(QKeyEvent* event)
-{
-    // move the player left and right
-    if (event->key() == Qt::Key_Left)
-        pendingDirection = MovementDirection::LEFT;
-    else if (event->key() == Qt::Key_Right)
-        pendingDirection = MovementDirection::RIGHT;
-    else if (event->key() == Qt::Key_Up)
-        pendingDirection = MovementDirection::UP;
-    else if (event->key() == Qt::Key_Down)
-        pendingDirection = MovementDirection::DOWN;
-    else if (event->key() == Qt::Key_Escape)
-        prepareToEndGame(PRESSED_ESC);
 }
 
 void Player::prepareToEndGame(Player::QuitReason reason) const
@@ -241,6 +241,39 @@ void Player::allowToMove()
     moving = true;
 }
 
+void Player::move()
+{
+    checkPositionWithRespectToNodes(); //meaning: check collisions with enemies or being in nodes
+
+    //moving Pac-Man
+    if (moving)
+    {
+        switch (currentDirection)
+        {
+        case MovementDirection::LEFT:
+            setPos(x() - 1, y());
+            break;
+        case MovementDirection::RIGHT:
+            setPos(x() + 1, y());
+            break;
+        case MovementDirection::UP:
+            setPos(x(), y() - 1);
+            break;
+        case MovementDirection::DOWN:
+            setPos(x(), y() + 1);
+            break;
+        }
+    }
+
+    //teleporting on the edges of a map
+    if (x() + pixmap().width() < 0)
+        setPos(450, y());
+    else if (x() > 450)
+        setPos(-pixmap().width(), y());
+
+    checkCollisionWithPelletsAndGhosts();
+}
+
 void Player::chompingAnimation()
 {
     static bool phase = false;
@@ -281,39 +314,6 @@ void Player::chompingAnimation()
 void Player::endGame() const
 {
     const_cast<Game&>(game).close();
-}
-
-void Player::move()
-{
-    checkPositionWithRespectToNodes(); //meaning: check collisions with enemies or being in nodes
-
-    //moving Pac-Man
-    if (moving)
-    {
-        switch (currentDirection)
-        {
-        case MovementDirection::LEFT:
-            setPos(x() - 1, y());
-            break;
-        case MovementDirection::RIGHT:
-            setPos(x() + 1, y());
-            break;
-        case MovementDirection::UP:
-            setPos(x(), y() - 1);
-            break;
-        case MovementDirection::DOWN:
-            setPos(x(), y() + 1);
-            break;
-        }
-    }
-
-    //teleporting on the edges of a map
-    if (x() + pixmap().width() < 0)
-        setPos(450, y());
-    else if (x() > 450)
-        setPos(-pixmap().width(), y());
-
-    checkCollisionWithPelletsAndGhosts();
 }
 
 template <class myType>

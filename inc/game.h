@@ -22,13 +22,13 @@ public:
 
 private:
     void createAndInitScene();
-    void createGhosts();
-    void createLivesCounter();
-    void createPlayer();
     void createScore();
+    void createLivesCounter();
     void deployNodes();
     void deployRegularPellets();
     void deploySuperPellets();
+    void createPlayer();
+    void createGhosts();
     QGraphicsScene scene;
     std::unique_ptr<Player> player;
     std::vector<Node*> nodes;

@@ -32,41 +32,15 @@ void Game::createAndInitScene()
     setFixedSize(450, 480);
 }
 
-void Game::createGhosts()
+void Game::createScore()
 {
-    // creating ghosts
-    enemies.emplace_back(new Blinky(*player, nodes));
-    scene.addItem(enemies[0]);
-    enemies.emplace_back(new Pinky(*player, nodes));
-    scene.addItem(enemies[1]);
-    enemies.emplace_back(new Inky(*player, nodes, dynamic_cast<Blinky&>(*enemies[0])));
-    scene.addItem(enemies[2]);
-    enemies.emplace_back(new Clyde(*player, nodes));
-    scene.addItem(enemies[3]);
+    scene.addItem(&score);
 }
 
 void Game::createLivesCounter()
 {
     livesCounter.setPos(livesCounter.x() + scene.width() - 62, livesCounter.y());
     scene.addItem(&livesCounter);
-}
-
-void Game::createPlayer()
-{
-    // create the player
-    player = std::unique_ptr<Player>(new Player(nodes, score, livesCounter, regularPellets, superPellets, *this, enemies));
-    // unfortunately player must get the reference to this game in order to call close function
-
-    // make the player focusable and set it to be the current focus
-    player->setFlag(QGraphicsItem::ItemIsFocusable);
-    player->setFocus();
-    // add the player to the scene
-    scene.addItem(player.get());
-}
-
-void Game::createScore()
-{
-    scene.addItem(&score);
 }
 
 void Game::deployNodes()
@@ -153,4 +127,30 @@ void Game::deploySuperPellets()
         scene.addItem(superPellets.back());
     }
     file.close();
+}
+
+void Game::createPlayer()
+{
+    // create the player
+    player = std::unique_ptr<Player>(new Player(nodes, score, livesCounter, regularPellets, superPellets, *this, enemies));
+    // unfortunately player must get the reference to this game in order to call close function
+
+    // make the player focusable and set it to be the current focus
+    player->setFlag(QGraphicsItem::ItemIsFocusable);
+    player->setFocus();
+    // add the player to the scene
+    scene.addItem(player.get());
+}
+
+void Game::createGhosts()
+{
+    // creating ghosts
+    enemies.emplace_back(new Blinky(*player, nodes));
+    scene.addItem(enemies[0]);
+    enemies.emplace_back(new Pinky(*player, nodes));
+    scene.addItem(enemies[1]);
+    enemies.emplace_back(new Inky(*player, nodes, dynamic_cast<Blinky&>(*enemies[0])));
+    scene.addItem(enemies[2]);
+    enemies.emplace_back(new Clyde(*player, nodes));
+    scene.addItem(enemies[3]);
 }

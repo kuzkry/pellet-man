@@ -19,6 +19,7 @@ protected:
     virtual void checkPositionWithRespectToNodes() = 0;
     virtual void disable() = 0;
     virtual void init() = 0;
+
     bool isInNode(Node const& node) const
     {
         return x() == node.x && y() == node.y;

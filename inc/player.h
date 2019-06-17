@@ -32,12 +32,13 @@ public:
 private:
     enum QuitReason{PRESSED_ESC, DEFEAT, VICTORY};
 
-    void checkCollisionWithPelletsAndGhosts();
     void checkPositionWithRespectToNodes();
     void disable();
     void init();
-    bool isAnyOfEnemiesFrightened() const;
     void keyPressEvent(QKeyEvent* event);
+
+    void checkCollisionWithPelletsAndGhosts();
+    bool isAnyOfEnemiesFrightened() const;
     void prepareToEndGame(QuitReason reason) const;
     void setMovement(MovementDirection const newDirection, bool movementPossibility = true);
     /* presumptive boolean value is true to spare the programmer's keyboard */
@@ -55,9 +56,10 @@ private:
 
 private slots:
     void allowToMove();
+    void move();
+
     void chompingAnimation();
     void endGame() const;
-    void move();
 };
 
 #endif // PLAYER_H
