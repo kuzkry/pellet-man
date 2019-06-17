@@ -12,13 +12,7 @@ public:
     Enemy(Player const& player, std::vector<Node*> const& nodes);
 
     void checkPositionWithRespectToNodes();
-    void disable()
-    {
-        initialDelayTimer.stop();
-        movementTimer.stop();
-        frightenedModeTimer.stop();
-        blinkingModeTimer.stop();
-    }
+    void disable();
     void enableRunawayState();
     void init();
     bool isFrightened() const

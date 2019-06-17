@@ -27,6 +27,14 @@ void Enemy::checkPositionWithRespectToNodes()
     }
 }
 
+void Enemy::disable()
+{
+    initialDelayTimer.stop();
+    movementTimer.stop();
+    frightenedModeTimer.stop();
+    blinkingModeTimer.stop();
+}
+
 void Enemy::enableRunawayState()
 {
     frightened = true;

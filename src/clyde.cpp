@@ -41,6 +41,15 @@ Clyde::MovementDirection Clyde::makeTurnDecision(
     return chooseMostSuitableTurnOption(possibleMovements, binder);
 }
 
+void Clyde::startInitialDelayTimer()
+{
+    initialDelayTimer.start(initialDelay);
+}
+void Clyde::setInitialPixmap()
+{
+    setPixmap(QPixmap(":/sprites/sprites/oghostU1.png").scaled(26, 26));
+}
+
 void Clyde::allowToMove()
 {
     initialDelayTimer.stop();

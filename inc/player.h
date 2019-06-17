@@ -34,12 +34,7 @@ private:
 
     void checkCollisionWithPelletsAndGhosts();
     void checkPositionWithRespectToNodes();
-    void disable()
-    {
-        initialDelayTimer.stop();
-        animationTimer.stop();
-        movementTimer.stop();
-    }
+    void disable();
     void init();
     bool isAnyOfEnemiesFrightened() const;
     void keyPressEvent(QKeyEvent* event);

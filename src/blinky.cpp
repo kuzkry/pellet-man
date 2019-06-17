@@ -35,6 +35,15 @@ Blinky::MovementDirection Blinky::makeTurnDecision(
     return chooseMostSuitableTurnOption(possibleMovements, binder);
 }
 
+void Blinky::startInitialDelayTimer()
+{
+    initialDelayTimer.start(initialDelay);
+}
+void Blinky::setInitialPixmap()
+{
+    setPixmap(QPixmap(":/sprites/sprites/rghostU1.png").scaled(26, 26));
+}
+
 void Blinky::allowToMove()
 {
     initialDelayTimer.stop();

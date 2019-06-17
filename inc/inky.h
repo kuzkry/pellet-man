@@ -12,14 +12,8 @@ public:
 
 private:
     MovementDirection makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened);
-    void startInitialDelayTimer()
-    {
-        initialDelayTimer.start(initialDelay);
-    }
-    void setInitialPixmap()
-    {
-        setPixmap(QPixmap(":/sprites/sprites/cghostU1.png").scaled(26, 26));
-    }
+    void startInitialDelayTimer();
+    void setInitialPixmap();
 
     Blinky const& blinky;
     unsigned short int initialDelay;

@@ -152,6 +152,13 @@ void Player::checkPositionWithRespectToNodes()
     }
 }
 
+void Player::disable()
+{
+    initialDelayTimer.stop();
+    animationTimer.stop();
+    movementTimer.stop();
+}
+
 void Player::init()
 {
     disable();

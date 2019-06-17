@@ -51,6 +51,15 @@ Pinky::MovementDirection Pinky::makeTurnDecision(
     return chooseMostSuitableTurnOption(possibleMovements, binder);
 }
 
+void Pinky::startInitialDelayTimer()
+{
+    initialDelayTimer.start(initialDelay);
+}
+void Pinky::setInitialPixmap()
+{
+    setPixmap(QPixmap(":/sprites/sprites/pghostU1.png").scaled(26, 26));
+}
+
 void Pinky::allowToMove()
 {
     initialDelayTimer.stop();

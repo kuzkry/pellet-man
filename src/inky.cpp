@@ -58,6 +58,15 @@ Inky::MovementDirection Inky::makeTurnDecision(
     return chooseMostSuitableTurnOption(possibleMovements, binder);
 }
 
+void Inky::startInitialDelayTimer()
+{
+    initialDelayTimer.start(initialDelay);
+}
+void Inky::setInitialPixmap()
+{
+    setPixmap(QPixmap(":/sprites/sprites/cghostU1.png").scaled(26, 26));
+}
+
 void Inky::allowToMove()
 {
     initialDelayTimer.stop();
