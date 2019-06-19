@@ -26,6 +26,7 @@ CONFIG += c++11 strict_c++
 
 SOURCES += \
     src/blinky.cpp \
+    src/character.cpp \
     src/clyde.cpp \
     src/enemy.cpp \
     src/game.cpp \

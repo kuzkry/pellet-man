@@ -1,11 +1,13 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include <QObject>
 #include <QGraphicsPixmapItem>
+#include <QObject>
 #include <QTimer>
+
 #include <vector>
-#include "node.h"
+
+struct Node;
 
 class Character : public QObject, public QGraphicsPixmapItem
 {
@@ -20,10 +22,7 @@ protected:
     virtual void disable() = 0;
     virtual void init() = 0;
 
-    auto isInNode(Node const& node) const -> bool
-    {
-        return x() == node.x && y() == node.y;
-    }
+    auto isInNode(Node const& node) const -> bool;
 
     std::vector<Node*> const& nodes;
     MovementDirection currentDirection;

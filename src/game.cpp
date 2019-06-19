@@ -1,11 +1,19 @@
 #include "game.h"
 
-#include <QTextStream>
-#include <sstream>
-#include "blinky.h"
-#include "pinky.h"
-#include "inky.h"
 #include "clyde.h"
+#include "blinky.h"
+#include "node.h"
+#include "inky.h"
+#include "pinky.h"
+#include "regularpellet.h"
+#include "superpellet.h"
+
+#include <QBrush>
+#include <QImage>
+#include <QFile>
+#include <QTextStream>
+
+#include <sstream>
 
 Game::Game()
 {

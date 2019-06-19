@@ -1,8 +1,9 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include <map>
 #include "character.h"
+
+#include <map>
 
 class Player;
 

@@ -1,5 +1,7 @@
 #include "clyde.h"
+
 #include "player.h"
+
 #include <cmath>
 #include <cstdlib>
 
@@ -17,18 +19,18 @@ auto Clyde::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovement
 {
     int playerX = player.x(),
         playerY = player.y();
-    unsigned int playerEnemyOffsetX = abs(playerX - x()),
-                 playerEnemyOffsetY = abs(playerY - y());
+    unsigned int playerEnemyOffsetX = std::abs(playerX - x()),
+                 playerEnemyOffsetY = std::abs(playerY - y());
     DistanceAndDirectionBinder binder[4] = {
-        {pow((playerY > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + pow(playerEnemyOffsetX, 2), MovementDirection::UP},
-        {pow((playerX > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + pow(playerEnemyOffsetY, 2), MovementDirection::LEFT},
-        {pow((playerY > y() ? playerEnemyOffsetY - 1 : playerEnemyOffsetY + 1), 2) + pow(playerEnemyOffsetX, 2), MovementDirection::DOWN},
-        {pow((playerX > x() ? playerEnemyOffsetX - 1 : playerEnemyOffsetX + 1), 2) + pow(playerEnemyOffsetY, 2), MovementDirection::RIGHT}};
+        {std::pow((playerY > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + std::pow(playerEnemyOffsetX, 2), MovementDirection::UP},
+        {std::pow((playerX > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + std::pow(playerEnemyOffsetY, 2), MovementDirection::LEFT},
+        {std::pow((playerY > y() ? playerEnemyOffsetY - 1 : playerEnemyOffsetY + 1), 2) + std::pow(playerEnemyOffsetX, 2), MovementDirection::DOWN},
+        {std::pow((playerX > x() ? playerEnemyOffsetX - 1 : playerEnemyOffsetX + 1), 2) + std::pow(playerEnemyOffsetY, 2), MovementDirection::RIGHT}};
     /* those directions are in the following order: up, left, down, right */
 
     {
         unsigned int nonChasingAreaLimiter = player.pixmap().width() * 8;
-        unsigned int distanceFromPlayer = sqrt(pow(abs(playerX - x()), 2) + pow(abs(playerY - y()), 2));
+        unsigned int distanceFromPlayer = sqrt(std::pow(std::abs(playerX - x()), 2) + std::pow(std::abs(playerY - y()), 2));
         if (!frightened && nonChasingAreaLimiter < distanceFromPlayer)
             std::qsort(binder, 4, sizeof(DistanceAndDirectionBinder),
                        sortDistanceAndDirectionBindersInAscendingOrder);
@@ -56,7 +58,7 @@ void Clyde::allowToMove()
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
     movementTimer.start(movementTime);
     moving = true;
-    currentDirection = rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
+    currentDirection = std::rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
 }
 
 void Clyde::blink()

@@ -1,9 +1,13 @@
-#include <QApplication>
 #include "game.h"
+
+#include <QApplication>
+
+#include <cstdlib>
+#include <ctime>
 
 auto main(int argc, char* argv[]) -> int
 {
-    srand(time(NULL));
+    std::srand(std::time(nullptr));
     QApplication a(argc, argv);
 
     Game game;

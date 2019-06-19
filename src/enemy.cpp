@@ -1,5 +1,7 @@
 #include "enemy.h"
 
+#include "node.h"
+
 Enemy::Enemy(Player const& player, std::vector<Node*> const& nodes)
     : Character(nodes),
       player(player),

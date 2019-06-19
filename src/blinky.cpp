@@ -1,5 +1,7 @@
 #include "blinky.h"
+
 #include "player.h"
+
 #include <cmath>
 #include <cstdlib>
 
@@ -15,13 +17,13 @@ Blinky::Blinky(Player const& player, std::vector<Node*> const& nodes)
 
 auto Blinky::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection
 {
-    unsigned int playerEnemyOffsetX = abs(player.x() - x()),
-                 playerEnemyOffsetY = abs(player.y() - y());
+    unsigned int playerEnemyOffsetX = std::abs(player.x() - x()),
+                 playerEnemyOffsetY = std::abs(player.y() - y());
     DistanceAndDirectionBinder binder[4] = {
-        {pow((player.y() > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + pow(playerEnemyOffsetX, 2), MovementDirection::UP},
-        {pow((player.x() > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + pow(playerEnemyOffsetY, 2), MovementDirection::LEFT},
-        {pow((player.y() > y() ? playerEnemyOffsetY - 1 : playerEnemyOffsetY + 1), 2) + pow(playerEnemyOffsetX, 2), MovementDirection::DOWN},
-        {pow((player.x() > x() ? playerEnemyOffsetX - 1 : playerEnemyOffsetX + 1), 2) + pow(playerEnemyOffsetY, 2), MovementDirection::RIGHT}};
+        {std::pow((player.y() > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + std::pow(playerEnemyOffsetX, 2), MovementDirection::UP},
+        {std::pow((player.x() > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + std::pow(playerEnemyOffsetY, 2), MovementDirection::LEFT},
+        {std::pow((player.y() > y() ? playerEnemyOffsetY - 1 : playerEnemyOffsetY + 1), 2) + std::pow(playerEnemyOffsetX, 2), MovementDirection::DOWN},
+        {std::pow((player.x() > x() ? playerEnemyOffsetX - 1 : playerEnemyOffsetX + 1), 2) + std::pow(playerEnemyOffsetY, 2), MovementDirection::RIGHT}};
     /* those directions are in the following order: up, left, down, right */
 
     if (!frightened)
@@ -49,7 +51,7 @@ void Blinky::allowToMove()
     QObject::disconnect(&initialDelayTimer, SIGNAL(timeout()), this, 0);
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
     moving = true;
-    currentDirection = rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
+    currentDirection = std::rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
 }
 
 void Blinky::blink()

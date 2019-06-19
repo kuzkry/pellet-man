@@ -1,15 +1,15 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <QKeyEvent>
-#include "score.h"
-#include "lifecounter.h"
-#include "regularpellet.h"
-#include "superpellet.h"
 #include "character.h"
-#include "enemy.h"
 
+class Enemy;
 class Game;
+class LifeCounter;
+class QKeyEvent;
+class RegularPellet;
+class Score;
+class SuperPellet;
 
 class Player : public Character
 {

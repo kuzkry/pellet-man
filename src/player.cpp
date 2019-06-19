@@ -1,15 +1,20 @@
 #include "player.h"
+
+#include "clyde.h"
+#include "blinky.h"
 #include "game.h"
+#include "inky.h"
+#include "node.h"
+#include "pinky.h"
+#include "regularpellet.h"
+#include "superpellet.h"
+
+#include <QKeyEvent>
+
 #include <algorithm>
 #include <map>
 #include <utility>
 #include <typeinfo>
-#include "blinky.h"
-#include "pinky.h"
-#include "inky.h"
-#include "clyde.h"
-#include "regularpellet.h"
-#include "superpellet.h"
 
 template <class myType>
 auto findInVector(std::vector<myType> const& vector, void* itemToBeFound) -> typename std::vector<myType>::const_iterator;

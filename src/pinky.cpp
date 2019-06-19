@@ -1,5 +1,7 @@
 #include "pinky.h"
+
 #include "player.h"
+
 #include <cmath>
 #include <cstdlib>
 
@@ -31,13 +33,13 @@ auto Pinky::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovement
             relativePlayerY += futurePlayerPositionOffset;
     }
 
-    unsigned int playerEnemyOffsetX = abs(relativePlayerX - x()),
-                 playerEnemyOffsetY = abs(relativePlayerY - y());
+    unsigned int playerEnemyOffsetX = std::abs(relativePlayerX - x()),
+                 playerEnemyOffsetY = std::abs(relativePlayerY - y());
     DistanceAndDirectionBinder binder[4] = {
-        {pow((relativePlayerY > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + pow(playerEnemyOffsetX, 2), MovementDirection::UP},
-        {pow((relativePlayerX > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + pow(playerEnemyOffsetY, 2), MovementDirection::LEFT},
-        {pow((relativePlayerY > y() ? playerEnemyOffsetY - 1 : playerEnemyOffsetY + 1), 2) + pow(playerEnemyOffsetX, 2), MovementDirection::DOWN},
-        {pow((relativePlayerX > x() ? playerEnemyOffsetX - 1 : playerEnemyOffsetX + 1), 2) + pow(playerEnemyOffsetY, 2), MovementDirection::RIGHT}};
+        {std::pow((relativePlayerY > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + std::pow(playerEnemyOffsetX, 2), MovementDirection::UP},
+        {std::pow((relativePlayerX > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + std::pow(playerEnemyOffsetY, 2), MovementDirection::LEFT},
+        {std::pow((relativePlayerY > y() ? playerEnemyOffsetY - 1 : playerEnemyOffsetY + 1), 2) + std::pow(playerEnemyOffsetX, 2), MovementDirection::DOWN},
+        {std::pow((relativePlayerX > x() ? playerEnemyOffsetX - 1 : playerEnemyOffsetX + 1), 2) + std::pow(playerEnemyOffsetY, 2), MovementDirection::RIGHT}};
     /* those directions are in the following order: up, left, down, right */
 
     if (!frightened)
@@ -65,7 +67,7 @@ void Pinky::allowToMove()
     QObject::disconnect(&initialDelayTimer, SIGNAL(timeout()), this, 0);
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
     moving = true;
-    currentDirection = rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
+    currentDirection = std::rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
 }
 
 void Pinky::blink()

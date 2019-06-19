@@ -1,19 +1,20 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "lifecounter.h"
+#include "player.h"
+#include "score.h"
+
+#include <QGraphicsScene>
 #include <QGraphicsView>
+
 #include <memory>
 #include <vector>
-#include "player.h"
-#include "node.h"
-#include "score.h"
-#include "lifecounter.h"
-#include "regularpellet.h"
-#include "superpellet.h"
-#include "enemy.h"
 
-class Player;
 class Enemy;
+struct Node;
+class RegularPellet;
+class SuperPellet;
 
 class Game : public QGraphicsView
 {
