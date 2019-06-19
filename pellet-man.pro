@@ -32,6 +32,7 @@ SOURCES += \
     src/inky.cpp \
     src/lifecounter.cpp \
     src/main.cpp \
+    src/node.cpp \
     src/pellet.cpp \
     src/pinky.cpp \
     src/player.cpp \

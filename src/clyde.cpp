@@ -3,7 +3,9 @@
 #include <cmath>
 #include <cstdlib>
 
-Clyde::Clyde(const Player &player, const std::vector<Node*> &nodes) : Enemy(player, nodes), initialDelay(3100)
+Clyde::Clyde(Player const& player, std::vector<Node*> const& nodes)
+    : Enemy(player, nodes),
+      initialDelay(3100)
 {
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(change()));
     QObject::connect(&frightenedModeTimer, SIGNAL(timeout()), this, SLOT(disableRunawayState()));
@@ -11,34 +13,40 @@ Clyde::Clyde(const Player &player, const std::vector<Node*> &nodes) : Enemy(play
     init();
 }
 
-Clyde::MovementDirection Clyde::makeTurnDecision(
-        std::map<MovementDirection, bool> &possibleMovements, bool frightened)
+auto Clyde::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection
 {
-    int playerX = player.x(), playerY = player.y();
-    unsigned int playerEnemyOffsetX = abs(playerX - x()), playerEnemyOffsetY = abs(playerY - y());
+    int playerX = player.x(),
+        playerY = player.y();
+    unsigned int playerEnemyOffsetX = abs(playerX - x()),
+                 playerEnemyOffsetY = abs(playerY - y());
     DistanceAndDirectionBinder binder[4] = {
-        {pow((playerY > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + pow(playerEnemyOffsetX, 2), up},
-        {pow((playerX > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + pow(playerEnemyOffsetY, 2), left},
-        {pow((playerY > y() ? playerEnemyOffsetY - 1 : playerEnemyOffsetY + 1), 2) + pow(playerEnemyOffsetX, 2), down},
-        {pow((playerX > x() ? playerEnemyOffsetX - 1 : playerEnemyOffsetX + 1), 2) + pow(playerEnemyOffsetY, 2), right}};
+        {pow((playerY > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + pow(playerEnemyOffsetX, 2), MovementDirection::UP},
+        {pow((playerX > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + pow(playerEnemyOffsetY, 2), MovementDirection::LEFT},
+        {pow((playerY > y() ? playerEnemyOffsetY - 1 : playerEnemyOffsetY + 1), 2) + pow(playerEnemyOffsetX, 2), MovementDirection::DOWN},
+        {pow((playerX > x() ? playerEnemyOffsetX - 1 : playerEnemyOffsetX + 1), 2) + pow(playerEnemyOffsetY, 2), MovementDirection::RIGHT}};
     /* those directions are in the following order: up, left, down, right */
 
     {
         unsigned int nonChasingAreaLimiter = player.pixmap().width() * 8;
         unsigned int distanceFromPlayer = sqrt(pow(abs(playerX - x()), 2) + pow(abs(playerY - y()), 2));
-        if(!frightened && nonChasingAreaLimiter < distanceFromPlayer)
-        {
+        if (!frightened && nonChasingAreaLimiter < distanceFromPlayer)
             std::qsort(binder, 4, sizeof(DistanceAndDirectionBinder),
                        sortDistanceAndDirectionBindersInAscendingOrder);
-        }
         else
-        {
             std::qsort(binder, 4, sizeof(DistanceAndDirectionBinder),
                        sortDistanceAndDirectionBindersInDescendingOrder);
-        }
     }
 
     return chooseMostSuitableTurnOption(possibleMovements, binder);
+}
+
+void Clyde::startInitialDelayTimer()
+{
+    initialDelayTimer.start(initialDelay);
+}
+void Clyde::setInitialPixmap()
+{
+    setPixmap(QPixmap(":/sprites/sprites/oghostU1.png").scaled(26, 26));
 }
 
 void Clyde::allowToMove()
@@ -48,7 +56,7 @@ void Clyde::allowToMove()
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
     movementTimer.start(movementTime);
     moving = true;
-    currentDirection = rand() % 2 ? right : left;
+    currentDirection = rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
 }
 
 void Clyde::blink()
@@ -61,40 +69,52 @@ void Clyde::change()
 {
     static bool phase = false;
 
-    if(!frightened)
+    if (!frightened)
     {
-        if(currentDirection == left)
+        if (currentDirection == MovementDirection::LEFT)
         {
-            if(!phase) setPixmap(QPixmap(":/sprites/sprites/oghostL1.png").scaled(26, 26));
-            else setPixmap(QPixmap(":/sprites/sprites/oghostL2.png").scaled(26, 26));
+            if (!phase)
+                setPixmap(QPixmap(":/sprites/sprites/oghostL1.png").scaled(26, 26));
+            else
+                setPixmap(QPixmap(":/sprites/sprites/oghostL2.png").scaled(26, 26));
         }
-        else if(currentDirection == right)
+        else if (currentDirection == MovementDirection::RIGHT)
         {
-            if(!phase) setPixmap(QPixmap(":/sprites/sprites/oghost1.png").scaled(26, 26));
-            else setPixmap(QPixmap(":/sprites/sprites/oghost2.png").scaled(26, 26));
+            if (!phase)
+                setPixmap(QPixmap(":/sprites/sprites/oghost1.png").scaled(26, 26));
+            else
+                setPixmap(QPixmap(":/sprites/sprites/oghost2.png").scaled(26, 26));
         }
-        else if(currentDirection == up)
+        else if (currentDirection == MovementDirection::UP)
         {
-            if(!phase) setPixmap(QPixmap(":/sprites/sprites/oghostU1.png").scaled(26, 26));
-            else setPixmap(QPixmap(":/sprites/sprites/oghostU2.png").scaled(26, 26));
+            if (!phase)
+                setPixmap(QPixmap(":/sprites/sprites/oghostU1.png").scaled(26, 26));
+            else
+                setPixmap(QPixmap(":/sprites/sprites/oghostU2.png").scaled(26, 26));
         }
-        else if(currentDirection == down)
+        else if (currentDirection == MovementDirection::DOWN)
         {
-            if(!phase) setPixmap(QPixmap(":/sprites/sprites/oghostD1.png").scaled(26, 26));
-            else setPixmap(QPixmap(":/sprites/sprites/oghostD2.png").scaled(26, 26));
+            if (!phase)
+                setPixmap(QPixmap(":/sprites/sprites/oghostD1.png").scaled(26, 26));
+            else
+                setPixmap(QPixmap(":/sprites/sprites/oghostD2.png").scaled(26, 26));
         }
     }
     else
     {
         if (blinking || frightenedModeTimer.remainingTime() > blinkingInterval)
         {
-            if(!phase) setPixmap(QPixmap(":/sprites/sprites/zombieghost1.png").scaled(26, 26));
-            else setPixmap(QPixmap(":/sprites/sprites/zombieghost2.png").scaled(26, 26));
+            if (!phase)
+                setPixmap(QPixmap(":/sprites/sprites/zombieghost1.png").scaled(26, 26));
+            else
+                setPixmap(QPixmap(":/sprites/sprites/zombieghost2.png").scaled(26, 26));
         }
         else
         {
-            if(!phase) setPixmap(QPixmap(":/sprites/sprites/leavethisplace1.png").scaled(26, 26));
-            else setPixmap(QPixmap(":/sprites/sprites/leavethisplace2.png").scaled(26, 26));
+            if (!phase)
+                setPixmap(QPixmap(":/sprites/sprites/leavethisplace1.png").scaled(26, 26));
+            else
+                setPixmap(QPixmap(":/sprites/sprites/leavethisplace2.png").scaled(26, 26));
         }
     }
 
@@ -113,36 +133,34 @@ void Clyde::move()
     checkPositionWithRespectToNodes();
 
     //moving a ghost
-    switch(currentDirection)
+    switch (currentDirection)
     {
-    case left:
+    case MovementDirection::LEFT:
         setPos(x() - 1, y());
         break;
-    case right:
+    case MovementDirection::RIGHT:
         setPos(x() + 1, y());
         break;
-    case up:
+    case MovementDirection::UP:
         setPos(x(), y() - 1);
         break;
-    case down:
-        setPos(x(),y() + 1);
+    case MovementDirection::DOWN:
+        setPos(x(), y() + 1);
         break;
     }
 
     //teleporting on the edges of a map
-    if(x() + this->pixmap().width() < 0) setPos(450, y());
-    else if(x() > 450) setPos(-this->pixmap().width(), y());
+    if (x() + pixmap().width() < 0)
+        setPos(450, y());
+    else if (x() > 450)
+        setPos(-pixmap().width(), y());
 }
 
 void Clyde::releaseFromGhostHouse()
 {
     initialDelayTimer.start(movementTime);
-    if(y() == 168 && x() == 210)
-    {
+    if (y() == 168 && x() == 210)
         allowToMove();
-    }
     else
-    {
-        setPos(x(),y() - 1);
-    }
+        setPos(x(), y() - 1);
 }

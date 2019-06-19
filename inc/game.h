@@ -19,15 +19,16 @@ class Game : public QGraphicsView
 {
 public:
     Game();
+
 private:
     void createAndInitScene();
-    void createGhosts();
-    void createLifeCounter();
-    void createPlayer();
     void createScore();
+    void createLifeCounter();
     void deployNodes();
     void deployRegularPellets();
     void deploySuperPellets();
+    void createPlayer();
+    void createGhosts();
     QGraphicsScene scene;
     std::unique_ptr<Player> player;
     std::vector<Node*> nodes;

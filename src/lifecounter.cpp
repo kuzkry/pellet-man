@@ -13,7 +13,7 @@ LifeCounter::LifeCounter()
     // draw the text
     setPlainText(QString("Lives: ") + QString::number(lives));
     setDefaultTextColor(Qt::white);
-    setFont(QFont("times",12));
+    setFont(QFont("times", 12));
 }
 
 void LifeCounter::decrease()

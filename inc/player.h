@@ -15,50 +15,50 @@ class Player : public Character
 {
     Q_OBJECT
 public:
-    Player(const std::vector<Node*> &nodes,
-           Score &score,
-           LifeCounter &lifeCounter,
-           std::vector<RegularPellet*> &regularPellets,
-           std::vector<SuperPellet*> &superPellets,
-           const Game &game,
-           const std::vector<Enemy*> &enemies);
+    Player(std::vector<Node*> const& nodes,
+           Score& score,
+           LifeCounter& lifeCounter,
+           std::vector<RegularPellet*>& regularPellets,
+           std::vector<SuperPellet*>& superPellets,
+           Game const& game,
+           std::vector<Enemy*> const& enemies);
     //last two are const to avoid inattentively usages of this (have to const_cast though)
-    MovementDirection getCurrentDirection() const
+
+    auto getCurrentDirection() const -> MovementDirection
     {
         return currentDirection;
     }
+
 private:
-    enum QuitReason{pressedEsc, lossOfLives, victory};
+    enum QuitReason{PRESSED_ESC, DEFEAT, VICTORY};
+
+    void checkPositionWithRespectToNodes() override;
+    void disable() override;
+    void init() override;
+    void keyPressEvent(QKeyEvent* event) override;
 
     void checkCollisionWithPelletsAndGhosts();
-    void checkPositionWithRespectToNodes();
-    void disable()
-    {
-        initialDelayTimer.stop();
-        animationTimer.stop();
-        movementTimer.stop();
-    }
-    void init();
-    bool isAnyOfEnemiesFrightened() const;
-    void keyPressEvent(QKeyEvent * event);
+    auto isAnyOfEnemiesFrightened() const -> bool;
     void prepareToEndGame(QuitReason reason) const;
-    void setMovement(const MovementDirection newDirection, bool movementPossibility = true);
+    void setMovement(MovementDirection const newDirection, bool movementPossibility = true);
     /* presumptive boolean value is true to spare the programmer's keyboard */
 
     MovementDirection pendingDirection;
-    Score &score;
-    LifeCounter &lifeCounter;
-    std::vector<RegularPellet*> &regularPellets;
-    std::vector<SuperPellet*> &superPellets;
+    Score& score;
+    LifeCounter& lifeCounter;
+    std::vector<RegularPellet*>& regularPellets;
+    std::vector<SuperPellet*>& superPellets;
     QTimer animationTimer;
-    const Game &game;
-    const std::vector<Enemy*> &enemies;
+    Game const& game;
+    std::vector<Enemy*> const& enemies;
     unsigned short int initialDelay, movementTime, animationTime;
+
 private slots:
-    void allowToMove();
+    void allowToMove() override;
+    void move() override;
+
     void chompingAnimation();
     void endGame() const;
-    void move();
 };
 
 #endif // PLAYER_H

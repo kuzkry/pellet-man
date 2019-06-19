@@ -7,11 +7,13 @@ class LifeCounter : public QGraphicsTextItem
 {
 public:
     LifeCounter();
+
     void decrease();
-    int getLives() const
+    auto getLives() const -> int
     {
         return lives;
     }
+
 private:
     int lives;
 };

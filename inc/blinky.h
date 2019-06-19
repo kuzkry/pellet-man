@@ -7,26 +7,22 @@ class Blinky : public Enemy
 {
     Q_OBJECT
 public:
-    Blinky(const Player &player, const std::vector<Node*> &nodes);
+    Blinky(Player const& player, const std::vector<Node*>& nodes);
+
 private:
-    MovementDirection makeTurnDecision(std::map<MovementDirection, bool> &possibleMovements, bool frightened);
-    void startInitialDelayTimer()
-    {
-        initialDelayTimer.start(initialDelay);
-    }
-    void setInitialPixmap()
-    {
-        setPixmap(QPixmap(":/sprites/sprites/rghostU1.png").scaled(26, 26));
-    }
+    auto makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection override;
+    void startInitialDelayTimer() override;
+    void setInitialPixmap() override;
 
     unsigned short int initialDelay;
+
 private slots:
-    void allowToMove();
-    void blink();
-    void change();
-    void disableRunawayState();
-    void move();
-    void releaseFromGhostHouse();
+    void allowToMove() override;
+    void blink() override;
+    void change() override;
+    void disableRunawayState() override;
+    void move() override;
+    void releaseFromGhostHouse() override;
 };
 
 #endif // BLINKY_H
