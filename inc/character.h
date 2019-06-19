@@ -11,7 +11,7 @@ class Character : public QObject, public QGraphicsPixmapItem
 {
 public:
     Character(std::vector<Node*> const& nodes) : nodes(nodes) {}
-    virtual ~Character() {}
+    ~Character() override = default;
 
 protected:
     enum class MovementDirection{UP, LEFT, DOWN, RIGHT};
