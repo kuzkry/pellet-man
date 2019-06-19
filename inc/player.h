@@ -32,10 +32,10 @@ public:
 private:
     enum QuitReason{PRESSED_ESC, DEFEAT, VICTORY};
 
-    void checkPositionWithRespectToNodes();
-    void disable();
-    void init();
-    void keyPressEvent(QKeyEvent* event);
+    void checkPositionWithRespectToNodes() override;
+    void disable() override;
+    void init() override;
+    void keyPressEvent(QKeyEvent* event) override;
 
     void checkCollisionWithPelletsAndGhosts();
     bool isAnyOfEnemiesFrightened() const;
@@ -55,8 +55,8 @@ private:
     bool moving;
 
 private slots:
-    void allowToMove();
-    void move();
+    void allowToMove() override;
+    void move() override;
 
     void chompingAnimation();
     void endGame() const;

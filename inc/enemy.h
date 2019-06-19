@@ -11,9 +11,9 @@ class Enemy : public Character
 public:
     Enemy(Player const& player, std::vector<Node*> const& nodes);
 
-    void checkPositionWithRespectToNodes();
-    void disable();
-    void init();
+    void checkPositionWithRespectToNodes() override;
+    void disable() override;
+    void init() override;
     virtual void setInitialPixmap() = 0;
 
     void enableRunawayState();

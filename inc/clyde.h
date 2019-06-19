@@ -10,19 +10,19 @@ public:
     Clyde(Player const& player, std::vector<Node*> const& nodes);
 
 private:
-    MovementDirection makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened);
-    void startInitialDelayTimer();
-    void setInitialPixmap();
+    MovementDirection makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) override;
+    void startInitialDelayTimer() override;
+    void setInitialPixmap() override;
 
     unsigned short int initialDelay;
 
 private slots:
-    void allowToMove();
-    void blink();
-    void change();
-    void disableRunawayState();
-    void move();
-    void releaseFromGhostHouse();
+    void allowToMove() override;
+    void blink() override;
+    void change() override;
+    void disableRunawayState() override;
+    void move() override;
+    void releaseFromGhostHouse() override;
 };
 
 #endif // CLYDE_H
