@@ -54,7 +54,6 @@ private:
     const Game &game;
     const std::vector<Enemy*> &enemies;
     unsigned short int initialDelay, movementTime, animationTime;
-    bool moving;
 private slots:
     void allowToMove();
     void chompingAnimation();
