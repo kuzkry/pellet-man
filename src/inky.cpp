@@ -14,8 +14,7 @@ Inky::Inky(Player const& player, std::vector<Node*> const& nodes, Blinky const& 
     init();
 }
 
-Inky::MovementDirection Inky::makeTurnDecision(
-        std::map<MovementDirection, bool>& possibleMovements, bool frightened)
+auto Inky::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection
 {
     int relativePlayerX = player.x(),
         relativePlayerY = player.y(),

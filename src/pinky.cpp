@@ -13,8 +13,7 @@ Pinky::Pinky(Player const& player, std::vector<Node*> const& nodes)
     init();
 }
 
-Pinky::MovementDirection Pinky::makeTurnDecision(
-        std::map<MovementDirection, bool>& possibleMovements, bool frightened)
+auto Pinky::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection
 {
     int relativePlayerX = player.x(),
         relativePlayerY = player.y();

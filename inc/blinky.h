@@ -10,7 +10,7 @@ public:
     Blinky(Player const& player, const std::vector<Node*>& nodes);
 
 private:
-    MovementDirection makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) override;
+    auto makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection override;
     void startInitialDelayTimer() override;
     void setInitialPixmap() override;
 

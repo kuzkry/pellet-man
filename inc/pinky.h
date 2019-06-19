@@ -10,7 +10,7 @@ public:
     Pinky(Player const& player, std::vector<Node*> const& nodes);
 
 private:
-    MovementDirection makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) override;
+    auto makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection override;
     void startInitialDelayTimer() override;
     void setInitialPixmap() override;
 

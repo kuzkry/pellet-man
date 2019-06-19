@@ -55,9 +55,8 @@ void Enemy::enableRunawayState()
     blinkingModeTimer.start(runAwayTime - blinkingInterval);
 }
 
-Character::MovementDirection Enemy::chooseMostSuitableTurnOption(
-        std::map<MovementDirection, bool>& possibleMovements,
-        Enemy::DistanceAndDirectionBinder const* binder) const
+auto Enemy::chooseMostSuitableTurnOption(std::map<MovementDirection, bool>& possibleMovements,
+                                         Enemy::DistanceAndDirectionBinder const* binder) const -> MovementDirection
 {
     for (unsigned short int i = 0; i < 4; ++i)
     {
@@ -67,7 +66,7 @@ Character::MovementDirection Enemy::chooseMostSuitableTurnOption(
     return MovementDirection::UP; // this is not going to be returned anyway
 }
 
-int Enemy::sortDistanceAndDirectionBindersInAscendingOrder(void const* p1, void const* p2)
+auto Enemy::sortDistanceAndDirectionBindersInAscendingOrder(void const* p1, void const* p2) -> int
 {
     if (*(static_cast<DistanceAndDirectionBinder const*>(p1)) < *(static_cast<DistanceAndDirectionBinder const*>(p2)))
         return -1;
@@ -77,7 +76,7 @@ int Enemy::sortDistanceAndDirectionBindersInAscendingOrder(void const* p1, void 
     return 0;
 }
 
-int Enemy::sortDistanceAndDirectionBindersInDescendingOrder(void const* p1, void const* p2)
+auto Enemy::sortDistanceAndDirectionBindersInDescendingOrder(void const* p1, void const* p2) -> int
 {
     if (*(static_cast<DistanceAndDirectionBinder const*>(p1)) < *(static_cast<DistanceAndDirectionBinder const*>(p2)))
         return 1;

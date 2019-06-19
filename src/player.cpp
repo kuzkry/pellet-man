@@ -12,7 +12,7 @@
 #include "superpellet.h"
 
 template <class myType>
-typename std::vector<myType>::const_iterator findInVector(std::vector<myType> const& vector, void* itemToBeFound);
+auto findInVector(std::vector<myType> const& vector, void* itemToBeFound) -> typename std::vector<myType>::const_iterator;
 
 Player::Player(std::vector<Node*> const& nodes,
                Score& score,
@@ -185,7 +185,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
         prepareToEndGame(VICTORY);
 }
 
-bool Player::isAnyOfEnemiesFrightened() const
+auto Player::isAnyOfEnemiesFrightened() const -> bool
 {
     for (auto it = enemies.cbegin(); it != enemies.cend(); ++it)
     {
@@ -317,7 +317,7 @@ void Player::endGame() const
 }
 
 template <class myType>
-typename std::vector<myType>::const_iterator findInVector(std::vector<myType> const& vector, void* itemToBeFound)
+auto findInVector(std::vector<myType> const& vector, void* itemToBeFound) -> typename std::vector<myType>::const_iterator
 {
     auto it = vector.cbegin();
     while (*it != itemToBeFound)

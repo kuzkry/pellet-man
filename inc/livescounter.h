@@ -9,7 +9,7 @@ public:
     LivesCounter();
 
     void decrease();
-    int getLives() const
+    auto getLives() const -> int
     {
         return lives;
     }

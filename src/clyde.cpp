@@ -13,8 +13,7 @@ Clyde::Clyde(Player const& player, std::vector<Node*> const& nodes)
     init();
 }
 
-Clyde::MovementDirection Clyde::makeTurnDecision(
-        std::map<MovementDirection, bool>& possibleMovements, bool frightened)
+auto Clyde::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection
 {
     int playerX = player.x(),
         playerY = player.y();

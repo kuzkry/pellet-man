@@ -17,7 +17,7 @@ public:
     virtual void setInitialPixmap() = 0;
 
     void enableRunawayState();
-    bool isFrightened() const
+    auto isFrightened() const -> bool
     {
         return frightened;
     }
@@ -28,11 +28,11 @@ protected:
         DistanceAndDirectionBinder(double distance, MovementDirection direction)
             : distance(distance),
               direction(direction) {}
-        bool operator<(DistanceAndDirectionBinder const& ref) const
+        auto operator<(DistanceAndDirectionBinder const& ref) const -> bool
         {
             return distance < ref.distance;
         }
-        bool operator>(DistanceAndDirectionBinder const& ref) const
+        auto operator>(DistanceAndDirectionBinder const& ref) const -> bool
         {
             return !(*this < ref);
         }
@@ -41,11 +41,10 @@ protected:
         MovementDirection const direction;
     };
 
-    virtual MovementDirection makeTurnDecision(
-            std::map<MovementDirection, bool>& possibleMovements, bool frightened) = 0;
+    virtual auto makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection = 0;
 
-    MovementDirection chooseMostSuitableTurnOption(std::map<MovementDirection, bool>& possibleMovements,
-                                                   DistanceAndDirectionBinder const* binder) const;
+    auto chooseMostSuitableTurnOption(std::map<MovementDirection, bool>& possibleMovements,
+                                      DistanceAndDirectionBinder const* binder) const -> MovementDirection;
     static int sortDistanceAndDirectionBindersInAscendingOrder(void const * p1, void const* p2);
     static int sortDistanceAndDirectionBindersInDescendingOrder(void const* p1, void const* p2);
 

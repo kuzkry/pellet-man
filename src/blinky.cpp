@@ -13,8 +13,7 @@ Blinky::Blinky(Player const& player, std::vector<Node*> const& nodes)
     init();
 }
 
-Blinky::MovementDirection Blinky::makeTurnDecision(
-        std::map<MovementDirection, bool>& possibleMovements, bool frightened)
+auto Blinky::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection
 {
     unsigned int playerEnemyOffsetX = abs(player.x() - x()),
                  playerEnemyOffsetY = abs(player.y() - y());

@@ -20,7 +20,7 @@ protected:
     virtual void disable() = 0;
     virtual void init() = 0;
 
-    bool isInNode(Node const& node) const
+    auto isInNode(Node const& node) const -> bool
     {
         return x() == node.x && y() == node.y;
     }

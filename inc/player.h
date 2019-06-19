@@ -24,7 +24,7 @@ public:
            std::vector<Enemy*> const& enemies);
     //last two are const to avoid inattentively usages of this (have to const_cast though)
 
-    MovementDirection getCurrentDirection() const
+    auto getCurrentDirection() const -> MovementDirection
     {
         return currentDirection;
     }
@@ -38,7 +38,7 @@ private:
     void keyPressEvent(QKeyEvent* event) override;
 
     void checkCollisionWithPelletsAndGhosts();
-    bool isAnyOfEnemiesFrightened() const;
+    auto isAnyOfEnemiesFrightened() const -> bool;
     void prepareToEndGame(QuitReason reason) const;
     void setMovement(MovementDirection const newDirection, bool movementPossibility = true);
     /* presumptive boolean value is true to spare the programmer's keyboard */
