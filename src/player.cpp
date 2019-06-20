@@ -181,12 +181,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
 
 auto Player::isAnyOfEnemiesFrightened() const -> bool
 {
-    for (auto it = enemies.cbegin(); it != enemies.cend(); ++it)
-    {
-        if ((*it)->isFrightened())
-            return true;
-    }
-    return false;
+    return std::any_of(enemies.begin(), enemies.end(), [](Enemy const* enemy) { return enemy->isFrightened(); });
 }
 
 void Player::prepareToEndGame(Player::QuitReason reason) const
