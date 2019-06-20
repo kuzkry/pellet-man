@@ -30,7 +30,7 @@ public:
     }
 
 private:
-    enum QuitReason{PRESSED_ESC, DEFEAT, VICTORY};
+    enum class QuitReason{PRESSED_ESC, DEFEAT, VICTORY};
 
     void checkPositionWithRespectToNodes() override;
     void disable() override;

@@ -111,7 +111,7 @@ void Player::keyPressEvent(QKeyEvent* event)
         pendingDirection = MovementDirection::DOWN;
         break;
     case Qt::Key_Escape:
-        prepareToEndGame(PRESSED_ESC);
+        prepareToEndGame(QuitReason::PRESSED_ESC);
         break;
     }
 }
@@ -166,7 +166,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
             {
                 lifeCounter.decrease();
                 if (lifeCounter.getLives() == 0)
-                    prepareToEndGame(DEFEAT);
+                    prepareToEndGame(QuitReason::DEFEAT);
                 else
                 {
                     std::for_each(const_cast<std::vector<Enemy*>&>(enemies).begin(),
@@ -183,7 +183,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
         }
     }
     if (!regularPellets.size() && !superPellets.size())
-        prepareToEndGame(VICTORY);
+        prepareToEndGame(QuitReason::VICTORY);
 }
 
 auto Player::isAnyOfEnemiesFrightened() const -> bool
@@ -195,13 +195,13 @@ void Player::prepareToEndGame(Player::QuitReason reason) const
 {
     QGraphicsTextItem* text = nullptr;
     switch (reason) {
-    case PRESSED_ESC:
+    case QuitReason::PRESSED_ESC:
         endGame();
         return;
-    case VICTORY:
+    case QuitReason::VICTORY:
         text = new QGraphicsTextItem("YOU WIN!");
         break;
-    case DEFEAT:
+    case QuitReason::DEFEAT:
         text = new QGraphicsTextItem("YOU LOSE!");
     }
     text->setPos(120, 210);
