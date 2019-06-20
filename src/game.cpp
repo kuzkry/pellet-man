@@ -106,7 +106,6 @@ void Game::deployRegularPellets()
         //then fill the vector and add to the scene
         regularPellets.push_back(new RegularPellet({x, y}));
         scene.addItem(regularPellets.back());
-        show();
     }
     file.close();
 }
