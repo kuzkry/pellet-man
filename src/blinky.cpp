@@ -66,33 +66,31 @@ void Blinky::change()
 
     if (!frightened)
     {
-        if (currentDirection == MovementDirection::LEFT)
-        {
+        switch (currentDirection) {
+        case MovementDirection::LEFT:
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/rghostL1.png").scaled(26, 26));
             else
                 setPixmap(QPixmap(":/sprites/sprites/rghostL2.png").scaled(26, 26));
-        }
-        else if (currentDirection == MovementDirection::RIGHT)
-        {
+            break;
+        case MovementDirection::RIGHT:
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/rghost1.png").scaled(26, 26));
             else
                 setPixmap(QPixmap(":/sprites/sprites/rghost2.png").scaled(26, 26));
-        }
-        else if (currentDirection == MovementDirection::UP)
-        {
+            break;
+        case MovementDirection::UP:
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/rghostU1.png").scaled(26, 26));
             else
                 setPixmap(QPixmap(":/sprites/sprites/rghostU2.png").scaled(26, 26));
-        }
-        else if (currentDirection == MovementDirection::DOWN)
-        {
+            break;
+        case MovementDirection::DOWN:
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/rghostD1.png").scaled(26, 26));
             else
                 setPixmap(QPixmap(":/sprites/sprites/rghostD2.png").scaled(26, 26));
+            break;
         }
     }
     else

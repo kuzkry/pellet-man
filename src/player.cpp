@@ -97,16 +97,23 @@ void Player::init()
 void Player::keyPressEvent(QKeyEvent* event)
 {
     // move the player left and right
-    if (event->key() == Qt::Key_Left)
+    switch (event->key()) {
+    case Qt::Key_Left:
         pendingDirection = MovementDirection::LEFT;
-    else if (event->key() == Qt::Key_Right)
+        break;
+    case Qt::Key_Right:
         pendingDirection = MovementDirection::RIGHT;
-    else if (event->key() == Qt::Key_Up)
+        break;
+    case Qt::Key_Up:
         pendingDirection = MovementDirection::UP;
-    else if (event->key() == Qt::Key_Down)
+        break;
+    case Qt::Key_Down:
         pendingDirection = MovementDirection::DOWN;
-    else if (event->key() == Qt::Key_Escape)
+        break;
+    case Qt::Key_Escape:
         prepareToEndGame(PRESSED_ESC);
+        break;
+    }
 }
 
 void Player::checkCollisionWithPelletsAndGhosts()
@@ -186,27 +193,21 @@ auto Player::isAnyOfEnemiesFrightened() const -> bool
 
 void Player::prepareToEndGame(Player::QuitReason reason) const
 {
-    if (reason == PRESSED_ESC)
-    {
+    QGraphicsTextItem* text = nullptr;
+    switch (reason) {
+    case PRESSED_ESC:
         endGame();
         return;
+    case VICTORY:
+        text = new QGraphicsTextItem("YOU WIN!");
+        break;
+    case DEFEAT:
+        text = new QGraphicsTextItem("YOU LOSE!");
     }
-    else if (reason == VICTORY)
-    {
-        QGraphicsTextItem* text = new QGraphicsTextItem("YOU WIN!");
-        text->setPos(120, 210);
-        text->setDefaultTextColor(Qt::red);
-        text->setFont(QFont("times", 34));
-        scene()->addItem(text);
-    }
-    else if (reason == DEFEAT)
-    {
-        QGraphicsTextItem*  text = new QGraphicsTextItem("YOU LOSE!");
-        text->setPos(120, 210);
-        text->setDefaultTextColor(Qt::red);
-        text->setFont(QFont("times", 34));
-        scene()->addItem(text);
-    }
+    text->setPos(120, 210);
+    text->setDefaultTextColor(Qt::red);
+    text->setFont(QFont("times", 34));
+    scene()->addItem(text);
 
     // disable all timers (disablesMovements)
     const_cast<Player*>(this)->disable(); // another way is to make timers mutable
@@ -267,34 +268,31 @@ void Player::chompingAnimation()
 {
     static bool phase = false;
 
-    if (currentDirection == MovementDirection::LEFT)
-    {
+    switch (currentDirection) {
+    case MovementDirection::LEFT:
         if (!phase)
             setPixmap(QPixmap(":/sprites/sprites/pacopenleft.png"));
         else
             setPixmap(QPixmap(":/sprites/sprites/pacmidleft.png"));
-    }
-    else if (currentDirection == MovementDirection::RIGHT)
-    {
+        break;
+    case MovementDirection::RIGHT:
         if (!phase)
             setPixmap(QPixmap(":/sprites/sprites/pacopenright.png"));
         else
             setPixmap(QPixmap(":/sprites/sprites/pacmidright.png"));
-    }
-    else if (currentDirection == MovementDirection::UP)
-    {
+        break;
+    case MovementDirection::UP:
         if (!phase)
             setPixmap(QPixmap(":/sprites/sprites/pacopenup.png"));
         else
             setPixmap(QPixmap(":/sprites/sprites/pacmidup.png"));
-
-    }
-    else if (currentDirection == MovementDirection::DOWN)
-    {
+        break;
+    case MovementDirection::DOWN:
         if (!phase)
             setPixmap(QPixmap(":/sprites/sprites/pacopendown.png"));
         else
             setPixmap(QPixmap(":/sprites/sprites/pacmiddown.png"));
+        break;
     }
 
     phase =! phase;

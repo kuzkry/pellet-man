@@ -23,14 +23,20 @@ auto Pinky::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovement
     if (!frightened)
     {
         unsigned futurePlayerPositionOffset = player.pixmap().width() * 4;
-        if (player.getCurrentDirection() == MovementDirection::LEFT)
+        switch (player.getCurrentDirection()) {
+        case MovementDirection::LEFT:
             relativePlayerX -= futurePlayerPositionOffset;
-        else if (player.getCurrentDirection() == MovementDirection::RIGHT)
+            break;
+        case MovementDirection::RIGHT:
             relativePlayerX += futurePlayerPositionOffset;
-        else if (player.getCurrentDirection() == MovementDirection::UP)
+            break;
+        case MovementDirection::UP:
             relativePlayerY -= futurePlayerPositionOffset;
-        else if (player.getCurrentDirection() == MovementDirection::DOWN)
+            break;
+        case MovementDirection::DOWN:
             relativePlayerY += futurePlayerPositionOffset;
+            break;
+        }
     }
 
     unsigned playerEnemyOffsetX = std::abs(relativePlayerX - x()),
@@ -82,33 +88,31 @@ void Pinky::change()
 
     if (!frightened)
     {
-        if (currentDirection == MovementDirection::LEFT)
-        {
+        switch (currentDirection) {
+        case MovementDirection::LEFT:
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/pghostL1.png").scaled(26, 26));
             else
                 setPixmap(QPixmap(":/sprites/sprites/pghostL2.png").scaled(26, 26));
-        }
-        else if (currentDirection == MovementDirection::RIGHT)
-        {
+            break;
+        case MovementDirection::RIGHT:
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/pghost1.png").scaled(26, 26));
             else
                 setPixmap(QPixmap(":/sprites/sprites/pghost2.png").scaled(26, 26));
-        }
-        else if (currentDirection == MovementDirection::UP)
-        {
+            break;
+        case MovementDirection::UP:
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/pghostU1.png").scaled(26, 26));
             else
                 setPixmap(QPixmap(":/sprites/sprites/pghostU2.png").scaled(26, 26));
-        }
-        else if (currentDirection == MovementDirection::DOWN)
-        {
+            break;
+        case MovementDirection::DOWN:
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/pghostD1.png").scaled(26, 26));
             else
                 setPixmap(QPixmap(":/sprites/sprites/pghostD2.png").scaled(26, 26));
+            break;
         }
     }
     else

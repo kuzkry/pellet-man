@@ -17,14 +17,20 @@ void Score::big_increase()
 
 void Score::huge_increase()
 {
-    if (multiplier == 1)
+    switch (multiplier) {
+    case 1:
         score += 200;
-    else if (multiplier == 2)
+        break;
+    case 2:
         score += 400;
-    else if (multiplier == 3)
+        break;
+    case 3:
         score += 800;
-    else if (multiplier == 4)
+        break;
+    case 4:
         score += 1600;
+        break;
+    }
     setPlainText(QString("Score: ") + QString::number(score));
     ++multiplier;
 }

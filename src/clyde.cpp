@@ -73,33 +73,31 @@ void Clyde::change()
 
     if (!frightened)
     {
-        if (currentDirection == MovementDirection::LEFT)
-        {
+        switch (currentDirection) {
+        case MovementDirection::LEFT:
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/oghostL1.png").scaled(26, 26));
             else
                 setPixmap(QPixmap(":/sprites/sprites/oghostL2.png").scaled(26, 26));
-        }
-        else if (currentDirection == MovementDirection::RIGHT)
-        {
+            break;
+        case MovementDirection::RIGHT:
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/oghost1.png").scaled(26, 26));
             else
                 setPixmap(QPixmap(":/sprites/sprites/oghost2.png").scaled(26, 26));
-        }
-        else if (currentDirection == MovementDirection::UP)
-        {
+            break;
+        case MovementDirection::UP:
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/oghostU1.png").scaled(26, 26));
             else
                 setPixmap(QPixmap(":/sprites/sprites/oghostU2.png").scaled(26, 26));
-        }
-        else if (currentDirection == MovementDirection::DOWN)
-        {
+            break;
+        case MovementDirection::DOWN:
             if (!phase)
                 setPixmap(QPixmap(":/sprites/sprites/oghostD1.png").scaled(26, 26));
             else
                 setPixmap(QPixmap(":/sprites/sprites/oghostD2.png").scaled(26, 26));
+            break;
         }
     }
     else
