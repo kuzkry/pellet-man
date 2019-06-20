@@ -5,7 +5,7 @@
 #include <cmath>
 #include <cstdlib>
 
-Clyde::Clyde(Player const& player, std::vector<Node*> const& nodes)
+Clyde::Clyde(Player const& player, std::vector<Node> const& nodes)
     : Enemy(player, nodes),
       initialDelay(3100)
 {

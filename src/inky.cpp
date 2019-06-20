@@ -5,7 +5,7 @@
 #include <cmath>
 #include <cstdlib>
 
-Inky::Inky(Player const& player, std::vector<Node*> const& nodes, Blinky const& blinky)
+Inky::Inky(Player const& player, std::vector<Node> const& nodes, Blinky const& blinky)
     : Enemy(player, nodes),
       blinky(blinky),
       initialDelay(2600)

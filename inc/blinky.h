@@ -7,7 +7,7 @@ class Blinky : public Enemy
 {
     Q_OBJECT
 public:
-    Blinky(Player const& player, const std::vector<Node*>& nodes);
+    Blinky(Player const& player, const std::vector<Node>& nodes);
 
 private:
     auto makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection override;

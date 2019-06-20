@@ -1,15 +1,14 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include <QGraphicsRectItem>
+#include <QPointF>
 
-struct Node : public QGraphicsRectItem
+struct Node : public QPointF
 {
-    Node(int x, int y,
+    Node(QPointF point,
          bool possibleUpward, bool possibleLeftward,
          bool possibleDownward, bool possibleRightward);
 
-    int x, y;
     bool possibleUpward, possibleLeftward, possibleDownward, possibleRightward;
 };
 

@@ -8,7 +8,7 @@ class Inky : public Enemy
 {
     Q_OBJECT
 public:
-    Inky(Player const& player, std::vector<Node*> const& nodes, Blinky const& blinky);
+    Inky(Player const& player, std::vector<Node> const& nodes, Blinky const& blinky);
 
 private:
     auto makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection override;

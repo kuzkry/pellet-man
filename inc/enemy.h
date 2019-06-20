@@ -10,7 +10,7 @@ class Player;
 class Enemy : public Character
 {
 public:
-    Enemy(Player const& player, std::vector<Node*> const& nodes);
+    Enemy(Player const& player, std::vector<Node> const& nodes);
 
     void checkPositionWithRespectToNodes() override;
     void disable() override;

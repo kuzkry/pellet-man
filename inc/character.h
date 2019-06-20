@@ -12,7 +12,7 @@ struct Node;
 class Character : public QObject, public QGraphicsPixmapItem
 {
 public:
-    Character(std::vector<Node*> const& nodes) : nodes(nodes) {}
+    Character(std::vector<Node> const& nodes) : nodes(nodes) {}
     ~Character() override = default;
 
 protected:
@@ -24,7 +24,7 @@ protected:
 
     auto isInNode(Node const& node) const -> bool;
 
-    std::vector<Node*> const& nodes;
+    std::vector<Node> const& nodes;
     MovementDirection currentDirection;
     QTimer initialDelayTimer;
     QTimer movementTimer;

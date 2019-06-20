@@ -7,7 +7,7 @@ class Clyde : public Enemy
 {
     Q_OBJECT
 public:
-    Clyde(Player const& player, std::vector<Node*> const& nodes);
+    Clyde(Player const& player, std::vector<Node> const& nodes);
 
 private:
     auto makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection override;

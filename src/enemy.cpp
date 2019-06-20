@@ -2,7 +2,7 @@
 
 #include "node.h"
 
-Enemy::Enemy(Player const& player, std::vector<Node*> const& nodes)
+Enemy::Enemy(Player const& player, std::vector<Node> const& nodes)
     : Character(nodes),
       player(player),
       movementTime(10),
@@ -12,16 +12,16 @@ Enemy::Enemy(Player const& player, std::vector<Node*> const& nodes)
 
 void Enemy::checkPositionWithRespectToNodes()
 {
-    for (auto it = nodes.cbegin(); it != nodes.cend(); ++it)
+    for (auto const& node : nodes)
     {
-        if (isInNode(**it))
+        if (isInNode(node))
         {
             std::map<MovementDirection, bool> movementPossibleFromTheNode;
 
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::UP, (currentDirection == MovementDirection::DOWN ? false : (*it)->possibleUpward)));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::LEFT, (currentDirection == MovementDirection::RIGHT ? false : (*it)->possibleLeftward)));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::DOWN, (currentDirection == MovementDirection::UP ? false : (*it)->possibleDownward)));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::RIGHT, (currentDirection == MovementDirection::LEFT ? false : (*it)->possibleRightward)));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::UP, (currentDirection == MovementDirection::DOWN ? false : node.possibleUpward)));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::LEFT, (currentDirection == MovementDirection::RIGHT ? false : node.possibleLeftward)));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::DOWN, (currentDirection == MovementDirection::UP ? false : node.possibleDownward)));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::RIGHT, (currentDirection == MovementDirection::LEFT ? false : node.possibleRightward)));
 
             currentDirection = makeTurnDecision(movementPossibleFromTheNode, false/*frightened*/);
             break;

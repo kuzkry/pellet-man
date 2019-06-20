@@ -2,7 +2,6 @@
 
 #include "clyde.h"
 #include "blinky.h"
-#include "node.h"
 #include "inky.h"
 #include "pinky.h"
 #include "player.h"
@@ -13,6 +12,7 @@
 #include <QImage>
 #include <QFile>
 #include <QTextStream>
+#include <QtGlobal>
 
 #include <sstream>
 
@@ -70,15 +70,14 @@ void Game::deployNodes()
             continue;
         /* so skip a line if it is either a commentary or an empty one */
         std::istringstream convertingStream(line.toStdString());
-        int x, y;
+        qreal x, y;
         bool movements[4];
         convertingStream >> x >> y;
         for (unsigned short i = 0; i < 4; ++i)
             convertingStream >> movements[i];
 
         //then fill the vector and add to the scene
-        nodes.push_back(new Node(x, y, movements[0], movements[1], movements[2], movements[3]));
-        scene.addItem(nodes.back());
+        nodes.push_back(Node{{x, y}, movements[0], movements[1], movements[2], movements[3]});
     }
     file.close();
 }

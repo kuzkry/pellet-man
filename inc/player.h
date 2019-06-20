@@ -15,7 +15,7 @@ class Player : public Character
 {
     Q_OBJECT
 public:
-    Player(std::vector<Node*> const& nodes,
+    Player(std::vector<Node> const& nodes,
            Score& score,
            LifeCounter& lifeCounter,
            std::vector<RegularPellet*>& regularPellets,

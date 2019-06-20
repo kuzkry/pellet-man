@@ -1,10 +1,9 @@
 #include "node.h"
 
-Node::Node(int x, int y,
+Node::Node(QPointF const point,
            bool possibleUpward, bool possibleLeftward,
            bool possibleDownward, bool possibleRightward)
-    : x(x),
-      y(y),
+    : QPointF(point),
       possibleUpward(possibleUpward),
       possibleLeftward(possibleLeftward),
       possibleDownward(possibleDownward),

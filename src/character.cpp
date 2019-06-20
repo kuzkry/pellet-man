@@ -4,5 +4,5 @@
 
 auto Character::isInNode(Node const& node) const -> bool
 {
-    return x() == node.x && y() == node.y;
+    return pos() == node;
 }

@@ -19,7 +19,7 @@
 template <class myType>
 auto findInVector(std::vector<myType> const& vector, void* itemToBeFound) -> typename std::vector<myType>::const_iterator;
 
-Player::Player(std::vector<Node*> const& nodes,
+Player::Player(std::vector<Node> const& nodes,
                Score& score,
                LifeCounter& lifeCounter,
                std::vector<RegularPellet*>& regularPellets,
@@ -45,45 +45,34 @@ Player::Player(std::vector<Node*> const& nodes,
 
 void Player::checkPositionWithRespectToNodes()
 {
-    for (auto it = nodes.cbegin();; ++it)
+    for (auto const& node : nodes)
     {
-        if (it == nodes.cend()) /* there is the last iteration of a list,
-        nothing happened but at least check along the player's movement line */
-        {
-            if (currentDirection == MovementDirection::UP || currentDirection == MovementDirection::DOWN)
-            {
-                if (pendingDirection == MovementDirection::UP || pendingDirection == MovementDirection::DOWN)
-                    setMovement(pendingDirection);
-            }
-            else if (currentDirection == MovementDirection::LEFT || currentDirection == MovementDirection::RIGHT)
-            {
-                if (pendingDirection == MovementDirection::LEFT || pendingDirection == MovementDirection::RIGHT)
-                    setMovement(pendingDirection);
-            }
-            break;
-        }
-        if (isInNode(**it)) //player is in a node
+        if (isInNode(node)) //player is in a node
         {
             std::map<MovementDirection, bool> movementPossibleFromTheNode;
 
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::UP, (*it)->possibleUpward));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::LEFT, (*it)->possibleLeftward));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::DOWN, (*it)->possibleDownward));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::RIGHT, (*it)->possibleRightward));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::UP, node.possibleUpward));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::LEFT, node.possibleLeftward));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::DOWN, node.possibleDownward));
+            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::RIGHT, node.possibleRightward));
 
             if (movementPossibleFromTheNode.find(pendingDirection)->second) //check if a pending move can be performed
-            {
                 setMovement(pendingDirection);
-            }
-            else if (movementPossibleFromTheNode.find(currentDirection)->second) //check if Pac-Man can continue in his current direction
-            {
-                // do nothing
-            }
-            else
-                setMovement(currentDirection, false); // Why currentMove? He's going to be stopped anyway
-
-            break;
+            else if (!movementPossibleFromTheNode.find(currentDirection)->second) //check if Pac-Man can not continue going in his current direction and must be stopped
+                setMovement(currentDirection, false);
+            return;
         }
+    }
+
+    if (currentDirection == MovementDirection::UP || currentDirection == MovementDirection::DOWN)
+    {
+        if (pendingDirection == MovementDirection::UP || pendingDirection == MovementDirection::DOWN)
+            setMovement(pendingDirection);
+    }
+    else if (currentDirection == MovementDirection::LEFT || currentDirection == MovementDirection::RIGHT)
+    {
+        if (pendingDirection == MovementDirection::LEFT || pendingDirection == MovementDirection::RIGHT)
+            setMovement(pendingDirection);
     }
 }
 
