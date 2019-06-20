@@ -2,17 +2,16 @@
 #define GAME_H
 
 #include "lifecounter.h"
-#include "player.h"
 #include "score.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsView>
 
-#include <memory>
 #include <vector>
 
 class Enemy;
 struct Node;
+class Player;
 class RegularPellet;
 class SuperPellet;
 
@@ -31,7 +30,7 @@ private:
     void createPlayer();
     void createGhosts();
     QGraphicsScene scene;
-    std::unique_ptr<Player> player;
+    Player* player;
     std::vector<Node*> nodes;
     std::vector<RegularPellet*> regularPellets;
     std::vector<SuperPellet*> superPellets;

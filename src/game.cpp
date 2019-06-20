@@ -5,6 +5,7 @@
 #include "node.h"
 #include "inky.h"
 #include "pinky.h"
+#include "player.h"
 #include "regularpellet.h"
 #include "superpellet.h"
 
@@ -140,14 +141,14 @@ void Game::deploySuperPellets()
 void Game::createPlayer()
 {
     // create the player
-    player = std::unique_ptr<Player>(new Player(nodes, score, lifeCounter, regularPellets, superPellets, *this, enemies));
+    player = new Player(nodes, score, lifeCounter, regularPellets, superPellets, *this, enemies);
     // unfortunately player must get the reference to this game in order to call close function
 
     // make the player focusable and set it to be the current focus
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
     // add the player to the scene
-    scene.addItem(player.get());
+    scene.addItem(player);
 }
 
 void Game::createGhosts()
