@@ -4,11 +4,12 @@ A *Pac-Man* clone written in C++ and Qt during the 3rd year of studies at Lodz U
 ***
 ### Getting Started
 
-Project can be set up using Qt Creator (load *pellet-man.pro* file).
+Project can be set up using Qt Creator (load *pellet-man.pro* file) or by invoking qmake on this project directory.
 It has to be compiled on the user's machine.
 
 ### Prerequisites
 
+- qmake
 - Qt framework (libraries used: Qt5Widgets Qt5Gui, Qt5Core) [tested on 5.12 version]
 - C++11 compiler
 
