@@ -53,7 +53,7 @@ protected:
     bool frightened, blinking;
     QTimer frightenedModeTimer;
     QTimer blinkingModeTimer;
-    unsigned short int movementTime, singleBlinkTime, blinkingInterval, runAwayTime;
+    unsigned short movementTime, singleBlinkTime, blinkingInterval, runAwayTime;
 
 protected slots:
     virtual void blink() = 0;

@@ -60,7 +60,7 @@ void Enemy::enableRunawayState()
 auto Enemy::chooseMostSuitableTurnOption(std::map<MovementDirection, bool>& possibleMovements,
                                          Enemy::DistanceAndDirectionBinder const* binder) const -> MovementDirection
 {
-    for (unsigned short int i = 0; i < 4; ++i)
+    for (unsigned short i = 0; i < 4; ++i)
     {
         if (possibleMovements.find(binder[i].direction)->second)
             return binder[i].direction;

@@ -72,7 +72,7 @@ void Game::deployNodes()
         int x, y;
         bool movements[4];
         convertingStream >> x >> y;
-        for (short unsigned int i = 0; i < 4; ++i)
+        for (unsigned short i = 0; i < 4; ++i)
             convertingStream >> movements[i];
 
         //then fill the vector and add to the scene

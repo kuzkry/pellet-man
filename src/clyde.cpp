@@ -19,8 +19,8 @@ auto Clyde::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovement
 {
     int playerX = player.x(),
         playerY = player.y();
-    unsigned int playerEnemyOffsetX = std::abs(playerX - x()),
-                 playerEnemyOffsetY = std::abs(playerY - y());
+    unsigned playerEnemyOffsetX = std::abs(playerX - x()),
+             playerEnemyOffsetY = std::abs(playerY - y());
     DistanceAndDirectionBinder binder[4] = {
         {std::pow((playerY > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + std::pow(playerEnemyOffsetX, 2), MovementDirection::UP},
         {std::pow((playerX > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + std::pow(playerEnemyOffsetY, 2), MovementDirection::LEFT},
@@ -29,8 +29,8 @@ auto Clyde::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovement
     /* those directions are in the following order: up, left, down, right */
 
     {
-        unsigned int nonChasingAreaLimiter = player.pixmap().width() * 8;
-        unsigned int distanceFromPlayer = sqrt(std::pow(std::abs(playerX - x()), 2) + std::pow(std::abs(playerY - y()), 2));
+        unsigned nonChasingAreaLimiter = player.pixmap().width() * 8,
+                 distanceFromPlayer = sqrt(std::pow(std::abs(playerX - x()), 2) + std::pow(std::abs(playerY - y()), 2));
         if (!frightened && nonChasingAreaLimiter < distanceFromPlayer)
             std::qsort(binder, 4, sizeof(DistanceAndDirectionBinder),
                        sortDistanceAndDirectionBindersInAscendingOrder);

@@ -51,7 +51,7 @@ private:
     QTimer animationTimer;
     Game const& game;
     std::vector<Enemy*> const& enemies;
-    unsigned short int initialDelay, movementTime, animationTime;
+    unsigned short initialDelay, movementTime, animationTime;
 
 private slots:
     void allowToMove() override;

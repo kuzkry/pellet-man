@@ -14,8 +14,8 @@ public:
     void resetMultiplier();
 
 private:
-    unsigned short int multiplier;
-    unsigned short int score;
+    unsigned short multiplier;
+    unsigned short score;
 };
 
 #endif // SCORE_H

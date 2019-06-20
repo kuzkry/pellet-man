@@ -24,7 +24,7 @@ auto Inky::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements
 
     if (!frightened)
     {
-        unsigned int futurePlayerPositionOffset = player.pixmap().width() * 2;
+        unsigned futurePlayerPositionOffset = player.pixmap().width() * 2;
         if (player.getCurrentDirection() == MovementDirection::LEFT)
             relativePlayerX -= futurePlayerPositionOffset;
         else if (player.getCurrentDirection() == MovementDirection::RIGHT)

@@ -16,7 +16,7 @@ private:
     void setInitialPixmap() override;
 
     Blinky const& blinky;
-    unsigned short int initialDelay;
+    unsigned short initialDelay;
 
 private slots:
     void allowToMove() override;

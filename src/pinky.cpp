@@ -22,7 +22,7 @@ auto Pinky::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovement
 
     if (!frightened)
     {
-        unsigned int futurePlayerPositionOffset = player.pixmap().width() * 4;
+        unsigned futurePlayerPositionOffset = player.pixmap().width() * 4;
         if (player.getCurrentDirection() == MovementDirection::LEFT)
             relativePlayerX -= futurePlayerPositionOffset;
         else if (player.getCurrentDirection() == MovementDirection::RIGHT)
@@ -33,8 +33,8 @@ auto Pinky::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovement
             relativePlayerY += futurePlayerPositionOffset;
     }
 
-    unsigned int playerEnemyOffsetX = std::abs(relativePlayerX - x()),
-                 playerEnemyOffsetY = std::abs(relativePlayerY - y());
+    unsigned playerEnemyOffsetX = std::abs(relativePlayerX - x()),
+             playerEnemyOffsetY = std::abs(relativePlayerY - y());
     DistanceAndDirectionBinder binder[4] = {
         {std::pow((relativePlayerY > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + std::pow(playerEnemyOffsetX, 2), MovementDirection::UP},
         {std::pow((relativePlayerX > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + std::pow(playerEnemyOffsetY, 2), MovementDirection::LEFT},

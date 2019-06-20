@@ -14,7 +14,7 @@ private:
     void startInitialDelayTimer() override;
     void setInitialPixmap() override;
 
-    unsigned short int initialDelay;
+    unsigned short initialDelay;
 
 private slots:
     void allowToMove() override;
