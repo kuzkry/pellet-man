@@ -55,7 +55,8 @@ HEADERS += \
     inc/player.h \
     inc/regularpellet.h \
     inc/score.h \
-    inc/superpellet.h
+    inc/superpellet.h \
+    inc/utils.h
 
 INCLUDEPATH += \
     inc

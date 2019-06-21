@@ -8,6 +8,7 @@
 #include "pinky.h"
 #include "regularpellet.h"
 #include "superpellet.h"
+#include "utils.h"
 
 #include <QKeyEvent>
 
@@ -64,15 +65,13 @@ void Player::checkPositionWithRespectToNodes()
         }
     }
 
-    if (currentDirection == MovementDirection::UP || currentDirection == MovementDirection::DOWN)
+    if ((::contains({MovementDirection::UP, MovementDirection::DOWN}, currentDirection) &&
+         ::contains({MovementDirection::UP, MovementDirection::DOWN}, pendingDirection))
+        ||
+        (::contains({MovementDirection::LEFT, MovementDirection::RIGHT}, currentDirection) &&
+         ::contains({MovementDirection::LEFT, MovementDirection::RIGHT}, pendingDirection)))
     {
-        if (pendingDirection == MovementDirection::UP || pendingDirection == MovementDirection::DOWN)
-            setMovement(pendingDirection);
-    }
-    else if (currentDirection == MovementDirection::LEFT || currentDirection == MovementDirection::RIGHT)
-    {
-        if (pendingDirection == MovementDirection::LEFT || pendingDirection == MovementDirection::RIGHT)
-            setMovement(pendingDirection);
+        setMovement(pendingDirection);
     }
 }
 
