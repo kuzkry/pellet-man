@@ -3,14 +3,18 @@
 
 #include "character.h"
 
+#include <QPointF>
+
+#include <chrono>
 #include <map>
 
 class Player;
 
 class Enemy : public Character
 {
+    Q_OBJECT
 public:
-    Enemy(Player const& player, std::vector<Node> const& nodes);
+    Enemy(Player const& player, std::vector<Node> const& nodes, std::chrono::milliseconds delayToLeaveHideout);
 
     void checkPositionWithRespectToNodes() override;
     void disable() override;
@@ -54,15 +58,21 @@ protected:
     QTimer frightenedModeTimer;
     QTimer blinkingModeTimer;
     unsigned short movementTime, singleBlinkTime, blinkingInterval, runAwayTime;
+    std::chrono::milliseconds const delayToLeaveHideout;
 
 protected slots:
-    virtual void blink() = 0;
     virtual void change() = 0;
-    virtual void disableRunawayState() = 0;
-    virtual void releaseFromGhostHouse() = 0;
 
 private:
-    virtual void startInitialDelayTimer() = 0;
+    static constexpr QPointF initialChasePoint = {210, 168};
+
+    void startInitialDelayTimer();
+
+private slots:
+    void blink();
+    void disableRunawayState();
+    void move() override;
+    void releaseFromHideout();
 };
 
 /* anyway these virtual functions are going to be early bind and virtuality will not work on them

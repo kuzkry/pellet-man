@@ -12,19 +12,14 @@ public:
 
 private:
     auto makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection override;
-    void startInitialDelayTimer() override;
     void setInitialPixmap() override;
 
     Blinky const& blinky;
-    unsigned short initialDelay;
+    static constexpr std::chrono::milliseconds delayToLeaveHideout{2600};
 
 private slots:
     void allowToMove() override;
-    void blink() override;
     void change() override;
-    void disableRunawayState() override;
-    void move() override;
-    void releaseFromGhostHouse() override;
 };
 
 #endif // INKY_H

@@ -5,13 +5,12 @@
 #include <cmath>
 #include <cstdlib>
 
+constexpr std::chrono::milliseconds Clyde::delayToLeaveHideout;
+
 Clyde::Clyde(Player const& player, std::vector<Node> const& nodes)
-    : Enemy(player, nodes),
-      initialDelay(3100)
+    : Enemy(player, nodes, delayToLeaveHideout)
 {
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(change()));
-    QObject::connect(&frightenedModeTimer, SIGNAL(timeout()), this, SLOT(disableRunawayState()));
-    QObject::connect(&blinkingModeTimer, SIGNAL(timeout()), this, SLOT(blink()));
     init();
 }
 
@@ -42,10 +41,6 @@ auto Clyde::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovement
     return chooseMostSuitableTurnOption(possibleMovements, binder);
 }
 
-void Clyde::startInitialDelayTimer()
-{
-    initialDelayTimer.start(initialDelay);
-}
 void Clyde::setInitialPixmap()
 {
     setPixmap(QPixmap(":/sprites/sprites/oghostU1.png").scaled(26, 26));
@@ -59,12 +54,6 @@ void Clyde::allowToMove()
     movementTimer.start(movementTime);
     moving = true;
     currentDirection = std::rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
-}
-
-void Clyde::blink()
-{
-    blinking = !blinking;
-    blinkingModeTimer.start(singleBlinkTime);
 }
 
 void Clyde::change()
@@ -119,48 +108,4 @@ void Clyde::change()
     }
 
     phase = !phase;
-}
-
-void Clyde::disableRunawayState()
-{
-    frightenedModeTimer.stop();
-    blinkingModeTimer.stop();
-    blinking = frightened = false;
-}
-
-void Clyde::move()
-{
-    checkPositionWithRespectToNodes();
-
-    //moving a ghost
-    switch (currentDirection)
-    {
-    case MovementDirection::LEFT:
-        setPos(x() - 1, y());
-        break;
-    case MovementDirection::RIGHT:
-        setPos(x() + 1, y());
-        break;
-    case MovementDirection::UP:
-        setPos(x(), y() - 1);
-        break;
-    case MovementDirection::DOWN:
-        setPos(x(), y() + 1);
-        break;
-    }
-
-    //teleporting on the edges of a map
-    if (x() + pixmap().width() < 0)
-        setPos(450, y());
-    else if (x() > 450)
-        setPos(-pixmap().width(), y());
-}
-
-void Clyde::releaseFromGhostHouse()
-{
-    initialDelayTimer.start(movementTime);
-    if (y() == 168 && x() == 210)
-        allowToMove();
-    else
-        setPos(x(), y() - 1);
 }

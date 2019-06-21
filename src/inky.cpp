@@ -5,14 +5,13 @@
 #include <cmath>
 #include <cstdlib>
 
+constexpr std::chrono::milliseconds Inky::delayToLeaveHideout;
+
 Inky::Inky(Player const& player, std::vector<Node> const& nodes, Blinky const& blinky)
-    : Enemy(player, nodes),
-      blinky(blinky),
-      initialDelay(2600)
+    : Enemy(player, nodes, delayToLeaveHideout),
+      blinky(blinky)
 {
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(change()));
-    QObject::connect(&frightenedModeTimer, SIGNAL(timeout()), this, SLOT(disableRunawayState()));
-    QObject::connect(&blinkingModeTimer, SIGNAL(timeout()), this, SLOT(blink()));
     init();
 }
 
@@ -65,10 +64,6 @@ auto Inky::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements
     return chooseMostSuitableTurnOption(possibleMovements, binder);
 }
 
-void Inky::startInitialDelayTimer()
-{
-    initialDelayTimer.start(initialDelay);
-}
 void Inky::setInitialPixmap()
 {
     setPixmap(QPixmap(":/sprites/sprites/cghostU1.png").scaled(26, 26));
@@ -81,12 +76,6 @@ void Inky::allowToMove()
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
     moving = true;
     currentDirection = std::rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
-}
-
-void Inky::blink()
-{
-    blinking = !blinking;
-    blinkingModeTimer.start(singleBlinkTime);
 }
 
 void Inky::change()
@@ -141,48 +130,4 @@ void Inky::change()
     }
 
     phase = !phase;
-}
-
-void Inky::disableRunawayState()
-{
-    frightenedModeTimer.stop();
-    blinkingModeTimer.stop();
-    blinking = frightened = false;
-}
-
-void Inky::move()
-{
-    checkPositionWithRespectToNodes();
-
-    //moving a ghost
-    switch (currentDirection)
-    {
-    case MovementDirection::LEFT:
-        setPos(x() - 1, y());
-        break;
-    case MovementDirection::RIGHT:
-        setPos(x() + 1, y());
-        break;
-    case MovementDirection::UP:
-        setPos(x(), y() - 1);
-        break;
-    case MovementDirection::DOWN:
-        setPos(x(), y() + 1);
-        break;
-    }
-
-    //teleporting on the edges of a map
-    if (x() + pixmap().width() < 0)
-        setPos(450, y());
-    else if (x() > 450)
-        setPos(-pixmap().width(), y());
-}
-
-void Inky::releaseFromGhostHouse()
-{
-    initialDelayTimer.start(movementTime);
-    if (y() == 168 && x() == 210)
-        allowToMove();
-    else
-        setPos(x(), y() - 1);
 }

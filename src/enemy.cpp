@@ -2,13 +2,16 @@
 
 #include "node.h"
 
-Enemy::Enemy(Player const& player, std::vector<Node> const& nodes)
+constexpr QPointF Enemy::initialChasePoint;
+
+Enemy::Enemy(Player const& player, std::vector<Node> const& nodes, std::chrono::milliseconds const delayToLeaveHideout)
     : Character(nodes),
       player(player),
       movementTime(10),
       singleBlinkTime(20 * movementTime),
       blinkingInterval(2000),
-      runAwayTime(8000) {}
+      runAwayTime(8000),
+      delayToLeaveHideout(delayToLeaveHideout) {}
 
 void Enemy::checkPositionWithRespectToNodes()
 {
@@ -39,11 +42,13 @@ void Enemy::disable()
 
 void Enemy::init()
 {
+    QObject::connect(&frightenedModeTimer, SIGNAL(timeout()), this, SLOT(disableRunawayState()));
+    QObject::connect(&blinkingModeTimer, SIGNAL(timeout()), this, SLOT(blink()));
     disable();
     setInitialPixmap();
     setPos(210, 210);
     QObject::disconnect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
-    QObject::connect(&initialDelayTimer, SIGNAL(timeout()), this, SLOT(releaseFromGhostHouse()));
+    QObject::connect(&initialDelayTimer, SIGNAL(timeout()), this, SLOT(releaseFromHideout()));
     currentDirection = MovementDirection::UP;
     moving = frightened = blinking = false;
     startInitialDelayTimer();
@@ -86,4 +91,59 @@ auto Enemy::sortDistanceAndDirectionBindersInDescendingOrder(void const* p1, voi
         return -1;
 
     return 0;
+}
+
+void Enemy::startInitialDelayTimer()
+{
+    initialDelayTimer.start(delayToLeaveHideout);
+}
+
+void Enemy::blink()
+{
+    blinking = !blinking;
+    blinkingModeTimer.start(singleBlinkTime);
+}
+
+void Enemy::disableRunawayState()
+{
+    frightenedModeTimer.stop();
+    blinkingModeTimer.stop();
+    blinking = frightened = false;
+}
+
+void Enemy::move()
+{
+    checkPositionWithRespectToNodes();
+
+    //moving a ghost
+    switch (currentDirection)
+    {
+    case MovementDirection::LEFT:
+        setPos(x() - 1, y());
+        break;
+    case MovementDirection::RIGHT:
+        setPos(x() + 1, y());
+        break;
+    case MovementDirection::UP:
+        setPos(x(), y() - 1);
+        break;
+    case MovementDirection::DOWN:
+        setPos(x(), y () + 1);
+        break;
+    }
+
+    //teleporting on the edges of a map
+    if (x() + pixmap().width() < 0)
+        setPos(450, y());
+    else if (x() > 450)
+        setPos(-pixmap().width(), y());
+}
+
+void Enemy::releaseFromHideout()
+{
+    initialDelayTimer.start(movementTime);
+    if (pos() == initialChasePoint)
+        allowToMove();
+    else
+        setPos(x(), y() - 1);
 }

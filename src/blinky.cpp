@@ -5,13 +5,12 @@
 #include <cmath>
 #include <cstdlib>
 
+constexpr std::chrono::milliseconds Blinky::delayToLeaveHideout;
+
 Blinky::Blinky(Player const& player, std::vector<Node> const& nodes)
-    : Enemy(player, nodes),
-      initialDelay(1600)
+    : Enemy(player, nodes, delayToLeaveHideout)
 {
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(change()));
-    QObject::connect(&frightenedModeTimer, SIGNAL(timeout()), this, SLOT(disableRunawayState()));
-    QObject::connect(&blinkingModeTimer, SIGNAL(timeout()), this, SLOT(blink()));
     init();
 }
 
@@ -36,10 +35,6 @@ auto Blinky::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovemen
     return chooseMostSuitableTurnOption(possibleMovements, binder);
 }
 
-void Blinky::startInitialDelayTimer()
-{
-    initialDelayTimer.start(initialDelay);
-}
 void Blinky::setInitialPixmap()
 {
     setPixmap(QPixmap(":/sprites/sprites/rghostU1.png").scaled(26, 26));
@@ -52,12 +47,6 @@ void Blinky::allowToMove()
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
     moving = true;
     currentDirection = std::rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
-}
-
-void Blinky::blink()
-{
-    blinking = !blinking;
-    blinkingModeTimer.start(singleBlinkTime);
 }
 
 void Blinky::change()
@@ -112,48 +101,4 @@ void Blinky::change()
     }
 
     phase = !phase;
-}
-
-void Blinky::disableRunawayState()
-{
-    frightenedModeTimer.stop();
-    blinkingModeTimer.stop();
-    blinking = frightened = false;
-}
-
-void Blinky::move()
-{
-    checkPositionWithRespectToNodes();
-
-    //moving a ghost
-    switch (currentDirection)
-    {
-    case MovementDirection::LEFT:
-        setPos(x() - 1, y());
-        break;
-    case MovementDirection::RIGHT:
-        setPos(x() + 1, y());
-        break;
-    case MovementDirection::UP:
-        setPos(x(), y() - 1);
-        break;
-    case MovementDirection::DOWN:
-        setPos(x(), y() + 1);
-        break;
-    }
-
-    //teleporting on the edges of a map
-    if (x() + pixmap().width() < 0)
-        setPos(450, y());
-    else if (x() > 450)
-        setPos(-pixmap().width(), y());
-}
-
-void Blinky::releaseFromGhostHouse()
-{
-    initialDelayTimer.start(movementTime);
-    if (y() == 168 && x() == 210)
-        allowToMove();
-    else
-        setPos(x(), y() - 1);
 }
