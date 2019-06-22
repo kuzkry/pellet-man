@@ -74,7 +74,6 @@ void Inky::allowToMove()
     initialDelayTimer.stop();
     QObject::disconnect(&initialDelayTimer, SIGNAL(timeout()), this, 0);
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
-    moving = true;
     currentDirection = std::rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
 }
 

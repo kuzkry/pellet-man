@@ -52,6 +52,7 @@ private:
     Game const& game;
     std::vector<Enemy*> const& enemies;
     unsigned short initialDelay, movementTime, animationTime;
+    bool isMoving;
 
 private slots:
     void allowToMove() override;

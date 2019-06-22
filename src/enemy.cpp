@@ -50,7 +50,7 @@ void Enemy::init()
     QObject::disconnect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
     QObject::connect(&initialDelayTimer, SIGNAL(timeout()), this, SLOT(releaseFromHideout()));
     currentDirection = MovementDirection::UP;
-    moving = frightened = blinking = false;
+    frightened = blinking = false;
     startInitialDelayTimer();
     movementTimer.start(movementTime);
 }

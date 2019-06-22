@@ -28,7 +28,6 @@ protected:
     MovementDirection currentDirection;
     QTimer initialDelayTimer;
     QTimer movementTimer;
-    bool moving;
     // positions are already inherited (use x() or y())
 
 protected slots:

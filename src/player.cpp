@@ -88,7 +88,7 @@ void Player::init()
     setPixmap(QPixmap(":/sprites/sprites/pacopenleft.png"));
     setPos(210, 347);
     currentDirection = pendingDirection = MovementDirection::LEFT;
-    moving = false;
+    isMoving = false;
     initialDelayTimer.start(initialDelay);
     animationTimer.start(animationTime);
 }
@@ -220,14 +220,14 @@ void Player::prepareToEndGame(Player::QuitReason reason) const
 void Player::setMovement(Player::MovementDirection const newDirection, bool movementPossibility)
 {
     currentDirection = newDirection;
-    moving = movementPossibility;
+    isMoving = movementPossibility;
 }
 
 void Player::allowToMove()
 {
     initialDelayTimer.stop();
     movementTimer.start(movementTime);
-    moving = true;
+    isMoving = true;
 }
 
 void Player::move()
@@ -235,7 +235,7 @@ void Player::move()
     checkPositionWithRespectToNodes(); //meaning: check collisions with enemies or being in nodes
 
     //moving Pac-Man
-    if (moving)
+    if (isMoving)
     {
         switch (currentDirection)
         {
