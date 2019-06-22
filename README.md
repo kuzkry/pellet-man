@@ -10,7 +10,7 @@ It has to be compiled on the user's machine.
 ### Prerequisites
 
 - Qt framework (libraries used: Qt5Widgets Qt5Gui, Qt5Core) [tested on 5.12 version]
-- C++11 compiler
+- C++17 compiler
 
 ### License
 

@@ -3,8 +3,6 @@
 #include "distancecalculator.h"
 #include "player.h"
 
-constexpr std::chrono::milliseconds Blinky::delayToLeaveHideout;
-
 Blinky::Blinky(Player const& player, std::vector<Node> const& nodes)
     : Enemy(player, nodes, getRegularSprites(), delayToLeaveHideout) {}
 
