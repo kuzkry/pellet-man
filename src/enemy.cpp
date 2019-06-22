@@ -132,6 +132,11 @@ auto Enemy::rescalePixmaps(SpriteMap<Key> spriteMap) -> SpriteMap<Key> {
     return spriteMap;
 }
 
+void Enemy::setInitialPixmap()
+{
+    setPixmap(regularSprites.find(MovementDirection::UP)->second[0]);
+}
+
 void Enemy::allowToMove()
 {
     initialDelayTimer.stop();

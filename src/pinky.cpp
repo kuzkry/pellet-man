@@ -60,8 +60,3 @@ auto Pinky::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovement
 
     return chooseMostSuitableTurnOption(possibleMovements, binder);
 }
-
-void Pinky::setInitialPixmap()
-{
-    setPixmap(QPixmap(":/sprites/sprites/pghostU1.png").scaled(26, 26));
-}

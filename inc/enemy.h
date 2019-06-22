@@ -27,7 +27,6 @@ public:
     void checkPositionWithRespectToNodes() override;
     void deinit() override;
     void init() override;
-    virtual void setInitialPixmap() = 0;
 
     void enableRunawayState();
     auto isFrightened() const -> bool
@@ -75,6 +74,7 @@ private:
     auto nextSpriteIndex() const noexcept -> std::size_t;
     template <typename Key>
     static auto rescalePixmaps(SpriteMap<Key> spriteMap) -> SpriteMap<Key>;
+    void setInitialPixmap();
 
     QTimer blinkingModeTimer, frightenedModeTimer;
     SpriteMap<MovementDirection> const regularSprites;

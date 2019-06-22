@@ -38,8 +38,3 @@ auto Blinky::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovemen
 
     return chooseMostSuitableTurnOption(possibleMovements, binder);
 }
-
-void Blinky::setInitialPixmap()
-{
-    setPixmap(QPixmap(":/sprites/sprites/rghostU1.png").scaled(26, 26));
-}

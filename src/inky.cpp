@@ -67,8 +67,3 @@ auto Inky::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements
 
     return chooseMostSuitableTurnOption(possibleMovements, binder);
 }
-
-void Inky::setInitialPixmap()
-{
-    setPixmap(QPixmap(":/sprites/sprites/cghostU1.png").scaled(26, 26));
-}

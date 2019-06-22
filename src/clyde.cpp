@@ -44,8 +44,3 @@ auto Clyde::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovement
 
     return chooseMostSuitableTurnOption(possibleMovements, binder);
 }
-
-void Clyde::setInitialPixmap()
-{
-    setPixmap(QPixmap(":/sprites/sprites/oghostU1.png").scaled(26, 26));
-}
