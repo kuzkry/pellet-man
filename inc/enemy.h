@@ -21,7 +21,7 @@ protected:
     using SpriteMap = std::unordered_map<Key, std::array<QPixmap, spriteCount>>;
 
 public:
-    Enemy(Player const& player, std::vector<Node> const& nodes,  SpriteMap<MovementDirection> regularSprites, std::chrono::milliseconds delayToLeaveHideout);
+    Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<MovementDirection> regularSprites, std::chrono::milliseconds delayToLeaveHideout);
 
     void checkPositionWithRespectToNodes() override;
     void deinit() override;
