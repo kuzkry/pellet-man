@@ -1,13 +1,11 @@
 #include "lifecounter.h"
-#include "game.h"
-#include "player.h"
+
 #include <QFont>
-#include <QGraphicsScene>
-#include <QTimer>
+#include <QString>
 
 LifeCounter::LifeCounter()
 {
-    // initialize lives to 0
+    // initial lives
     lives = 3;
 
     // draw the text
