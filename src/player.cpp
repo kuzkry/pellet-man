@@ -23,8 +23,6 @@
 template <class myType>
 auto findInVector(std::vector<myType> const& vector, void* itemToBeFound) -> typename std::vector<myType>::const_iterator;
 
-constexpr QPointF Player::initialPosition;
-
 Player::Player(std::vector<Node> const& nodes,
                Score& score,
                LifeCounter& lifeCounter,

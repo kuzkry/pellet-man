@@ -3,8 +3,6 @@
 #include "distancecalculator.h"
 #include "player.h"
 
-constexpr std::chrono::milliseconds Pinky::delayToLeaveHideout;
-
 Pinky::Pinky(Player const& player, std::vector<Node> const& nodes)
     : Enemy(player, nodes, getRegularSprites(), delayToLeaveHideout) {}
 

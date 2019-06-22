@@ -3,10 +3,6 @@
 #include "node.h"
 #include "player.h"
 
-constexpr QPointF Enemy::initialPosition;
-constexpr QPointF Enemy::initialChasePoint;
-constexpr QSize Enemy::pixmapScaling;
-
 Enemy::Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<MovementDirection> regularSprites, std::chrono::milliseconds const delayToLeaveHideout)
     : Character(nodes, initialPosition),
       player(player),
