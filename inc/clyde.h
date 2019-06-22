@@ -16,7 +16,6 @@ private:
     static constexpr std::chrono::milliseconds delayToLeaveHideout{3100};
 
 private slots:
-    void allowToMove() override;
     void change() override;
 };
 

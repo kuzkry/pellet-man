@@ -69,14 +69,6 @@ void Inky::setInitialPixmap()
     setPixmap(QPixmap(":/sprites/sprites/cghostU1.png").scaled(26, 26));
 }
 
-void Inky::allowToMove()
-{
-    initialDelayTimer.stop();
-    QObject::disconnect(&initialDelayTimer, SIGNAL(timeout()), this, 0);
-    QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
-    currentDirection = std::rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
-}
-
 void Inky::change()
 {
     static bool phase = false;

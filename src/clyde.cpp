@@ -46,14 +46,6 @@ void Clyde::setInitialPixmap()
     setPixmap(QPixmap(":/sprites/sprites/oghostU1.png").scaled(26, 26));
 }
 
-void Clyde::allowToMove()
-{
-    initialDelayTimer.stop();
-    QObject::disconnect(&initialDelayTimer, SIGNAL(timeout()), this, 0);
-    QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
-    currentDirection = std::rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
-}
-
 void Clyde::change()
 {
     static bool phase = false;

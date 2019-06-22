@@ -69,6 +69,7 @@ private:
     void startInitialDelayTimer();
 
 private slots:
+    void allowToMove() override;
     void blink();
     void disableRunawayState();
     void move() override;

@@ -2,6 +2,8 @@
 
 #include "node.h"
 
+#include <cstdlib>
+
 constexpr QPointF Enemy::initialChasePoint;
 
 Enemy::Enemy(Player const& player, std::vector<Node> const& nodes, std::chrono::milliseconds const delayToLeaveHideout)
@@ -96,6 +98,14 @@ auto Enemy::sortDistanceAndDirectionBindersInDescendingOrder(void const* p1, voi
 void Enemy::startInitialDelayTimer()
 {
     initialDelayTimer.start(delayToLeaveHideout);
+}
+
+void Enemy::allowToMove()
+{
+    initialDelayTimer.stop();
+    QObject::disconnect(&initialDelayTimer, SIGNAL(timeout()), this, 0);
+    QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
+    currentDirection = std::rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
 }
 
 void Enemy::blink()
