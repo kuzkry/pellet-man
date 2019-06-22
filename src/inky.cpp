@@ -9,10 +9,7 @@ constexpr std::chrono::milliseconds Inky::delayToLeaveHideout;
 
 Inky::Inky(Player const& player, std::vector<Node> const& nodes, Blinky const& blinky)
     : Enemy(player, nodes, getRegularSprites(), delayToLeaveHideout),
-      blinky(blinky)
-{
-    init();
-}
+      blinky(blinky) {}
 
 auto Inky::getRegularSprites() -> SpriteMap<MovementDirection>
 {

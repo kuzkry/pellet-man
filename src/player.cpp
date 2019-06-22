@@ -2,14 +2,17 @@
 
 #include "clyde.h"
 #include "blinky.h"
-#include "game.h"
 #include "inky.h"
+#include "lifecounter.h"
 #include "node.h"
 #include "pinky.h"
 #include "regularpellet.h"
+#include "score.h"
 #include "superpellet.h"
 #include "utils.h"
 
+#include <QFont>
+#include <QGraphicsScene>
 #include <QKeyEvent>
 
 #include <algorithm>
@@ -25,14 +28,14 @@ Player::Player(std::vector<Node> const& nodes,
                LifeCounter& lifeCounter,
                std::vector<RegularPellet*>& regularPellets,
                std::vector<SuperPellet*>& superPellets,
-               Game const& game,
+               std::function<void()> quitCallback,
                std::vector<Enemy*> const& enemies)
     : Character(nodes),
       score(score),
       lifeCounter(lifeCounter),
       regularPellets(regularPellets),
       superPellets(superPellets),
-      game(game),
+      quitCallback(std::move(quitCallback)),
       enemies(enemies),
       initialDelay(1000),
       movementTime(9),
@@ -41,7 +44,17 @@ Player::Player(std::vector<Node> const& nodes,
     QObject::connect(&initialDelayTimer, SIGNAL(timeout()), this, SLOT(allowToMove()));
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
     QObject::connect(&animationTimer, SIGNAL(timeout()), this, SLOT(chompingAnimation()));
-    init();
+}
+
+void Player::init()
+{
+    deinit();
+    setPixmap(QPixmap(":/sprites/sprites/pacopenleft.png"));
+    setPos(210, 347);
+    currentDirection = pendingDirection = MovementDirection::LEFT;
+    isMoving = false;
+    initialDelayTimer.start(initialDelay);
+    animationTimer.start(animationTime);
 }
 
 void Player::checkPositionWithRespectToNodes()
@@ -80,17 +93,6 @@ void Player::deinit()
     initialDelayTimer.stop();
     animationTimer.stop();
     movementTimer.stop();
-}
-
-void Player::init()
-{
-    deinit();
-    setPixmap(QPixmap(":/sprites/sprites/pacopenleft.png"));
-    setPos(210, 347);
-    currentDirection = pendingDirection = MovementDirection::LEFT;
-    isMoving = false;
-    initialDelayTimer.start(initialDelay);
-    animationTimer.start(animationTime);
 }
 
 void Player::keyPressEvent(QKeyEvent* event)
@@ -299,7 +301,7 @@ void Player::chompingAnimation()
 
 void Player::endGame() const
 {
-    const_cast<Game&>(game).close();
+    quitCallback();
 }
 
 template <class myType>

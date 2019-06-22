@@ -4,7 +4,6 @@
 #include "character.h"
 
 class Enemy;
-class Game;
 class LifeCounter;
 class QKeyEvent;
 class RegularPellet;
@@ -20,7 +19,7 @@ public:
            LifeCounter& lifeCounter,
            std::vector<RegularPellet*>& regularPellets,
            std::vector<SuperPellet*>& superPellets,
-           Game const& game,
+           std::function<void()> quitCallback,
            std::vector<Enemy*> const& enemies);
     //last two are const to avoid inattentively usages of this (have to const_cast though)
 
@@ -28,13 +27,13 @@ public:
     {
         return currentDirection;
     }
+    void init() override;
 
 private:
     enum class QuitReason{PRESSED_ESC, DEFEAT, VICTORY};
 
     void checkPositionWithRespectToNodes() override;
     void deinit() override;
-    void init() override;
     void keyPressEvent(QKeyEvent* event) override;
 
     void checkCollisionWithPelletsAndGhosts();
@@ -49,7 +48,7 @@ private:
     std::vector<RegularPellet*>& regularPellets;
     std::vector<SuperPellet*>& superPellets;
     QTimer animationTimer;
-    Game const& game;
+    std::function<void()> quitCallback;
     std::vector<Enemy*> const& enemies;
     unsigned short initialDelay, movementTime, animationTime;
     bool isMoving;

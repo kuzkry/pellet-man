@@ -15,10 +15,11 @@ class Player;
 class RegularPellet;
 class SuperPellet;
 
-class Game : public QGraphicsView
+class Game
 {
 public:
     Game();
+    void run();
 
 private:
     void createAndInitScene();
@@ -29,6 +30,7 @@ private:
     void deploySuperPellets();
     void createPlayer();
     void createGhosts();
+    QGraphicsView view;
     QGraphicsScene scene;
     Player* player;
     std::vector<Node> nodes;

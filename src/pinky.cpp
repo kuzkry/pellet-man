@@ -8,10 +8,7 @@
 constexpr std::chrono::milliseconds Pinky::delayToLeaveHideout;
 
 Pinky::Pinky(Player const& player, std::vector<Node> const& nodes)
-    : Enemy(player, nodes, getRegularSprites(), delayToLeaveHideout)
-{
-    init();
-}
+    : Enemy(player, nodes, getRegularSprites(), delayToLeaveHideout) {}
 
 auto Pinky::getRegularSprites() -> SpriteMap<MovementDirection>
 {

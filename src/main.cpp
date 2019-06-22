@@ -11,7 +11,7 @@ auto main(int argc, char* argv[]) -> int
     QApplication a(argc, argv);
 
     Game game;
-    game.show();
+    game.run();
 
     return a.exec();
 }

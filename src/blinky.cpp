@@ -8,10 +8,7 @@
 constexpr std::chrono::milliseconds Blinky::delayToLeaveHideout;
 
 Blinky::Blinky(Player const& player, std::vector<Node> const& nodes)
-    : Enemy(player, nodes, getRegularSprites(), delayToLeaveHideout)
-{
-    init();
-}
+    : Enemy(player, nodes, getRegularSprites(), delayToLeaveHideout) {}
 
 auto Blinky::getRegularSprites() -> SpriteMap<MovementDirection>
 {

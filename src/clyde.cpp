@@ -8,10 +8,7 @@
 constexpr std::chrono::milliseconds Clyde::delayToLeaveHideout;
 
 Clyde::Clyde(Player const& player, std::vector<Node> const& nodes)
-    : Enemy(player, nodes, getRegularSprites(), delayToLeaveHideout)
-{
-    init();
-}
+    : Enemy(player, nodes, getRegularSprites(), delayToLeaveHideout) {}
 
 auto Clyde::getRegularSprites() -> SpriteMap<MovementDirection>
 {

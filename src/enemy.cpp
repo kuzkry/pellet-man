@@ -24,6 +24,18 @@ Enemy::Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<Mov
     QObject::connect(&initialDelayTimer, SIGNAL(timeout()), this, SLOT(releaseFromHideout()));
 }
 
+void Enemy::init()
+{
+    deinit();
+    setInitialPixmap();
+    setPos(210, 210);
+    QObject::disconnect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
+    currentDirection = MovementDirection::UP;
+    frightened = false;
+    initialDelayTimer.start(delayToLeaveHideout);
+    movementTimer.start(movementTime);
+}
+
 void Enemy::checkPositionWithRespectToNodes()
 {
     for (auto const& node : nodes)
@@ -49,18 +61,6 @@ void Enemy::deinit()
     movementTimer.stop();
     frightenedModeTimer.stop();
     blinkingModeTimer.stop();
-}
-
-void Enemy::init()
-{
-    deinit();
-    setInitialPixmap();
-    setPos(210, 210);
-    QObject::disconnect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
-    currentDirection = MovementDirection::UP;
-    frightened = false;
-    initialDelayTimer.start(delayToLeaveHideout);
-    movementTimer.start(movementTime);
 }
 
 void Enemy::enableRunawayState()

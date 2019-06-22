@@ -28,17 +28,25 @@ Game::Game()
     createGhosts();
 }
 
+void Game::run()
+{
+    player->init();
+    for (Enemy* enemy : enemies)
+        enemy->init();
+    view.show();
+}
+
 void Game::createAndInitScene()
 {
     // create the scene
     scene.setSceneRect(0, 0, 450, 480); // make the scene 450x480 instead of infinity by infinity (default)
-    setBackgroundBrush(QBrush(QImage(":/sprites/sprites/map.jpg")));
+    view.setBackgroundBrush(QBrush(QImage(":/sprites/sprites/map.jpg")));
     /* make the newly created scene the scene to visualize
      * (since Game is a QGraphicsView Widget, it can be used to visualize scenes) */
-    setScene(&scene);
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setFixedSize(450, 480);
+    view.setScene(&scene);
+    view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view.setFixedSize(450, 480);
 }
 
 void Game::createScore()
@@ -139,7 +147,7 @@ void Game::deploySuperPellets()
 void Game::createPlayer()
 {
     // create the player
-    player = new Player(nodes, score, lifeCounter, regularPellets, superPellets, *this, enemies);
+    player = new Player(nodes, score, lifeCounter, regularPellets, superPellets, [&]() { view.close(); }, enemies);
     // unfortunately player must get the reference to this game in order to call close function
 
     // make the player focusable and set it to be the current focus
