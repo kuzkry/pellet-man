@@ -30,6 +30,8 @@ public:
     void init() override;
 
 private:
+    static constexpr QPointF initialPosition = {210, 347};
+
     enum class QuitReason{PRESSED_ESC, DEFEAT, VICTORY};
 
     void checkPositionWithRespectToNodes() override;

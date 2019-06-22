@@ -4,11 +4,12 @@
 
 #include <cstdlib>
 
+constexpr QPointF Enemy::initialPosition;
 constexpr QPointF Enemy::initialChasePoint;
 constexpr QSize Enemy::pixmapScaling;
 
 Enemy::Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<MovementDirection> regularSprites, std::chrono::milliseconds const delayToLeaveHideout)
-    : Character(nodes),
+    : Character(nodes, initialPosition),
       player(player),
       regularSprites(rescalePixmaps(std::move(regularSprites))),
       frightenedSprites(rescalePixmaps(getFrightenedSprites())),
@@ -28,7 +29,7 @@ void Enemy::init()
 {
     deinit();
     setInitialPixmap();
-    setPos(210, 210);
+    setInitialPosition();
     QObject::disconnect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
     currentDirection = MovementDirection::UP;
     frightened = false;

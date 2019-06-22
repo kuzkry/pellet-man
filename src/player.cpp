@@ -23,6 +23,8 @@
 template <class myType>
 auto findInVector(std::vector<myType> const& vector, void* itemToBeFound) -> typename std::vector<myType>::const_iterator;
 
+constexpr QPointF Player::initialPosition;
+
 Player::Player(std::vector<Node> const& nodes,
                Score& score,
                LifeCounter& lifeCounter,
@@ -30,7 +32,7 @@ Player::Player(std::vector<Node> const& nodes,
                std::vector<SuperPellet*>& superPellets,
                std::function<void()> quitCallback,
                std::vector<Enemy*> const& enemies)
-    : Character(nodes),
+    : Character(nodes, initialPosition),
       score(score),
       lifeCounter(lifeCounter),
       regularPellets(regularPellets),
@@ -50,7 +52,7 @@ void Player::init()
 {
     deinit();
     setPixmap(QPixmap(":/sprites/sprites/pacopenleft.png"));
-    setPos(210, 347);
+    setInitialPosition();
     currentDirection = pendingDirection = MovementDirection::LEFT;
     isMoving = false;
     initialDelayTimer.start(initialDelay);

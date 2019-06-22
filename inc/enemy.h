@@ -3,7 +3,6 @@
 
 #include "character.h"
 
-#include <QPointF>
 #include <QSize>
 
 #include <array>
@@ -67,6 +66,7 @@ protected:
     Player const& player;
 
 private:
+    static constexpr QPointF initialPosition = {210, 210};
     static constexpr QPointF initialChasePoint = {210, 168};
     static constexpr QSize pixmapScaling = {26, 26};
 

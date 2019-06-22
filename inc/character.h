@@ -3,6 +3,7 @@
 
 #include <QGraphicsPixmapItem>
 #include <QObject>
+#include <QPointF>
 #include <QTimer>
 
 #include <vector>
@@ -12,7 +13,7 @@ struct Node;
 class Character : public QObject, public QGraphicsPixmapItem
 {
 public:
-    Character(std::vector<Node> const& nodes) : nodes(nodes) {}
+    Character(std::vector<Node> const& nodes, QPointF initialPosition);
     ~Character() override = default;
 
     virtual void init() = 0;
@@ -24,19 +25,17 @@ protected:
     virtual void deinit() = 0;
 
     auto isInNode(Node const& node) const -> bool;
+    void setInitialPosition();
 
     std::vector<Node> const& nodes;
     MovementDirection currentDirection;
     QTimer initialDelayTimer;
     QTimer movementTimer;
-    // positions are already inherited (use x() or y())
+    QPointF const initialPosition;
 
 protected slots:
     virtual void allowToMove() = 0;
     virtual void move() = 0;
 };
-
-/* anyway these virtual functions are going to be early bind and virtuality will not work on them
-thus I put them in protected section */
 
 #endif // CHARACTER_H
