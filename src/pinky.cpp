@@ -8,10 +8,17 @@
 constexpr std::chrono::milliseconds Pinky::delayToLeaveHideout;
 
 Pinky::Pinky(Player const& player, std::vector<Node> const& nodes)
-    : Enemy(player, nodes, delayToLeaveHideout)
+    : Enemy(player, nodes, getRegularSprites(), delayToLeaveHideout)
 {
-    QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(change()));
     init();
+}
+
+auto Pinky::getRegularSprites() -> SpriteMap<MovementDirection>
+{
+    return {{MovementDirection::LEFT, {QPixmap(":/sprites/sprites/pghostL1.png"), QPixmap(":/sprites/sprites/pghostL2.png")}},
+            {MovementDirection::RIGHT, {QPixmap(":/sprites/sprites/pghost1.png"), QPixmap(":/sprites/sprites/pghost2.png")}},
+            {MovementDirection::UP, {QPixmap(":/sprites/sprites/pghostU1.png"), QPixmap(":/sprites/sprites/pghostU2.png")}},
+            {MovementDirection::DOWN, {QPixmap(":/sprites/sprites/pghostD1.png"), QPixmap(":/sprites/sprites/pghostD2.png")}}};
 }
 
 auto Pinky::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection
@@ -60,58 +67,4 @@ auto Pinky::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovement
 void Pinky::setInitialPixmap()
 {
     setPixmap(QPixmap(":/sprites/sprites/pghostU1.png").scaled(26, 26));
-}
-
-void Pinky::change()
-{
-    static bool phase = false;
-
-    if (!frightened)
-    {
-        switch (currentDirection) {
-        case MovementDirection::LEFT:
-            if (!phase)
-                setPixmap(QPixmap(":/sprites/sprites/pghostL1.png").scaled(26, 26));
-            else
-                setPixmap(QPixmap(":/sprites/sprites/pghostL2.png").scaled(26, 26));
-            break;
-        case MovementDirection::RIGHT:
-            if (!phase)
-                setPixmap(QPixmap(":/sprites/sprites/pghost1.png").scaled(26, 26));
-            else
-                setPixmap(QPixmap(":/sprites/sprites/pghost2.png").scaled(26, 26));
-            break;
-        case MovementDirection::UP:
-            if (!phase)
-                setPixmap(QPixmap(":/sprites/sprites/pghostU1.png").scaled(26, 26));
-            else
-                setPixmap(QPixmap(":/sprites/sprites/pghostU2.png").scaled(26, 26));
-            break;
-        case MovementDirection::DOWN:
-            if (!phase)
-                setPixmap(QPixmap(":/sprites/sprites/pghostD1.png").scaled(26, 26));
-            else
-                setPixmap(QPixmap(":/sprites/sprites/pghostD2.png").scaled(26, 26));
-            break;
-        }
-    }
-    else
-    {
-        if (blinking || frightenedModeTimer.remainingTime() > blinkingInterval)
-        {
-            if (!phase)
-                setPixmap(QPixmap(":/sprites/sprites/zombieghost1.png").scaled(26, 26));
-            else
-                setPixmap(QPixmap(":/sprites/sprites/zombieghost2.png").scaled(26, 26));
-        }
-        else
-        {
-            if (!phase)
-                setPixmap(QPixmap(":/sprites/sprites/leavethisplace1.png").scaled(26, 26));
-            else
-                setPixmap(QPixmap(":/sprites/sprites/leavethisplace2.png").scaled(26, 26));
-        }
-    }
-
-    phase = !phase;
 }

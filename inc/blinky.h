@@ -5,18 +5,15 @@
 
 class Blinky : public Enemy
 {
-    Q_OBJECT
 public:
     Blinky(Player const& player, const std::vector<Node>& nodes);
 
 private:
+    static auto getRegularSprites() -> SpriteMap<MovementDirection>;
     auto makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection override;
     void setInitialPixmap() override;
 
     static constexpr std::chrono::milliseconds delayToLeaveHideout{1600};
-
-private slots:
-    void change() override;
 };
 
 #endif // BLINKY_H

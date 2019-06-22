@@ -8,10 +8,17 @@
 constexpr std::chrono::milliseconds Clyde::delayToLeaveHideout;
 
 Clyde::Clyde(Player const& player, std::vector<Node> const& nodes)
-    : Enemy(player, nodes, delayToLeaveHideout)
+    : Enemy(player, nodes, getRegularSprites(), delayToLeaveHideout)
 {
-    QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(change()));
     init();
+}
+
+auto Clyde::getRegularSprites() -> SpriteMap<MovementDirection>
+{
+    return {{MovementDirection::LEFT, {QPixmap(":/sprites/sprites/oghostL1.png"), QPixmap(":/sprites/sprites/oghostL2.png")}},
+            {MovementDirection::RIGHT, {QPixmap(":/sprites/sprites/oghost1.png"), QPixmap(":/sprites/sprites/oghost2.png")}},
+            {MovementDirection::UP, {QPixmap(":/sprites/sprites/oghostU1.png"), QPixmap(":/sprites/sprites/oghostU2.png")}},
+            {MovementDirection::DOWN, {QPixmap(":/sprites/sprites/oghostD1.png"), QPixmap(":/sprites/sprites/oghostD2.png")}}};
 }
 
 auto Clyde::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection
@@ -44,58 +51,4 @@ auto Clyde::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovement
 void Clyde::setInitialPixmap()
 {
     setPixmap(QPixmap(":/sprites/sprites/oghostU1.png").scaled(26, 26));
-}
-
-void Clyde::change()
-{
-    static bool phase = false;
-
-    if (!frightened)
-    {
-        switch (currentDirection) {
-        case MovementDirection::LEFT:
-            if (!phase)
-                setPixmap(QPixmap(":/sprites/sprites/oghostL1.png").scaled(26, 26));
-            else
-                setPixmap(QPixmap(":/sprites/sprites/oghostL2.png").scaled(26, 26));
-            break;
-        case MovementDirection::RIGHT:
-            if (!phase)
-                setPixmap(QPixmap(":/sprites/sprites/oghost1.png").scaled(26, 26));
-            else
-                setPixmap(QPixmap(":/sprites/sprites/oghost2.png").scaled(26, 26));
-            break;
-        case MovementDirection::UP:
-            if (!phase)
-                setPixmap(QPixmap(":/sprites/sprites/oghostU1.png").scaled(26, 26));
-            else
-                setPixmap(QPixmap(":/sprites/sprites/oghostU2.png").scaled(26, 26));
-            break;
-        case MovementDirection::DOWN:
-            if (!phase)
-                setPixmap(QPixmap(":/sprites/sprites/oghostD1.png").scaled(26, 26));
-            else
-                setPixmap(QPixmap(":/sprites/sprites/oghostD2.png").scaled(26, 26));
-            break;
-        }
-    }
-    else
-    {
-        if (blinking || frightenedModeTimer.remainingTime() > blinkingInterval)
-        {
-            if (!phase)
-                setPixmap(QPixmap(":/sprites/sprites/zombieghost1.png").scaled(26, 26));
-            else
-                setPixmap(QPixmap(":/sprites/sprites/zombieghost2.png").scaled(26, 26));
-        }
-        else
-        {
-            if (!phase)
-                setPixmap(QPixmap(":/sprites/sprites/leavethisplace1.png").scaled(26, 26));
-            else
-                setPixmap(QPixmap(":/sprites/sprites/leavethisplace2.png").scaled(26, 26));
-        }
-    }
-
-    phase = !phase;
 }

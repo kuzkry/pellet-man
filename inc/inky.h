@@ -6,19 +6,16 @@
 
 class Inky : public Enemy
 {
-    Q_OBJECT
 public:
     Inky(Player const& player, std::vector<Node> const& nodes, Blinky const& blinky);
 
 private:
+    static auto getRegularSprites() -> SpriteMap<MovementDirection>;
     auto makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection override;
     void setInitialPixmap() override;
 
     Blinky const& blinky;
     static constexpr std::chrono::milliseconds delayToLeaveHideout{2600};
-
-private slots:
-    void change() override;
 };
 
 #endif // INKY_H

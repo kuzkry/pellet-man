@@ -5,15 +5,24 @@
 #include <cstdlib>
 
 constexpr QPointF Enemy::initialChasePoint;
+constexpr QSize Enemy::pixmapScaling;
 
-Enemy::Enemy(Player const& player, std::vector<Node> const& nodes, std::chrono::milliseconds const delayToLeaveHideout)
+Enemy::Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<MovementDirection> regularSprites, std::chrono::milliseconds const delayToLeaveHideout)
     : Character(nodes),
       player(player),
+      regularSprites(rescalePixmaps(std::move(regularSprites))),
+      frightenedSprites(rescalePixmaps(getFrightenedSprites())),
       blinkingInterval(2000),
       movementTime(10),
       singleBlinkTime(20 * movementTime),
       runAwayTime(8000),
-      delayToLeaveHideout(delayToLeaveHideout) {}
+      delayToLeaveHideout(delayToLeaveHideout),
+      spriteIndex(0) {
+    QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(changeSprite()));
+    QObject::connect(&frightenedModeTimer, SIGNAL(timeout()), this, SLOT(disableRunawayState()));
+    QObject::connect(&blinkingModeTimer, SIGNAL(timeout()), this, SLOT(blink()));
+    QObject::connect(&initialDelayTimer, SIGNAL(timeout()), this, SLOT(releaseFromHideout()));
+}
 
 void Enemy::checkPositionWithRespectToNodes()
 {
@@ -44,21 +53,19 @@ void Enemy::disable()
 
 void Enemy::init()
 {
-    QObject::connect(&frightenedModeTimer, SIGNAL(timeout()), this, SLOT(disableRunawayState()));
-    QObject::connect(&blinkingModeTimer, SIGNAL(timeout()), this, SLOT(blink()));
     disable();
     setInitialPixmap();
     setPos(210, 210);
     QObject::disconnect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
-    QObject::connect(&initialDelayTimer, SIGNAL(timeout()), this, SLOT(releaseFromHideout()));
     currentDirection = MovementDirection::UP;
-    frightened = blinking = false;
-    startInitialDelayTimer();
+    frightened = false;
+    initialDelayTimer.start(delayToLeaveHideout);
     movementTimer.start(movementTime);
 }
 
 void Enemy::enableRunawayState()
 {
+    frightState = FrightState::INITIAL_BLUE;
     frightened = true;
     frightenedModeTimer.start(runAwayTime);
     blinkingModeTimer.start(runAwayTime - blinkingInterval);
@@ -95,30 +102,63 @@ auto Enemy::sortDistanceAndDirectionBindersInDescendingOrder(void const* p1, voi
     return 0;
 }
 
-void Enemy::startInitialDelayTimer()
+auto Enemy::getFrightenedSprites() -> SpriteMap<FrightState>
 {
-    initialDelayTimer.start(delayToLeaveHideout);
+    return {{FrightState::INITIAL_BLUE, {QPixmap(":/sprites/sprites/zombieghost1.png"), QPixmap(":/sprites/sprites/zombieghost2.png")}},
+            {FrightState::TRANSFORMING_WHITE, {QPixmap(":/sprites/sprites/leavethisplace1.png"), QPixmap(":/sprites/sprites/leavethisplace1.png")}}};
+}
+
+auto Enemy::nextFrightState() const noexcept -> FrightState
+{
+    switch (frightState) {
+    case FrightState::INITIAL_BLUE: return FrightState::TRANSFORMING_WHITE;
+    case FrightState::TRANSFORMING_WHITE: return FrightState::INITIAL_BLUE;
+    }
+    return FrightState::INITIAL_BLUE;
+}
+
+auto Enemy::nextSpriteIndex() const noexcept -> std::size_t
+{
+    return (spriteIndex + 1) % spriteCount;
+}
+
+template <typename Key>
+auto Enemy::rescalePixmaps(SpriteMap<Key> spriteMap) -> SpriteMap<Key> {
+    for (auto& value : spriteMap) {
+        for (auto& pixmap : value.second)
+            pixmap = pixmap.scaled(26, 26);
+    }
+    return spriteMap;
 }
 
 void Enemy::allowToMove()
 {
     initialDelayTimer.stop();
-    QObject::disconnect(&initialDelayTimer, SIGNAL(timeout()), this, 0);
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
     currentDirection = std::rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
 }
 
 void Enemy::blink()
 {
-    blinking = !blinking;
+    frightState = nextFrightState();
     blinkingModeTimer.start(singleBlinkTime);
+}
+
+void Enemy::changeSprite()
+{
+    if (!frightened)
+        setPixmap(regularSprites.find(currentDirection)->second[spriteIndex]);
+    else
+        setPixmap(frightenedSprites.find(frightState)->second[spriteIndex]);
+
+    spriteIndex = nextSpriteIndex();
 }
 
 void Enemy::disableRunawayState()
 {
     frightenedModeTimer.stop();
     blinkingModeTimer.stop();
-    blinking = frightened = false;
+    frightened = false;
 }
 
 void Enemy::move()
