@@ -39,10 +39,10 @@ void Enemy::checkPositionWithRespectToNodes()
         if (isInNode(node))
         {
             std::vector<MovementDirection> possibleDirections;
-            for (auto const& movementOption : node.movementPossibilities)
+            for (auto const& [direction, isDirectionValid] : node.movementPossibilities)
             {
-                if (movementOption.second && movementOption.first != opposite(currentDirection))
-                    possibleDirections.push_back(movementOption.first);
+                if (isDirectionValid && direction != opposite(currentDirection))
+                    possibleDirections.push_back(direction);
             }
 
             currentDirection = makeTurnDecision(possibleDirections);

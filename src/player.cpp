@@ -64,9 +64,9 @@ void Player::checkPositionWithRespectToNodes()
         if (isInNode(node)) //player is in a node
         {
             std::map<MovementDirection, bool> movementPossibleFromTheNode;
-            for (auto const& movementOption : node.movementPossibilities)
+            for (auto const& [direction, isDirectionValid] : node.movementPossibilities)
             {
-                movementPossibleFromTheNode.insert({movementOption.first, movementOption.second});
+                movementPossibleFromTheNode.insert({direction, isDirectionValid});
             }
 
             if (movementPossibleFromTheNode.find(pendingDirection)->second) //check if a pending move can be performed
