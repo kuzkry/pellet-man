@@ -7,7 +7,6 @@
 
 #include <array>
 #include <chrono>
-#include <map>
 #include <unordered_map>
 
 class Player;
@@ -37,30 +36,7 @@ public:
 protected:
     enum class FrightState {INITIAL_BLUE, TRANSFORMING_WHITE};
 
-    struct DistanceAndDirectionBinder
-    {
-        DistanceAndDirectionBinder(double distance, MovementDirection direction)
-            : distance(distance),
-              direction(direction) {}
-        auto operator<(DistanceAndDirectionBinder const& ref) const -> bool
-        {
-            return distance < ref.distance;
-        }
-        auto operator>(DistanceAndDirectionBinder const& ref) const -> bool
-        {
-            return !(*this < ref);
-        }
-
-        float const distance;
-        MovementDirection const direction;
-    };
-
-    virtual auto makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection = 0;
-
-    auto chooseMostSuitableTurnOption(std::map<MovementDirection, bool>& possibleMovements,
-                                      DistanceAndDirectionBinder const* binder) const -> MovementDirection;
-    static int sortDistanceAndDirectionBindersInAscendingOrder(void const * p1, void const* p2);
-    static int sortDistanceAndDirectionBindersInDescendingOrder(void const* p1, void const* p2);
+    virtual auto makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) -> MovementDirection = 0;
 
     Player const& player;
 

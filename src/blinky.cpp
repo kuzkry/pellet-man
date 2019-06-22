@@ -1,9 +1,7 @@
 #include "blinky.h"
 
+#include "distancecalculator.h"
 #include "player.h"
-
-#include <cmath>
-#include <cstdlib>
 
 constexpr std::chrono::milliseconds Blinky::delayToLeaveHideout;
 
@@ -18,23 +16,9 @@ auto Blinky::getRegularSprites() -> SpriteMap<MovementDirection>
             {MovementDirection::DOWN, {QPixmap(":/sprites/sprites/rghostD1.png"), QPixmap(":/sprites/sprites/rghostD2.png")}}};
 }
 
-auto Blinky::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection
+auto Blinky::makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) -> MovementDirection
 {
-    unsigned playerEnemyOffsetX = std::abs(player.x() - x()),
-             playerEnemyOffsetY = std::abs(player.y() - y());
-    DistanceAndDirectionBinder binder[4] = {
-        {std::pow((player.y() > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + std::pow(playerEnemyOffsetX, 2), MovementDirection::UP},
-        {std::pow((player.x() > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + std::pow(playerEnemyOffsetY, 2), MovementDirection::LEFT},
-        {std::pow((player.y() > y() ? playerEnemyOffsetY - 1 : playerEnemyOffsetY + 1), 2) + std::pow(playerEnemyOffsetX, 2), MovementDirection::DOWN},
-        {std::pow((player.x() > x() ? playerEnemyOffsetX - 1 : playerEnemyOffsetX + 1), 2) + std::pow(playerEnemyOffsetY, 2), MovementDirection::RIGHT}};
-    /* those directions are in the following order: up, left, down, right */
+    DistanceCalculator const distanceCalculator(possibleMovements, pos(), player.pos());
 
-    if (!frightened)
-        std::qsort(binder, 4, sizeof(DistanceAndDirectionBinder),
-                   sortDistanceAndDirectionBindersInAscendingOrder);
-    else
-        std::qsort(binder, 4, sizeof(DistanceAndDirectionBinder),
-                   sortDistanceAndDirectionBindersInDescendingOrder);
-
-    return chooseMostSuitableTurnOption(possibleMovements, binder);
+    return !isFrightened() ? distanceCalculator.calculateShortestDirection() : distanceCalculator.calculateLongestDirection();
 }

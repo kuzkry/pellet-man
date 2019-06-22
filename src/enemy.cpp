@@ -1,8 +1,7 @@
 #include "enemy.h"
 
 #include "node.h"
-
-#include <cstdlib>
+#include "player.h"
 
 constexpr QPointF Enemy::initialPosition;
 constexpr QPointF Enemy::initialChasePoint;
@@ -43,14 +42,14 @@ void Enemy::checkPositionWithRespectToNodes()
     {
         if (isInNode(node))
         {
-            std::map<MovementDirection, bool> movementPossibleFromTheNode;
+            std::vector<MovementDirection> possibleDirections;
+            for (auto const& movementOption : node.movementPossibilities)
+            {
+                if (movementOption.second && movementOption.first != opposite(currentDirection))
+                    possibleDirections.push_back(movementOption.first);
+            }
 
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::UP, (currentDirection == MovementDirection::DOWN ? false : node.possibleUpward)));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::LEFT, (currentDirection == MovementDirection::RIGHT ? false : node.possibleLeftward)));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::DOWN, (currentDirection == MovementDirection::UP ? false : node.possibleDownward)));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::RIGHT, (currentDirection == MovementDirection::LEFT ? false : node.possibleRightward)));
-
-            currentDirection = makeTurnDecision(movementPossibleFromTheNode, false/*frightened*/);
+            currentDirection = makeTurnDecision(possibleDirections);
             break;
         }
     }
@@ -70,37 +69,6 @@ void Enemy::enableRunawayState()
     frightened = true;
     frightenedModeTimer.start(runAwayTime);
     blinkingModeTimer.start(runAwayTime - blinkingInterval);
-}
-
-auto Enemy::chooseMostSuitableTurnOption(std::map<MovementDirection, bool>& possibleMovements,
-                                         Enemy::DistanceAndDirectionBinder const* binder) const -> MovementDirection
-{
-    for (unsigned short i = 0; i < 4; ++i)
-    {
-        if (possibleMovements.find(binder[i].direction)->second)
-            return binder[i].direction;
-    }
-    return MovementDirection::UP; // this is not going to be returned anyway
-}
-
-auto Enemy::sortDistanceAndDirectionBindersInAscendingOrder(void const* p1, void const* p2) -> int
-{
-    if (*(static_cast<DistanceAndDirectionBinder const*>(p1)) < *(static_cast<DistanceAndDirectionBinder const*>(p2)))
-        return -1;
-    else if (*(static_cast<DistanceAndDirectionBinder const*>(p1)) > *(static_cast<DistanceAndDirectionBinder const*>(p2)))
-        return 1;
-
-    return 0;
-}
-
-auto Enemy::sortDistanceAndDirectionBindersInDescendingOrder(void const* p1, void const* p2) -> int
-{
-    if (*(static_cast<DistanceAndDirectionBinder const*>(p1)) < *(static_cast<DistanceAndDirectionBinder const*>(p2)))
-        return 1;
-    else if (*(static_cast<DistanceAndDirectionBinder const*>(p1)) > *(static_cast<DistanceAndDirectionBinder const*>(p2)))
-        return -1;
-
-    return 0;
 }
 
 auto Enemy::getFrightenedSprites() -> SpriteMap<FrightState>

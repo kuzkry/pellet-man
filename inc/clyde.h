@@ -10,7 +10,7 @@ public:
 
 private:
     static auto getRegularSprites() -> SpriteMap<MovementDirection>;
-    auto makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection override;
+    auto makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) -> MovementDirection override;
 
     static constexpr std::chrono::milliseconds delayToLeaveHideout{3100};
 };

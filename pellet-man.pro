@@ -28,6 +28,7 @@ SOURCES += \
     src/blinky.cpp \
     src/character.cpp \
     src/clyde.cpp \
+    src/distancecalculator.cpp \
     src/enemy.cpp \
     src/game.cpp \
     src/inky.cpp \
@@ -45,6 +46,8 @@ HEADERS += \
     inc/blinky.h \
     inc/character.h \
     inc/clyde.h \
+    inc/directions.h \
+    inc/distancecalculator.h \
     inc/enemy.h \
     inc/game.h \
     inc/inky.h \

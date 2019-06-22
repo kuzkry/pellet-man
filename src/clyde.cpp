@@ -1,9 +1,7 @@
 #include "clyde.h"
 
+#include "distancecalculator.h"
 #include "player.h"
-
-#include <cmath>
-#include <cstdlib>
 
 constexpr std::chrono::milliseconds Clyde::delayToLeaveHideout;
 
@@ -18,29 +16,13 @@ auto Clyde::getRegularSprites() -> SpriteMap<MovementDirection>
             {MovementDirection::DOWN, {QPixmap(":/sprites/sprites/oghostD1.png"), QPixmap(":/sprites/sprites/oghostD2.png")}}};
 }
 
-auto Clyde::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection
+auto Clyde::makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) -> MovementDirection
 {
-    int playerX = player.x(),
-        playerY = player.y();
-    unsigned playerEnemyOffsetX = std::abs(playerX - x()),
-             playerEnemyOffsetY = std::abs(playerY - y());
-    DistanceAndDirectionBinder binder[4] = {
-        {std::pow((playerY > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + std::pow(playerEnemyOffsetX, 2), MovementDirection::UP},
-        {std::pow((playerX > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + std::pow(playerEnemyOffsetY, 2), MovementDirection::LEFT},
-        {std::pow((playerY > y() ? playerEnemyOffsetY - 1 : playerEnemyOffsetY + 1), 2) + std::pow(playerEnemyOffsetX, 2), MovementDirection::DOWN},
-        {std::pow((playerX > x() ? playerEnemyOffsetX - 1 : playerEnemyOffsetX + 1), 2) + std::pow(playerEnemyOffsetY, 2), MovementDirection::RIGHT}};
-    /* those directions are in the following order: up, left, down, right */
+    DistanceCalculator const distanceCalculator(possibleMovements, pos(), player.pos());
 
-    {
-        unsigned nonChasingAreaLimiter = player.pixmap().width() * 8,
-                 distanceFromPlayer = sqrt(std::pow(std::abs(playerX - x()), 2) + std::pow(std::abs(playerY - y()), 2));
-        if (!frightened && nonChasingAreaLimiter < distanceFromPlayer)
-            std::qsort(binder, 4, sizeof(DistanceAndDirectionBinder),
-                       sortDistanceAndDirectionBindersInAscendingOrder);
-        else
-            std::qsort(binder, 4, sizeof(DistanceAndDirectionBinder),
-                       sortDistanceAndDirectionBindersInDescendingOrder);
-    }
+    constexpr auto tilesAhead = 8;
+    qreal const nonChasingArea = player.pixmap().width() * tilesAhead,
+                distanceFromPlayer = distanceCalculator.calculateDistance(pos(), player.pos());
 
-    return chooseMostSuitableTurnOption(possibleMovements, binder);
+    return nonChasingArea < distanceFromPlayer && !isFrightened() ? distanceCalculator.calculateShortestDirection() : distanceCalculator.calculateLongestDirection();
 }

@@ -1,9 +1,7 @@
 #include "pinky.h"
 
+#include "distancecalculator.h"
 #include "player.h"
-
-#include <cmath>
-#include <cstdlib>
 
 constexpr std::chrono::milliseconds Pinky::delayToLeaveHideout;
 
@@ -18,45 +16,16 @@ auto Pinky::getRegularSprites() -> SpriteMap<MovementDirection>
             {MovementDirection::DOWN, {QPixmap(":/sprites/sprites/pghostD1.png"), QPixmap(":/sprites/sprites/pghostD2.png")}}};
 }
 
-auto Pinky::makeTurnDecision(std::map<MovementDirection, bool>& possibleMovements, bool frightened) -> MovementDirection
+auto Pinky::makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) -> MovementDirection
 {
-    int relativePlayerX = player.x(),
-        relativePlayerY = player.y();
-
-    if (!frightened)
+    if (!isFrightened())
     {
-        unsigned futurePlayerPositionOffset = player.pixmap().width() * 4;
-        switch (player.getCurrentDirection()) {
-        case MovementDirection::LEFT:
-            relativePlayerX -= futurePlayerPositionOffset;
-            break;
-        case MovementDirection::RIGHT:
-            relativePlayerX += futurePlayerPositionOffset;
-            break;
-        case MovementDirection::UP:
-            relativePlayerY -= futurePlayerPositionOffset;
-            break;
-        case MovementDirection::DOWN:
-            relativePlayerY += futurePlayerPositionOffset;
-            break;
-        }
+        constexpr auto tilesAhead = 4;
+        qreal offsetPlayerPositionOffset = player.pixmap().width() * tilesAhead;
+        auto const futurePlayerPosition = DistanceCalculator::generateNextPosition(player.pos(), player.getCurrentDirection(), offsetPlayerPositionOffset);
+
+        DistanceCalculator const distanceCalculator(possibleMovements, pos(), futurePlayerPosition);
+        return distanceCalculator.calculateShortestDirection();
     }
-
-    unsigned playerEnemyOffsetX = std::abs(relativePlayerX - x()),
-             playerEnemyOffsetY = std::abs(relativePlayerY - y());
-    DistanceAndDirectionBinder binder[4] = {
-        {std::pow((relativePlayerY > y() ? playerEnemyOffsetY + 1 : playerEnemyOffsetY - 1), 2) + std::pow(playerEnemyOffsetX, 2), MovementDirection::UP},
-        {std::pow((relativePlayerX > x() ? playerEnemyOffsetX + 1 : playerEnemyOffsetX - 1), 2) + std::pow(playerEnemyOffsetY, 2), MovementDirection::LEFT},
-        {std::pow((relativePlayerY > y() ? playerEnemyOffsetY - 1 : playerEnemyOffsetY + 1), 2) + std::pow(playerEnemyOffsetX, 2), MovementDirection::DOWN},
-        {std::pow((relativePlayerX > x() ? playerEnemyOffsetX - 1 : playerEnemyOffsetX + 1), 2) + std::pow(playerEnemyOffsetY, 2), MovementDirection::RIGHT}};
-    /* those directions are in the following order: up, left, down, right */
-
-    if (!frightened)
-        std::qsort(binder, 4, sizeof(DistanceAndDirectionBinder),
-                   sortDistanceAndDirectionBindersInAscendingOrder);
-    else
-        std::qsort(binder, 4, sizeof(DistanceAndDirectionBinder),
-                   sortDistanceAndDirectionBindersInDescendingOrder);
-
-    return chooseMostSuitableTurnOption(possibleMovements, binder);
+    return DistanceCalculator(possibleMovements, pos(), player.pos()).calculateLongestDirection();
 }

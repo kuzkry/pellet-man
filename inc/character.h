@@ -1,6 +1,8 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
+#include "directions.h"
+
 #include <QGraphicsPixmapItem>
 #include <QObject>
 #include <QPointF>
@@ -19,8 +21,6 @@ public:
     virtual void init() = 0;
 
 protected:
-    enum class MovementDirection{UP, LEFT, DOWN, RIGHT};
-
     virtual void checkPositionWithRespectToNodes() = 0;
     virtual void deinit() = 0;
 

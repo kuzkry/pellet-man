@@ -66,11 +66,10 @@ void Player::checkPositionWithRespectToNodes()
         if (isInNode(node)) //player is in a node
         {
             std::map<MovementDirection, bool> movementPossibleFromTheNode;
-
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::UP, node.possibleUpward));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::LEFT, node.possibleLeftward));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::DOWN, node.possibleDownward));
-            movementPossibleFromTheNode.insert(std::pair<MovementDirection, bool>(MovementDirection::RIGHT, node.possibleRightward));
+            for (auto const& movementOption : node.movementPossibilities)
+            {
+                movementPossibleFromTheNode.insert({movementOption.first, movementOption.second});
+            }
 
             if (movementPossibleFromTheNode.find(pendingDirection)->second) //check if a pending move can be performed
                 setMovement(pendingDirection);
@@ -223,7 +222,7 @@ void Player::prepareToEndGame(Player::QuitReason reason) const
     QTimer::singleShot(3000, this, SLOT(endGame()));
 }
 
-void Player::setMovement(Player::MovementDirection const newDirection, bool movementPossibility)
+void Player::setMovement(MovementDirection const newDirection, bool movementPossibility)
 {
     currentDirection = newDirection;
     isMoving = movementPossibility;
