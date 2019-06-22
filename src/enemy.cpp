@@ -9,9 +9,9 @@ constexpr QPointF Enemy::initialChasePoint;
 Enemy::Enemy(Player const& player, std::vector<Node> const& nodes, std::chrono::milliseconds const delayToLeaveHideout)
     : Character(nodes),
       player(player),
+      blinkingInterval(2000),
       movementTime(10),
       singleBlinkTime(20 * movementTime),
-      blinkingInterval(2000),
       runAwayTime(8000),
       delayToLeaveHideout(delayToLeaveHideout) {}
 

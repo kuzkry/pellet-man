@@ -54,11 +54,9 @@ protected:
     static int sortDistanceAndDirectionBindersInDescendingOrder(void const* p1, void const* p2);
 
     Player const& player;
-    bool frightened, blinking;
     QTimer frightenedModeTimer;
-    QTimer blinkingModeTimer;
-    unsigned short movementTime, singleBlinkTime, blinkingInterval, runAwayTime;
-    std::chrono::milliseconds const delayToLeaveHideout;
+    unsigned short blinkingInterval;
+    bool frightened, blinking;
 
 protected slots:
     virtual void change() = 0;
@@ -67,6 +65,10 @@ private:
     static constexpr QPointF initialChasePoint = {210, 168};
 
     void startInitialDelayTimer();
+
+    QTimer blinkingModeTimer;
+    unsigned short movementTime, singleBlinkTime, runAwayTime;
+    std::chrono::milliseconds const delayToLeaveHideout;
 
 private slots:
     void allowToMove() override;
