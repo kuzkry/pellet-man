@@ -94,7 +94,4 @@ private slots:
     void releaseFromHideout();
 };
 
-/* anyway these virtual functions are going to be early bind and virtuality will not work on them
-thus I put most of them in protected section */
-
 #endif // ENEMY_H
