@@ -17,7 +17,8 @@ void Score::big_increase()
 
 void Score::huge_increase()
 {
-    switch (multiplier) {
+    switch (multiplier)
+    {
     case 1:
         score += 200;
         break;

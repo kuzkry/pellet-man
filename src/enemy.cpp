@@ -111,7 +111,8 @@ auto Enemy::getFrightenedSprites() -> SpriteMap<FrightState>
 
 auto Enemy::nextFrightState() const noexcept -> FrightState
 {
-    switch (frightState) {
+    switch (frightState)
+    {
     case FrightState::INITIAL_BLUE: return FrightState::TRANSFORMING_WHITE;
     case FrightState::TRANSFORMING_WHITE: return FrightState::INITIAL_BLUE;
     }
@@ -125,7 +126,8 @@ auto Enemy::nextSpriteIndex() const noexcept -> std::size_t
 
 template <typename Key>
 auto Enemy::rescalePixmaps(SpriteMap<Key> spriteMap) -> SpriteMap<Key> {
-    for (auto& value : spriteMap) {
+    for (auto& value : spriteMap)
+    {
         for (auto& pixmap : value.second)
             pixmap = pixmap.scaled(26, 26);
     }

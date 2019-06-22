@@ -100,7 +100,8 @@ void Player::deinit()
 void Player::keyPressEvent(QKeyEvent* event)
 {
     // move the player left and right
-    switch (event->key()) {
+    switch (event->key())
+    {
     case Qt::Key_Left:
         pendingDirection = MovementDirection::LEFT;
         break;
@@ -197,7 +198,8 @@ auto Player::isAnyOfEnemiesFrightened() const -> bool
 void Player::prepareToEndGame(Player::QuitReason reason) const
 {
     QGraphicsTextItem* text = nullptr;
-    switch (reason) {
+    switch (reason)
+    {
     case QuitReason::PRESSED_ESC:
         endGame();
         return;
@@ -271,7 +273,8 @@ void Player::chompingAnimation()
 {
     static bool phase = false;
 
-    switch (currentDirection) {
+    switch (currentDirection)
+    {
     case MovementDirection::LEFT:
         if (!phase)
             setPixmap(QPixmap(":/sprites/sprites/pacopenleft.png"));
