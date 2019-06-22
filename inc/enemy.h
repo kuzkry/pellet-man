@@ -26,7 +26,7 @@ public:
     Enemy(Player const& player, std::vector<Node> const& nodes,  SpriteMap<MovementDirection> regularSprites, std::chrono::milliseconds delayToLeaveHideout);
 
     void checkPositionWithRespectToNodes() override;
-    void disable() override;
+    void deinit() override;
     void init() override;
     virtual void setInitialPixmap() = 0;
 

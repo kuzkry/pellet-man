@@ -33,7 +33,7 @@ private:
     enum class QuitReason{PRESSED_ESC, DEFEAT, VICTORY};
 
     void checkPositionWithRespectToNodes() override;
-    void disable() override;
+    void deinit() override;
     void init() override;
     void keyPressEvent(QKeyEvent* event) override;
 

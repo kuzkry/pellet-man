@@ -75,7 +75,7 @@ void Player::checkPositionWithRespectToNodes()
     }
 }
 
-void Player::disable()
+void Player::deinit()
 {
     initialDelayTimer.stop();
     animationTimer.stop();
@@ -84,7 +84,7 @@ void Player::disable()
 
 void Player::init()
 {
-    disable();
+    deinit();
     setPixmap(QPixmap(":/sprites/sprites/pacopenleft.png"));
     setPos(210, 347);
     currentDirection = pendingDirection = MovementDirection::LEFT;
@@ -209,10 +209,10 @@ void Player::prepareToEndGame(Player::QuitReason reason) const
     scene()->addItem(text);
 
     // disable all timers (disablesMovements)
-    const_cast<Player*>(this)->disable(); // another way is to make timers mutable
+    const_cast<Player*>(this)->deinit(); // another way is to make timers mutable
     std::for_each(const_cast<std::vector<Enemy*>&>(enemies).begin(),
                   const_cast<std::vector<Enemy*>&>(enemies).end(),
-                  [](Enemy* ptrToEnemy){ptrToEnemy->disable();});
+                  [](Enemy* ptrToEnemy){ptrToEnemy->deinit();});
 
     QTimer::singleShot(3000, this, SLOT(endGame()));
 }

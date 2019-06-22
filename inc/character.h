@@ -19,7 +19,7 @@ protected:
     enum class MovementDirection{UP, LEFT, DOWN, RIGHT};
 
     virtual void checkPositionWithRespectToNodes() = 0;
-    virtual void disable() = 0;
+    virtual void deinit() = 0;
     virtual void init() = 0;
 
     auto isInNode(Node const& node) const -> bool;

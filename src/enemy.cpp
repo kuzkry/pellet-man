@@ -43,7 +43,7 @@ void Enemy::checkPositionWithRespectToNodes()
     }
 }
 
-void Enemy::disable()
+void Enemy::deinit()
 {
     initialDelayTimer.stop();
     movementTimer.stop();
@@ -53,7 +53,7 @@ void Enemy::disable()
 
 void Enemy::init()
 {
-    disable();
+    deinit();
     setInitialPixmap();
     setPos(210, 210);
     QObject::disconnect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
