@@ -4,16 +4,16 @@
 #include "player.h"
 
 Enemy::Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<MovementDirection> regularSprites, std::chrono::milliseconds const delayToLeaveHideout)
-    : Character(nodes, initialPosition),
+    : Character(nodes, rescalePixmaps(std::move(regularSprites)), initialPosition),
       player(player),
-      regularSprites(rescalePixmaps(std::move(regularSprites))),
       frightenedSprites(rescalePixmaps(getFrightenedSprites())),
       delayToLeaveHideout(delayToLeaveHideout)
 {
-    QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(changeSprite()));
+    QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
     QObject::connect(&frightenedModeTimer, SIGNAL(timeout()), this, SLOT(disableRunawayState()));
     QObject::connect(&blinkingModeTimer, SIGNAL(timeout()), this, SLOT(blink()));
     QObject::connect(&initialDelayTimer, SIGNAL(timeout()), this, SLOT(releaseFromHideout()));
+    QObject::connect(&animationTimer, SIGNAL(timeout()), this, SLOT(changeSprite()));
 }
 
 void Enemy::deinit()
@@ -22,18 +22,18 @@ void Enemy::deinit()
     movementTimer.stop();
     frightenedModeTimer.stop();
     blinkingModeTimer.stop();
+    animationTimer.stop();
 }
 
 void Enemy::init()
 {
-    deinit();
-    setInitialPixmap();
-    setInitialPosition();
-    QObject::disconnect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
     currentDirection = MovementDirection::UP;
+    deinit();
+    setInitialPixmap(currentDirection);
+    setInitialPosition();
     frightened = false;
     initialDelayTimer.start(delayToLeaveHideout);
-    movementTimer.start(movementTime);
+    animationTimer.start(animationTime);
 }
 
 void Enemy::enableRunawayState()
@@ -73,11 +73,6 @@ auto Enemy::nextFrightState() const noexcept -> FrightState
     return FrightState::INITIAL_BLUE;
 }
 
-auto Enemy::nextSpriteIndex() const noexcept -> std::size_t
-{
-    return (spriteIndex + 1) % spriteCount;
-}
-
 template <typename Key>
 auto Enemy::rescalePixmaps(SpriteMap<Key> spriteMap) -> SpriteMap<Key> {
     for (auto& value : spriteMap)
@@ -88,16 +83,19 @@ auto Enemy::rescalePixmaps(SpriteMap<Key> spriteMap) -> SpriteMap<Key> {
     return spriteMap;
 }
 
-void Enemy::setInitialPixmap()
-{
-    setPixmap(regularSprites.find(MovementDirection::UP)->second[0]);
-}
-
 void Enemy::allowToMove()
 {
     initialDelayTimer.stop();
-    QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
     currentDirection = std::rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
+    movementTimer.start(movementTime);
+}
+
+void Enemy::changeSprite()
+{
+    if (!frightened)
+        setSprite(regularSprites, currentDirection);
+    else
+        setSprite(frightenedSprites, frightState);
 }
 
 void Enemy::move()
@@ -113,16 +111,6 @@ void Enemy::blink()
 {
     frightState = nextFrightState();
     blinkingModeTimer.start(singleBlinkTime);
-}
-
-void Enemy::changeSprite()
-{
-    if (!frightened)
-        setPixmap(regularSprites.find(currentDirection)->second[spriteIndex]);
-    else
-        setPixmap(frightenedSprites.find(frightState)->second[spriteIndex]);
-
-    spriteIndex = nextSpriteIndex();
 }
 
 void Enemy::disableRunawayState()

@@ -42,6 +42,7 @@ private:
 
     void checkCollisionWithPelletsAndGhosts();
     auto isAnyOfEnemiesFrightened() const -> bool;
+    auto getSprites() -> SpriteMap<MovementDirection>;
     void prepareToEndGame(QuitReason reason) const;
     void setMovement(MovementDirection newDirection) noexcept;
     void setMovementInNode(Node const& node);
@@ -53,16 +54,15 @@ private:
     LifeCounter& lifeCounter;
     std::vector<RegularPellet*>& regularPellets;
     std::vector<SuperPellet*>& superPellets;
-    QTimer animationTimer;
     std::function<void()> quitCallback;
     std::vector<Enemy*> const& enemies;
     bool isMoving;
 
 private slots:
     void allowToMove() override;
+    void changeSprite() override;
     void move() override;
 
-    void chompingAnimation();
     void endGame() const;
 };
 

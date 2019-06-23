@@ -29,7 +29,7 @@ Player::Player(std::vector<Node> const& nodes,
                std::vector<SuperPellet*>& superPellets,
                std::function<void()> quitCallback,
                std::vector<Enemy*> const& enemies)
-    : Character(nodes, initialPosition),
+    : Character(nodes, getSprites(), initialPosition),
       score(score),
       lifeCounter(lifeCounter),
       regularPellets(regularPellets),
@@ -39,15 +39,15 @@ Player::Player(std::vector<Node> const& nodes,
 {
     QObject::connect(&initialDelayTimer, SIGNAL(timeout()), this, SLOT(allowToMove()));
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
-    QObject::connect(&animationTimer, SIGNAL(timeout()), this, SLOT(chompingAnimation()));
+    QObject::connect(&animationTimer, SIGNAL(timeout()), this, SLOT(changeSprite()));
 }
 
 void Player::init()
 {
-    deinit();
-    setPixmap(QPixmap(":/sprites/sprites/pacopenleft.png"));
-    setInitialPosition();
     currentDirection = pendingDirection = MovementDirection::LEFT;
+    deinit();
+    setInitialPixmap(currentDirection);
+    setInitialPosition();
     isMoving = false;
     initialDelayTimer.start(initialDelay);
     animationTimer.start(animationTime);
@@ -158,6 +158,14 @@ auto Player::isAnyOfEnemiesFrightened() const -> bool
     return std::any_of(enemies.begin(), enemies.end(), [](Enemy const* enemy) { return enemy->isFrightened(); });
 }
 
+auto Player::getSprites() -> SpriteMap<MovementDirection>
+{
+    return {{MovementDirection::LEFT, {QPixmap(":/sprites/sprites/pacopenleft.png"), QPixmap(":/sprites/sprites/pacmidleft.png")}},
+            {MovementDirection::RIGHT, {QPixmap(":/sprites/sprites/pacopenright.png"), QPixmap(":/sprites/sprites/pacmidright.png")}},
+            {MovementDirection::UP, {QPixmap(":/sprites/sprites/pacopenup.png"), QPixmap(":/sprites/sprites/pacmidup.png")}},
+            {MovementDirection::DOWN, {QPixmap(":/sprites/sprites/pacopendown.png"), QPixmap(":/sprites/sprites/pacmiddown.png")}}};
+}
+
 void Player::prepareToEndGame(Player::QuitReason reason) const
 {
     QGraphicsTextItem* text = nullptr;
@@ -242,39 +250,9 @@ void Player::move()
     checkCollisionWithPelletsAndGhosts();
 }
 
-void Player::chompingAnimation()
+void Player::changeSprite()
 {
-    static bool phase = false;
-
-    switch (currentDirection)
-    {
-    case MovementDirection::LEFT:
-        if (!phase)
-            setPixmap(QPixmap(":/sprites/sprites/pacopenleft.png"));
-        else
-            setPixmap(QPixmap(":/sprites/sprites/pacmidleft.png"));
-        break;
-    case MovementDirection::RIGHT:
-        if (!phase)
-            setPixmap(QPixmap(":/sprites/sprites/pacopenright.png"));
-        else
-            setPixmap(QPixmap(":/sprites/sprites/pacmidright.png"));
-        break;
-    case MovementDirection::UP:
-        if (!phase)
-            setPixmap(QPixmap(":/sprites/sprites/pacopenup.png"));
-        else
-            setPixmap(QPixmap(":/sprites/sprites/pacmidup.png"));
-        break;
-    case MovementDirection::DOWN:
-        if (!phase)
-            setPixmap(QPixmap(":/sprites/sprites/pacopendown.png"));
-        else
-            setPixmap(QPixmap(":/sprites/sprites/pacmiddown.png"));
-        break;
-    }
-
-    phase =! phase;
+    setSprite(regularSprites, currentDirection);
 }
 
 void Player::endGame() const

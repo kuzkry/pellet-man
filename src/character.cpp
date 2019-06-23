@@ -2,8 +2,11 @@
 
 #include "node.h"
 
-Character::Character(std::vector<Node> const& nodes, QPointF const initialPosition)
+#include <utility>
+
+Character::Character(std::vector<Node> const& nodes, SpriteMap<MovementDirection> regularSprites, QPointF const initialPosition)
     : nodes(nodes),
+      regularSprites(std::move(regularSprites)),
       initialPosition(initialPosition) {}
 
 void Character::animate()
@@ -32,6 +35,11 @@ auto Character::findCurrentNode() const -> std::vector<Node>::const_iterator
     return std::find_if(nodes.cbegin(), nodes.cend(), [this](auto& node) { return isInNode(node); });
 }
 
+void Character::setInitialPixmap(MovementDirection const direction)
+{
+    setPixmap(regularSprites.find(direction)->second[0]);
+}
+
 void Character::setInitialPosition()
 {
     setPos(initialPosition);
@@ -40,6 +48,11 @@ void Character::setInitialPosition()
 auto Character::isInNode(Node const& node) const -> bool
 {
     return pos() == node;
+}
+
+auto Character::nextSpriteIndex() const noexcept -> std::size_t
+{
+    return (spriteIndex + 1) % spriteCount;
 }
 
 void Character::teleportOnMapEdge()
