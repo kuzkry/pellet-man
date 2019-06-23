@@ -25,11 +25,9 @@ public:
            std::vector<Enemy*> const& enemies);
     //last two are const to avoid inattentively usages of this (have to const_cast though)
 
-    auto getCurrentDirection() const noexcept -> MovementDirection
-    {
-        return currentDirection;
-    }
     void init() override;
+
+    auto getCurrentDirection() const noexcept -> MovementDirection;
 
 private:
     static constexpr QPointF initialPosition = {210, 347};
@@ -39,8 +37,6 @@ private:
 
     enum class QuitReason{PRESSED_ESC, DEFEAT, VICTORY};
 
-    void setMovementInNode(Node const& node);
-    void tryToSetOppositeMovement() noexcept;
     void deinit() override;
     void keyPressEvent(QKeyEvent* event) override;
 
@@ -48,7 +44,9 @@ private:
     auto isAnyOfEnemiesFrightened() const -> bool;
     void prepareToEndGame(QuitReason reason) const;
     void setMovement(MovementDirection newDirection) noexcept;
+    void setMovementInNode(Node const& node);
     void stop() noexcept;
+    void tryToSetOppositeMovement() noexcept;
 
     MovementDirection pendingDirection;
     Score& score;
@@ -67,5 +65,10 @@ private slots:
     void chompingAnimation();
     void endGame() const;
 };
+
+inline auto Player::getCurrentDirection() const noexcept -> MovementDirection
+{
+    return currentDirection;
+}
 
 #endif // PLAYER_H

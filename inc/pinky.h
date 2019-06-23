@@ -9,8 +9,9 @@ public:
     Pinky(Player const& player, std::vector<Node> const& nodes);
 
 private:
-    static auto getRegularSprites() -> SpriteMap<MovementDirection>;
     auto makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) const -> MovementDirection override;
+
+    static auto getRegularSprites() -> SpriteMap<MovementDirection>;
 
     static constexpr std::chrono::milliseconds delayToLeaveHideout{2100};
 };

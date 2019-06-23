@@ -26,6 +26,18 @@ auto DistanceCalculator::calculateDistance(QPointF const from, QPointF const to)
     return std::sqrt(std::pow(from.x() - to.x(), 2) + std::pow(from.y() - to.y(), 2));
 }
 
+auto DistanceCalculator::generateNextPosition(QPointF const pos, MovementDirection const direction, qreal const offset) -> QPointF
+{
+    switch (direction)
+    {
+    case MovementDirection::UP: return {pos.x(), pos.y() - offset};
+    case MovementDirection::DOWN: return {pos.x(), pos.y() + offset};
+    case MovementDirection::LEFT: return {pos.x() - offset, pos.y()};
+    case MovementDirection::RIGHT: return {pos.x() + offset, pos.y()};
+    }
+    return pos;
+}
+
 template <typename Comp>
 auto DistanceCalculator::calculate(qreal const boundaryValue, Comp const comp) const -> MovementDirection
 {
@@ -41,18 +53,6 @@ auto DistanceCalculator::calculate(qreal const boundaryValue, Comp const comp) c
         }
     }
     return ret;
-}
-
-auto DistanceCalculator::generateNextPosition(QPointF const pos, MovementDirection const direction, qreal const offset) -> QPointF
-{
-    switch (direction)
-    {
-    case MovementDirection::UP: return {pos.x(), pos.y() - offset};
-    case MovementDirection::DOWN: return {pos.x(), pos.y() + offset};
-    case MovementDirection::LEFT: return {pos.x() - offset, pos.y()};
-    case MovementDirection::RIGHT: return {pos.x() + offset, pos.y()};
-    }
-    return pos;
 }
 
 auto DistanceCalculator::generateNextPosition(QPointF const pos, MovementDirection const direction) -> QPointF

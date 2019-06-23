@@ -27,10 +27,7 @@ public:
     void init() override;
 
     void enableRunawayState();
-    auto isFrightened() const -> bool
-    {
-        return frightened;
-    }
+    auto isFrightened() const noexcept -> bool;
 
 protected:
     enum class FrightState {INITIAL_BLUE, TRANSFORMING_WHITE};
@@ -66,11 +63,17 @@ private:
 
 private slots:
     void allowToMove() override;
+    void move() override;
+
     void blink();
     void changeSprite();
     void disableRunawayState();
-    void move() override;
     void releaseFromHideout();
 };
+
+inline auto Enemy::isFrightened() const noexcept -> bool
+{
+    return frightened;
+}
 
 #endif // ENEMY_H

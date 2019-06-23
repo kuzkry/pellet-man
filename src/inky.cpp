@@ -10,14 +10,6 @@ Inky::Inky(Player const& player, std::vector<Node> const& nodes, Blinky const& b
     : Enemy(player, nodes, getRegularSprites(), delayToLeaveHideout),
       blinky(blinky) {}
 
-auto Inky::getRegularSprites() -> SpriteMap<MovementDirection>
-{
-    return {{MovementDirection::LEFT, {QPixmap(":/sprites/sprites/cghostL1.png"), QPixmap(":/sprites/sprites/cghostL2.png")}},
-            {MovementDirection::RIGHT, {QPixmap(":/sprites/sprites/cghost1.png"), QPixmap(":/sprites/sprites/cghost2.png")}},
-            {MovementDirection::UP, {QPixmap(":/sprites/sprites/cghostU1.png"), QPixmap(":/sprites/sprites/cghostU2.png")}},
-            {MovementDirection::DOWN, {QPixmap(":/sprites/sprites/cghostD1.png"), QPixmap(":/sprites/sprites/cghostD2.png")}}};
-}
-
 auto Inky::makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) const -> MovementDirection
 {
     if (!isFrightened())
@@ -36,4 +28,12 @@ auto Inky::makeTurnDecision(std::vector<MovementDirection> const& possibleMoveme
         return distanceCalculator.calculateShortestDirection();
     }
     return DistanceCalculator(possibleMovements, pos(), player.pos()).calculateLongestDirection();
+}
+
+auto Inky::getRegularSprites() -> SpriteMap<MovementDirection>
+{
+    return {{MovementDirection::LEFT, {QPixmap(":/sprites/sprites/cghostL1.png"), QPixmap(":/sprites/sprites/cghostL2.png")}},
+            {MovementDirection::RIGHT, {QPixmap(":/sprites/sprites/cghost1.png"), QPixmap(":/sprites/sprites/cghost2.png")}},
+            {MovementDirection::UP, {QPixmap(":/sprites/sprites/cghostU1.png"), QPixmap(":/sprites/sprites/cghostU2.png")}},
+            {MovementDirection::DOWN, {QPixmap(":/sprites/sprites/cghostD1.png"), QPixmap(":/sprites/sprites/cghostD2.png")}}};
 }

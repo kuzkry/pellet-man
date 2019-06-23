@@ -16,6 +16,14 @@ Enemy::Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<Mov
     QObject::connect(&initialDelayTimer, SIGNAL(timeout()), this, SLOT(releaseFromHideout()));
 }
 
+void Enemy::deinit()
+{
+    initialDelayTimer.stop();
+    movementTimer.stop();
+    frightenedModeTimer.stop();
+    blinkingModeTimer.stop();
+}
+
 void Enemy::init()
 {
     deinit();
@@ -26,14 +34,6 @@ void Enemy::init()
     frightened = false;
     initialDelayTimer.start(delayToLeaveHideout);
     movementTimer.start(movementTime);
-}
-
-void Enemy::deinit()
-{
-    initialDelayTimer.stop();
-    movementTimer.stop();
-    frightenedModeTimer.stop();
-    blinkingModeTimer.stop();
 }
 
 void Enemy::enableRunawayState()
@@ -100,6 +100,15 @@ void Enemy::allowToMove()
     currentDirection = std::rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
 }
 
+void Enemy::move()
+{
+    auto const it = findCurrentNode();
+    if (it != nodes.cend())
+        currentDirection = nextDirection(*it);
+
+    animate();
+}
+
 void Enemy::blink()
 {
     frightState = nextFrightState();
@@ -121,15 +130,6 @@ void Enemy::disableRunawayState()
     frightenedModeTimer.stop();
     blinkingModeTimer.stop();
     frightened = false;
-}
-
-void Enemy::move()
-{
-    auto const it = findCurrentNode();
-    if (it != nodes.cend())
-        currentDirection = nextDirection(*it);
-
-    animate();
 }
 
 void Enemy::releaseFromHideout()

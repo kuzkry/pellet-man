@@ -53,30 +53,6 @@ void Player::init()
     animationTimer.start(animationTime);
 }
 
-void Player::setMovementInNode(Node const& node)
-{
-    std::vector<MovementDirection> possibleDirections;
-    possibleDirections.reserve(node.movementPossibilities.size());
-    for (auto const& [direction, isDirectionValid] : node.movementPossibilities)
-    {
-        if (isDirectionValid)
-            possibleDirections.push_back(direction);
-    }
-
-    if (std::find(possibleDirections.cbegin(), possibleDirections.cend(), pendingDirection) != possibleDirections.cend()) // check if a pending move can be performed
-        setMovement(pendingDirection);
-    else if (std::find(possibleDirections.cbegin(), possibleDirections.cend(), currentDirection) != possibleDirections.cend()) // check if Pac-Man can continue going in his current direction
-        setMovement(currentDirection);
-    else // otherwise Pac-Man hits a wall
-        stop();
-}
-
-void Player::tryToSetOppositeMovement() noexcept
-{
-    if (pendingDirection == opposite(currentDirection))
-        setMovement(pendingDirection);
-}
-
 void Player::deinit()
 {
     initialDelayTimer.stop();
@@ -216,9 +192,33 @@ void Player::setMovement(MovementDirection const newDirection) noexcept
     isMoving = true;
 }
 
+void Player::setMovementInNode(Node const& node)
+{
+    std::vector<MovementDirection> possibleDirections;
+    possibleDirections.reserve(node.movementPossibilities.size());
+    for (auto const& [direction, isDirectionValid] : node.movementPossibilities)
+    {
+        if (isDirectionValid)
+            possibleDirections.push_back(direction);
+    }
+
+    if (std::find(possibleDirections.cbegin(), possibleDirections.cend(), pendingDirection) != possibleDirections.cend()) // check if a pending move can be performed
+        setMovement(pendingDirection);
+    else if (std::find(possibleDirections.cbegin(), possibleDirections.cend(), currentDirection) != possibleDirections.cend()) // check if Pac-Man can continue going in his current direction
+        setMovement(currentDirection);
+    else // otherwise Pac-Man hits a wall
+        stop();
+}
+
 void Player::stop() noexcept
 {
     isMoving = false;
+}
+
+void Player::tryToSetOppositeMovement() noexcept
+{
+    if (pendingDirection == opposite(currentDirection))
+        setMovement(pendingDirection);
 }
 
 void Player::allowToMove()
