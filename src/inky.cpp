@@ -18,7 +18,7 @@ auto Inky::getRegularSprites() -> SpriteMap<MovementDirection>
             {MovementDirection::DOWN, {QPixmap(":/sprites/sprites/cghostD1.png"), QPixmap(":/sprites/sprites/cghostD2.png")}}};
 }
 
-auto Inky::makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) -> MovementDirection
+auto Inky::makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) const -> MovementDirection
 {
     if (!isFrightened())
     {

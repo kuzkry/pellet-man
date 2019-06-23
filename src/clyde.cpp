@@ -14,7 +14,7 @@ auto Clyde::getRegularSprites() -> SpriteMap<MovementDirection>
             {MovementDirection::DOWN, {QPixmap(":/sprites/sprites/oghostD1.png"), QPixmap(":/sprites/sprites/oghostD2.png")}}};
 }
 
-auto Clyde::makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) -> MovementDirection
+auto Clyde::makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) const -> MovementDirection
 {
     DistanceCalculator const distanceCalculator(possibleMovements, pos(), player.pos());
 

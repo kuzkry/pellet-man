@@ -17,8 +17,8 @@
 
 #include <algorithm>
 #include <map>
-#include <utility>
 #include <typeinfo>
+#include <utility>
 
 template <class myType>
 auto findInVector(std::vector<myType> const& vector, void* itemToBeFound) -> typename std::vector<myType>::const_iterator;

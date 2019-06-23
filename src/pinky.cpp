@@ -14,7 +14,7 @@ auto Pinky::getRegularSprites() -> SpriteMap<MovementDirection>
             {MovementDirection::DOWN, {QPixmap(":/sprites/sprites/pghostD1.png"), QPixmap(":/sprites/sprites/pghostD2.png")}}};
 }
 
-auto Pinky::makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) -> MovementDirection
+auto Pinky::makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) const -> MovementDirection
 {
     if (!isFrightened())
     {

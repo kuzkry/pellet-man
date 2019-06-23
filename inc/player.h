@@ -23,7 +23,7 @@ public:
            std::vector<Enemy*> const& enemies);
     //last two are const to avoid inattentively usages of this (have to const_cast though)
 
-    auto getCurrentDirection() const -> MovementDirection
+    auto getCurrentDirection() const noexcept -> MovementDirection
     {
         return currentDirection;
     }

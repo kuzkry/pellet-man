@@ -36,7 +36,7 @@ public:
 protected:
     enum class FrightState {INITIAL_BLUE, TRANSFORMING_WHITE};
 
-    virtual auto makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) -> MovementDirection = 0;
+    virtual auto makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) const -> MovementDirection = 0;
 
     Player const& player;
 

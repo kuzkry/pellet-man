@@ -11,7 +11,7 @@ public:
 
 private:
     static auto getRegularSprites() -> SpriteMap<MovementDirection>;
-    auto makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) -> MovementDirection override;
+    auto makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) const -> MovementDirection override;
 
     Blinky const& blinky;
     static constexpr std::chrono::milliseconds delayToLeaveHideout{2600};

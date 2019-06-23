@@ -14,7 +14,7 @@ auto Blinky::getRegularSprites() -> SpriteMap<MovementDirection>
             {MovementDirection::DOWN, {QPixmap(":/sprites/sprites/rghostD1.png"), QPixmap(":/sprites/sprites/rghostD2.png")}}};
 }
 
-auto Blinky::makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) -> MovementDirection
+auto Blinky::makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) const -> MovementDirection
 {
     DistanceCalculator const distanceCalculator(possibleMovements, pos(), player.pos());
 
