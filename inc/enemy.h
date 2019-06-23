@@ -44,6 +44,10 @@ private:
     static constexpr QPointF initialPosition = {210, 210};
     static constexpr QPointF initialChasePoint = {210, 168};
     static constexpr QSize pixmapScaling = {26, 26};
+    static constexpr std::chrono::milliseconds movementTime{10};
+    static constexpr std::chrono::milliseconds singleBlinkTime{20 * movementTime};
+    static constexpr std::chrono::milliseconds blinkingInterval{2000};
+    static constexpr std::chrono::milliseconds runAwayTime{8000};
 
     static auto getFrightenedSprites() -> SpriteMap<FrightState>;
     auto nextFrightState() const noexcept -> FrightState;
@@ -55,10 +59,9 @@ private:
     QTimer blinkingModeTimer, frightenedModeTimer;
     SpriteMap<MovementDirection> const regularSprites;
     SpriteMap<FrightState> const frightenedSprites;
-    unsigned short blinkingInterval, movementTime, singleBlinkTime, runAwayTime;
     std::chrono::milliseconds const delayToLeaveHideout;
     FrightState frightState;
-    std::size_t spriteIndex;
+    std::size_t spriteIndex = 0;
     bool frightened;
 
 private slots:

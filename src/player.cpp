@@ -36,10 +36,7 @@ Player::Player(std::vector<Node> const& nodes,
       regularPellets(regularPellets),
       superPellets(superPellets),
       quitCallback(std::move(quitCallback)),
-      enemies(enemies),
-      initialDelay(1000),
-      movementTime(9),
-      animationTime(100)
+      enemies(enemies)
 {
     QObject::connect(&initialDelayTimer, SIGNAL(timeout()), this, SLOT(allowToMove()));
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));

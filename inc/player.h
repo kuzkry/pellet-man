@@ -3,6 +3,8 @@
 
 #include "character.h"
 
+#include <chrono>
+
 class Enemy;
 class LifeCounter;
 class QKeyEvent;
@@ -31,6 +33,9 @@ public:
 
 private:
     static constexpr QPointF initialPosition = {210, 347};
+    static constexpr std::chrono::milliseconds movementTime{9};
+    static constexpr std::chrono::milliseconds animationTime{100};
+    static constexpr std::chrono::milliseconds initialDelay{1000};
 
     enum class QuitReason{PRESSED_ESC, DEFEAT, VICTORY};
 
@@ -52,7 +57,6 @@ private:
     QTimer animationTimer;
     std::function<void()> quitCallback;
     std::vector<Enemy*> const& enemies;
-    unsigned short initialDelay, movementTime, animationTime;
     bool isMoving;
 
 private slots:

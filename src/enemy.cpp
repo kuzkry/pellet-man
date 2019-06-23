@@ -8,12 +8,8 @@ Enemy::Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<Mov
       player(player),
       regularSprites(rescalePixmaps(std::move(regularSprites))),
       frightenedSprites(rescalePixmaps(getFrightenedSprites())),
-      blinkingInterval(2000),
-      movementTime(10),
-      singleBlinkTime(20 * movementTime),
-      runAwayTime(8000),
-      delayToLeaveHideout(delayToLeaveHideout),
-      spriteIndex(0) {
+      delayToLeaveHideout(delayToLeaveHideout)
+{
     QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(changeSprite()));
     QObject::connect(&frightenedModeTimer, SIGNAL(timeout()), this, SLOT(disableRunawayState()));
     QObject::connect(&blinkingModeTimer, SIGNAL(timeout()), this, SLOT(blink()));
