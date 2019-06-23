@@ -23,7 +23,6 @@ protected:
 public:
     Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<MovementDirection> regularSprites, std::chrono::milliseconds delayToLeaveHideout);
 
-    void checkPositionWithRespectToNodes() override;
     void deinit() override;
     void init() override;
 
@@ -50,6 +49,7 @@ private:
     static constexpr std::chrono::milliseconds runAwayTime{8000};
 
     static auto getFrightenedSprites() -> SpriteMap<FrightState>;
+    auto nextDirection(Node const& node) const -> MovementDirection;
     auto nextFrightState() const noexcept -> FrightState;
     auto nextSpriteIndex() const noexcept -> std::size_t;
     template <typename Key>

@@ -39,15 +39,16 @@ private:
 
     enum class QuitReason{PRESSED_ESC, DEFEAT, VICTORY};
 
-    void checkPositionWithRespectToNodes() override;
+    void setMovementInNode(Node const& node);
+    void tryToSetOppositeMovement() noexcept;
     void deinit() override;
     void keyPressEvent(QKeyEvent* event) override;
 
     void checkCollisionWithPelletsAndGhosts();
     auto isAnyOfEnemiesFrightened() const -> bool;
     void prepareToEndGame(QuitReason reason) const;
-    void setMovement(MovementDirection const newDirection, bool movementPossibility = true);
-    /* presumptive boolean value is true to spare the programmer's keyboard */
+    void setMovement(MovementDirection newDirection) noexcept;
+    void stop() noexcept;
 
     MovementDirection pendingDirection;
     Score& score;

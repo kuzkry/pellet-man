@@ -28,25 +28,6 @@ void Enemy::init()
     movementTimer.start(movementTime);
 }
 
-void Enemy::checkPositionWithRespectToNodes()
-{
-    for (auto const& node : nodes)
-    {
-        if (isInNode(node))
-        {
-            std::vector<MovementDirection> possibleDirections;
-            for (auto const& [direction, isDirectionValid] : node.movementPossibilities)
-            {
-                if (isDirectionValid && direction != opposite(currentDirection))
-                    possibleDirections.push_back(direction);
-            }
-
-            currentDirection = makeTurnDecision(possibleDirections);
-            break;
-        }
-    }
-}
-
 void Enemy::deinit()
 {
     initialDelayTimer.stop();
@@ -67,6 +48,19 @@ auto Enemy::getFrightenedSprites() -> SpriteMap<FrightState>
 {
     return {{FrightState::INITIAL_BLUE, {QPixmap(":/sprites/sprites/zombieghost1.png"), QPixmap(":/sprites/sprites/zombieghost2.png")}},
             {FrightState::TRANSFORMING_WHITE, {QPixmap(":/sprites/sprites/leavethisplace1.png"), QPixmap(":/sprites/sprites/leavethisplace1.png")}}};
+}
+
+auto Enemy::nextDirection(Node const& node) const -> MovementDirection
+{
+    std::vector<MovementDirection> possibleDirections;
+    possibleDirections.reserve(node.movementPossibilities.size());
+    for (auto const& [direction, isDirectionValid] : node.movementPossibilities)
+    {
+        if (isDirectionValid && direction != opposite(currentDirection))
+            possibleDirections.push_back(direction);
+    }
+
+    return makeTurnDecision(possibleDirections);
 }
 
 auto Enemy::nextFrightState() const noexcept -> FrightState
@@ -131,30 +125,11 @@ void Enemy::disableRunawayState()
 
 void Enemy::move()
 {
-    checkPositionWithRespectToNodes();
+    auto const it = findCurrentNode();
+    if (it != nodes.cend())
+        currentDirection = nextDirection(*it);
 
-    //moving a ghost
-    switch (currentDirection)
-    {
-    case MovementDirection::LEFT:
-        setPos(x() - 1, y());
-        break;
-    case MovementDirection::RIGHT:
-        setPos(x() + 1, y());
-        break;
-    case MovementDirection::UP:
-        setPos(x(), y() - 1);
-        break;
-    case MovementDirection::DOWN:
-        setPos(x(), y () + 1);
-        break;
-    }
-
-    //teleporting on the edges of a map
-    if (x() + pixmap().width() < 0)
-        setPos(450, y());
-    else if (x() > 450)
-        setPos(-pixmap().width(), y());
+    animate();
 }
 
 void Enemy::releaseFromHideout()
@@ -163,5 +138,5 @@ void Enemy::releaseFromHideout()
     if (pos() == initialChasePoint)
         allowToMove();
     else
-        setPos(x(), y() - 1);
+        animate();
 }

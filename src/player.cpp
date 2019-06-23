@@ -9,16 +9,15 @@
 #include "regularpellet.h"
 #include "score.h"
 #include "superpellet.h"
-#include "utils.h"
 
 #include <QFont>
 #include <QGraphicsScene>
 #include <QKeyEvent>
 
 #include <algorithm>
-#include <map>
 #include <typeinfo>
 #include <utility>
+#include <vector>
 
 template <class myType>
 auto findInVector(std::vector<myType> const& vector, void* itemToBeFound) -> typename std::vector<myType>::const_iterator;
@@ -54,34 +53,28 @@ void Player::init()
     animationTimer.start(animationTime);
 }
 
-void Player::checkPositionWithRespectToNodes()
+void Player::setMovementInNode(Node const& node)
 {
-    for (auto const& node : nodes)
+    std::vector<MovementDirection> possibleDirections;
+    possibleDirections.reserve(node.movementPossibilities.size());
+    for (auto const& [direction, isDirectionValid] : node.movementPossibilities)
     {
-        if (isInNode(node)) //player is in a node
-        {
-            std::map<MovementDirection, bool> movementPossibleFromTheNode;
-            for (auto const& [direction, isDirectionValid] : node.movementPossibilities)
-            {
-                movementPossibleFromTheNode.insert({direction, isDirectionValid});
-            }
-
-            if (movementPossibleFromTheNode.find(pendingDirection)->second) //check if a pending move can be performed
-                setMovement(pendingDirection);
-            else if (!movementPossibleFromTheNode.find(currentDirection)->second) //check if Pac-Man can not continue going in his current direction and must be stopped
-                setMovement(currentDirection, false);
-            return;
-        }
+        if (isDirectionValid)
+            possibleDirections.push_back(direction);
     }
 
-    if ((::contains({MovementDirection::UP, MovementDirection::DOWN}, currentDirection) &&
-         ::contains({MovementDirection::UP, MovementDirection::DOWN}, pendingDirection))
-        ||
-        (::contains({MovementDirection::LEFT, MovementDirection::RIGHT}, currentDirection) &&
-         ::contains({MovementDirection::LEFT, MovementDirection::RIGHT}, pendingDirection)))
-    {
+    if (std::find(possibleDirections.cbegin(), possibleDirections.cend(), pendingDirection) != possibleDirections.cend()) // check if a pending move can be performed
         setMovement(pendingDirection);
-    }
+    else if (std::find(possibleDirections.cbegin(), possibleDirections.cend(), currentDirection) != possibleDirections.cend()) // check if Pac-Man can continue going in his current direction
+        setMovement(currentDirection);
+    else // otherwise Pac-Man hits a wall
+        stop();
+}
+
+void Player::tryToSetOppositeMovement() noexcept
+{
+    if (pendingDirection == opposite(currentDirection))
+        setMovement(pendingDirection);
 }
 
 void Player::deinit()
@@ -217,10 +210,15 @@ void Player::prepareToEndGame(Player::QuitReason reason) const
     QTimer::singleShot(3000, this, SLOT(endGame()));
 }
 
-void Player::setMovement(MovementDirection const newDirection, bool movementPossibility)
+void Player::setMovement(MovementDirection const newDirection) noexcept
 {
     currentDirection = newDirection;
-    isMoving = movementPossibility;
+    isMoving = true;
+}
+
+void Player::stop() noexcept
+{
+    isMoving = false;
 }
 
 void Player::allowToMove()
@@ -232,33 +230,14 @@ void Player::allowToMove()
 
 void Player::move()
 {
-    checkPositionWithRespectToNodes(); //meaning: check collisions with enemies or being in nodes
+    auto const it = findCurrentNode();
+    if (it != nodes.cend())
+        setMovementInNode(*it);
+    else
+        tryToSetOppositeMovement();
 
-    //moving Pac-Man
     if (isMoving)
-    {
-        switch (currentDirection)
-        {
-        case MovementDirection::LEFT:
-            setPos(x() - 1, y());
-            break;
-        case MovementDirection::RIGHT:
-            setPos(x() + 1, y());
-            break;
-        case MovementDirection::UP:
-            setPos(x(), y() - 1);
-            break;
-        case MovementDirection::DOWN:
-            setPos(x(), y() + 1);
-            break;
-        }
-    }
-
-    //teleporting on the edges of a map
-    if (x() + pixmap().width() < 0)
-        setPos(450, y());
-    else if (x() > 450)
-        setPos(-pixmap().width(), y());
+        animate();
 
     checkCollisionWithPelletsAndGhosts();
 }

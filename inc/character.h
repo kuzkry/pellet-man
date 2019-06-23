@@ -21,10 +21,10 @@ public:
     virtual void init() = 0;
 
 protected:
-    virtual void checkPositionWithRespectToNodes() = 0;
     virtual void deinit() = 0;
 
-    auto isInNode(Node const& node) const -> bool;
+    void animate();
+    auto findCurrentNode() const -> std::vector<Node>::const_iterator;
     void setInitialPosition();
 
     std::vector<Node> const& nodes;
@@ -36,6 +36,10 @@ protected:
 protected slots:
     virtual void allowToMove() = 0;
     virtual void move() = 0;
+
+private:
+    auto isInNode(Node const& node) const -> bool;
+    void teleportOnMapEdge();
 };
 
 #endif // CHARACTER_H
