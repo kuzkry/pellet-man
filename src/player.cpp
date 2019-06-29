@@ -19,9 +19,6 @@
 #include <utility>
 #include <vector>
 
-template <class myType>
-auto findInVector(std::vector<myType> const& vector, void* itemToBeFound) -> typename std::vector<myType>::const_iterator;
-
 Player::Player(std::vector<Node> const& nodes,
                Score& score,
                LifeCounter& lifeCounter,
@@ -96,7 +93,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
             score.little_increase(); // increase the score by 10
 
             // remove from a vector
-            regularPellets.erase(findInVector(regularPellets, static_cast<void*>(allItems[i])));
+            regularPellets.erase(std::find(regularPellets.cbegin(), regularPellets.cend(), allItems[i]));
 
             // remove them from the scene (still on the heap)
             scene()->removeItem(allItems[i]);
@@ -109,7 +106,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
             score.big_increase(); // increase the score by 50
 
             // remove from a vector
-            superPellets.erase(findInVector(superPellets, static_cast<void*>(allItems[i])));
+            superPellets.erase(std::find(superPellets.cbegin(), superPellets.cend(), allItems[i]));
 
             // remove them from the scene (still on the heap)
             scene()->removeItem(allItems[i]);
@@ -258,14 +255,4 @@ void Player::changeSprite()
 void Player::endGame() const
 {
     quitCallback();
-}
-
-template <class myType>
-auto findInVector(std::vector<myType> const& vector, void* itemToBeFound) -> typename std::vector<myType>::const_iterator
-{
-    auto it = vector.cbegin();
-    while (*it != itemToBeFound)
-        it++;
-
-    return it;
 }
