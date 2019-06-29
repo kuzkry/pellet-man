@@ -1,5 +1,8 @@
 #include "score.h"
+
 #include <QFont>
+
+#include <cmath>
 
 Score::Score() : multiplier(0), score(0)
 {
@@ -17,23 +20,8 @@ void Score::big_increase()
 
 void Score::huge_increase()
 {
-    switch (multiplier)
-    {
-    case 1:
-        score += 200;
-        break;
-    case 2:
-        score += 400;
-        break;
-    case 3:
-        score += 800;
-        break;
-    case 4:
-        score += 1600;
-        break;
-    }
+    score += static_cast<unsigned>(200 * std::pow(2, ++multiplier - 1));
     setPlainText(QString("Score: ") + QString::number(score));
-    ++multiplier;
 }
 
 void Score::little_increase()

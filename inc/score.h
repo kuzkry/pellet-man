@@ -15,7 +15,7 @@ public:
 
 private:
     unsigned short multiplier;
-    unsigned short score;
+    unsigned score;
 };
 
 #endif // SCORE_H
