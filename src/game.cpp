@@ -16,6 +16,7 @@
 #include <QtGlobal>
 
 #include <sstream>
+#include <stdexcept>
 
 Game::Game()
 {
@@ -41,7 +42,14 @@ void Game::createAndInitScene()
 {
     // create the scene
     scene.setSceneRect(0, 0, gameWindow.width(), gameWindow.height());
-    view.setBackgroundBrush(QBrush(QImage(":/sprites/sprites/map.jpg")));
+    QImage const background(":/sprites/sprites/map.jpg");
+    if (background.size() != gameWindow)
+    {
+        std::ostringstream errorMsg("size of provided background different than ");
+        errorMsg << background.width() << 'x' << background.height();
+        throw std::runtime_error(errorMsg.str());
+    }
+    view.setBackgroundBrush(QBrush(background));
     /* make the newly created scene the scene to visualize
      * (since Game is a QGraphicsView Widget, it can be used to visualize scenes) */
     view.setScene(&scene);
@@ -66,10 +74,7 @@ void Game::deployNodes()
     //node values (position x, position y, upward, leftward, downward, rightward)
     QFile file(":/coordinates/coordinates/nodesCoordinates.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        class fileOpenFailure{}; //does not really matter but the game must load without this file
-        throw fileOpenFailure();
-    }
+        throw std::runtime_error("couldn't load nodes");
 
     QTextStream in(&file);
     while (!in.atEnd())
@@ -95,10 +100,7 @@ void Game::deployRegularPellets()
 {
     QFile file(":/coordinates/coordinates/regularPelletsCoordinates.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        class fileOpenFailure{}; //does not really matter but the game must not load without this file
-        throw fileOpenFailure();
-    }
+        throw std::runtime_error("couldn't load regular pellets");
 
     QTextStream in(&file);
     while (!in.atEnd())
@@ -122,10 +124,7 @@ void Game::deploySuperPellets()
 {
     QFile file(":/coordinates/coordinates/superPelletsCoordinates.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        class fileOpenFailure{}; //does not really matter but the game must not load without this file
-        throw fileOpenFailure();
-    }
+        throw std::runtime_error("couldn't load super pellets");
 
     QTextStream in(&file);
     while (!in.atEnd())
