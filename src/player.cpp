@@ -15,7 +15,6 @@
 #include <QKeyEvent>
 
 #include <algorithm>
-#include <typeinfo>
 #include <utility>
 #include <vector>
 
@@ -88,31 +87,31 @@ void Player::checkCollisionWithPelletsAndGhosts()
     // if one of the colliding items is Pac-Man, destroy that dot
     for (int i = 0; i < allItems.size(); ++i)
     {
-        if (typeid(*(allItems[i])) == typeid(RegularPellet))
+        if (auto const it = std::find(regularPellets.cbegin(), regularPellets.cend(), allItems[i]); it != regularPellets.cend())
         {
             score.little_increase(); // increase the score by 10
 
-            // remove from a vector
-            regularPellets.erase(std::find(regularPellets.cbegin(), regularPellets.cend(), allItems[i]));
-
             // remove them from the scene (still on the heap)
-            scene()->removeItem(allItems[i]);
+            scene()->removeItem(*it);
 
             // delete them from the heap to save memory
-            delete allItems[i];
+            delete *it;
+
+            // remove from a vector
+            regularPellets.erase(it);
         }
-        else if (typeid(*(allItems[i])) == typeid(SuperPellet))
+        else if (auto const it = std::find(superPellets.cbegin(), superPellets.cend(), allItems[i]); it != superPellets.cend())
         {
             score.big_increase(); // increase the score by 50
 
-            // remove from a vector
-            superPellets.erase(std::find(superPellets.cbegin(), superPellets.cend(), allItems[i]));
-
             // remove them from the scene (still on the heap)
-            scene()->removeItem(allItems[i]);
+            scene()->removeItem(*it);
 
             // delete them from the heap to save memory
-            delete allItems[i];
+            delete *it;
+
+            // remove from a vector
+            superPellets.erase(it);
 
             // checking if any of enemies is frightened (if not, that means that player will not get extra points
             if (!isAnyOfEnemiesFrightened())
@@ -123,10 +122,9 @@ void Player::checkCollisionWithPelletsAndGhosts()
                           const_cast<std::vector<Enemy*>&>(enemies).end(),
                           [](Enemy* ptrToEnemy){ptrToEnemy->enableRunawayState();});
         }
-        else if (typeid(*(allItems[i])) == typeid(Blinky) || typeid(*(allItems[i])) == typeid(Pinky)
-                || typeid(*(allItems[i])) == typeid(Inky) || typeid(*(allItems[i])) == typeid(Clyde))
+        else if (auto const enemyIt = std::find(enemies.cbegin(), enemies.cend(), allItems[i]); enemyIt != enemies.cend())
         {
-            if (!dynamic_cast<Enemy*>(allItems[i])->isFrightened())
+            if (!(*enemyIt)->isFrightened())
             {
                 lifeCounter.decrease();
                 if (lifeCounter.getLives() == 0)
@@ -142,7 +140,7 @@ void Player::checkCollisionWithPelletsAndGhosts()
             else
             {
                 score.huge_increase();
-                dynamic_cast<Enemy*>(allItems[i])->init();
+                (*enemyIt)->init();
             }
         }
     }
