@@ -2,6 +2,7 @@
 
 #include "clyde.h"
 #include "blinky.h"
+#include "gamewindow.h"
 #include "inky.h"
 #include "pinky.h"
 #include "player.h"
@@ -39,14 +40,14 @@ void Game::run()
 void Game::createAndInitScene()
 {
     // create the scene
-    scene.setSceneRect(0, 0, 450, 480); // make the scene 450x480 instead of infinity by infinity (default)
+    scene.setSceneRect(0, 0, gameWindow.width(), gameWindow.height());
     view.setBackgroundBrush(QBrush(QImage(":/sprites/sprites/map.jpg")));
     /* make the newly created scene the scene to visualize
      * (since Game is a QGraphicsView Widget, it can be used to visualize scenes) */
     view.setScene(&scene);
     view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view.setFixedSize(450, 480);
+    view.setFixedSize(gameWindow);
 }
 
 void Game::createScore()

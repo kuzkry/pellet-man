@@ -1,5 +1,6 @@
 #include "character.h"
 
+#include "gamewindow.h"
 #include "node.h"
 
 #include <utility>
@@ -58,7 +59,7 @@ auto Character::nextSpriteIndex() const noexcept -> std::size_t
 void Character::teleportOnMapEdge()
 {
     if (x() + pixmap().width() < 0)
-        setPos(450, y());
-    else if (x() > 450)
+        setPos(gameWindow.width(), y());
+    else if (x() > gameWindow.width())
         setPos(-pixmap().width(), y());
 }
