@@ -49,7 +49,7 @@ void Game::createAndInitScene()
         errorMsg << background.width() << 'x' << background.height();
         throw std::runtime_error(errorMsg.str());
     }
-    view.setBackgroundBrush(QBrush(background));
+    scene.setBackgroundBrush(QBrush(background));
     /* make the newly created scene the scene to visualize
      * (since Game is a QGraphicsView Widget, it can be used to visualize scenes) */
     view.setScene(&scene);
