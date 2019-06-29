@@ -133,8 +133,8 @@ void Player::checkCollisionWithPelletsAndGhosts()
                     prepareToEndGame(QuitReason::DEFEAT);
                 else
                 {
-                    std::for_each(const_cast<std::vector<Enemy*>&>(enemies).begin(),
-                                  const_cast<std::vector<Enemy*>&>(enemies).end(),
+                    std::for_each(enemies.cbegin(),
+                                  enemies.cend(),
                                   [](Enemy* ptrToEnemy){ptrToEnemy->init();});
                     init();
                 }
