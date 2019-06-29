@@ -20,14 +20,15 @@
 
 Game::Game()
 {
-    createAndInitScene();
-    createScore();
-    createLifeCounter();
+    initScene();
+    initScore();
+    initLifeCounter();
     deployNodes();
     deployRegularPellets();
     deploySuperPellets();
     createPlayer();
     createGhosts();
+    initView();
 }
 
 void Game::run()
@@ -38,7 +39,7 @@ void Game::run()
     view.show();
 }
 
-void Game::createAndInitScene()
+void Game::initScene()
 {
     // create the scene
     scene.setSceneRect(0, 0, gameWindow.width(), gameWindow.height());
@@ -50,20 +51,14 @@ void Game::createAndInitScene()
         throw std::runtime_error(errorMsg.str());
     }
     scene.setBackgroundBrush(QBrush(background));
-    /* make the newly created scene the scene to visualize
-     * (since Game is a QGraphicsView Widget, it can be used to visualize scenes) */
-    view.setScene(&scene);
-    view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view.setFixedSize(gameWindow);
 }
 
-void Game::createScore()
+void Game::initScore()
 {
     scene.addItem(&score);
 }
 
-void Game::createLifeCounter()
+void Game::initLifeCounter()
 {
     lifeCounter.setPos(lifeCounter.x() + scene.width() - 62, lifeCounter.y());
     scene.addItem(&lifeCounter);
@@ -168,4 +163,12 @@ void Game::createGhosts()
     scene.addItem(enemies[2]);
     enemies.emplace_back(new Clyde(*player, nodes));
     scene.addItem(enemies[3]);
+}
+
+void Game::initView()
+{
+    view.setScene(&scene);
+    view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view.setFixedSize(gameWindow);
 }
