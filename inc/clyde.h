@@ -9,11 +9,11 @@ public:
     Clyde(Player const& player, std::vector<Node> const& nodes);
 
 private:
-    auto makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) const -> MovementDirection override;
+    auto make_turn_decision(std::vector<MovementDirection> const& possible_movements) const -> MovementDirection override;
 
-    static auto getRegularSprites() -> SpriteMap<MovementDirection>;
+    static auto get_regular_sprites() -> SpriteMap<MovementDirection>;
 
-    static constexpr std::chrono::milliseconds delayToLeaveHideout{3100};
+    static constexpr std::chrono::milliseconds DelayToLeaveHideout{3100};
 };
 
 #endif // CLYDE_H

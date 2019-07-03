@@ -18,57 +18,57 @@ class Player : public Character
 public:
     Player(std::vector<Node> const& nodes,
            Score& score,
-           LifeCounter& lifeCounter,
-           std::vector<RegularPellet*>& regularPellets,
-           std::vector<SuperPellet*>& superPellets,
-           std::function<void()> quitCallback,
+           LifeCounter& life_counter,
+           std::vector<RegularPellet*>& regular_pellets,
+           std::vector<SuperPellet*>& super_pellets,
+           std::function<void()> quit_callback,
            std::vector<Enemy*> const& enemies);
     //last two are const to avoid inattentively usages of this (have to const_cast though)
 
     void init() override;
 
-    auto getCurrentDirection() const noexcept -> MovementDirection;
+    auto get_current_direction() const noexcept -> MovementDirection;
 
 private:
-    static constexpr QPointF initialPosition = {210, 347};
-    static constexpr std::chrono::milliseconds movementTime{9};
-    static constexpr std::chrono::milliseconds animationTime{100};
-    static constexpr std::chrono::milliseconds initialDelay{1000};
+    static constexpr QPointF InitialPosition = {210, 347};
+    static constexpr std::chrono::milliseconds MovementTime{9};
+    static constexpr std::chrono::milliseconds AnimationTime{100};
+    static constexpr std::chrono::milliseconds InitialDelay{1000};
 
     enum class QuitReason{PRESSED_ESC, DEFEAT, VICTORY};
 
     void deinit() override;
     void keyPressEvent(QKeyEvent* event) override;
 
-    void checkCollisionWithPelletsAndGhosts();
-    auto isAnyOfEnemiesFrightened() const -> bool;
-    auto getSprites() -> SpriteMap<MovementDirection>;
-    void prepareToEndGame(QuitReason reason) const;
-    void setMovement(MovementDirection newDirection) noexcept;
-    void setMovementInNode(Node const& node);
+    void check_collision_with_pellets_and_ghosts();
+    auto is_any_of_enemies_frightened() const -> bool;
+    auto get_sprites() -> SpriteMap<MovementDirection>;
+    void prepare_to_end_game(QuitReason reason) const;
+    void set_movement(MovementDirection new_direction) noexcept;
+    void set_movement_in_node(Node const& node);
     void stop() noexcept;
-    void tryToSetOppositeMovement() noexcept;
+    void try_to_set_opposite_movement() noexcept;
 
-    MovementDirection pendingDirection;
+    MovementDirection pending_direction;
     Score& score;
-    LifeCounter& lifeCounter;
-    std::vector<RegularPellet*>& regularPellets;
-    std::vector<SuperPellet*>& superPellets;
-    std::function<void()> quitCallback;
+    LifeCounter& life_counter;
+    std::vector<RegularPellet*>& regular_pellets;
+    std::vector<SuperPellet*>& super_pellets;
+    std::function<void()> quit_callback;
     std::vector<Enemy*> const& enemies;
-    bool isMoving;
+    bool moving;
 
 private slots:
-    void allowToMove() override;
-    void changeSprite() override;
+    void allow_to_move() override;
+    void change_sprite() override;
     void move() override;
 
-    void endGame() const;
+    void end_game() const;
 };
 
-inline auto Player::getCurrentDirection() const noexcept -> MovementDirection
+inline auto Player::get_current_direction() const noexcept -> MovementDirection
 {
-    return currentDirection;
+    return current_direction;
 }
 
 #endif // PLAYER_H

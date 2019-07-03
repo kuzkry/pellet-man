@@ -20,15 +20,15 @@
 
 Game::Game()
 {
-    initScene();
-    initScore();
-    initLifeCounter();
-    deployNodes();
-    deployRegularPellets();
-    deploySuperPellets();
-    createPlayer();
-    createGhosts();
-    initView();
+    init_scene();
+    init_score();
+    init_life_counter();
+    deploy_nodes();
+    deploy_regular_pellets();
+    deploy_super_pellets();
+    create_player();
+    create_ghosts();
+    init_view();
 }
 
 void Game::run()
@@ -39,32 +39,32 @@ void Game::run()
     view.show();
 }
 
-void Game::initScene()
+void Game::init_scene()
 {
     // create the scene
-    scene.setSceneRect(0, 0, gameWindow.width(), gameWindow.height());
+    scene.setSceneRect(0, 0, GameWindow.width(), GameWindow.height());
     QImage const background(":/sprites/sprites/map.jpg");
-    if (background.size() != gameWindow)
+    if (background.size() != GameWindow)
     {
-        std::ostringstream errorMsg("size of provided background different than ");
-        errorMsg << background.width() << 'x' << background.height();
-        throw std::runtime_error(errorMsg.str());
+        std::ostringstream error_msg("size of provided background different than ");
+        error_msg << background.width() << 'x' << background.height();
+        throw std::runtime_error(error_msg.str());
     }
     scene.setBackgroundBrush(QBrush(background));
 }
 
-void Game::initScore()
+void Game::init_score()
 {
     scene.addItem(&score);
 }
 
-void Game::initLifeCounter()
+void Game::init_life_counter()
 {
-    lifeCounter.setPos(lifeCounter.x() + scene.width() - 62, lifeCounter.y());
-    scene.addItem(&lifeCounter);
+    life_counter.setPos(life_counter.x() + scene.width() - 62, life_counter.y());
+    scene.addItem(&life_counter);
 }
 
-void Game::deployNodes()
+void Game::deploy_nodes()
 {
     //node values (position x, position y, upward, leftward, downward, rightward)
     QFile file(":/coordinates/coordinates/nodesCoordinates.txt");
@@ -78,12 +78,12 @@ void Game::deployNodes()
         if (line.startsWith("//") || line.isEmpty())
             continue;
         /* so skip a line if it is either a commentary or an empty one */
-        std::istringstream convertingStream(line.toStdString());
+        std::istringstream converting_stream(line.toStdString());
         qreal x, y;
         bool movements[4];
-        convertingStream >> x >> y;
+        converting_stream >> x >> y;
         for (unsigned short i = 0; i < 4; ++i)
-            convertingStream >> movements[i];
+            converting_stream >> movements[i];
 
         //then fill the vector and add to the scene
         nodes.push_back(Node{{x, y}, movements[0], movements[1], movements[2], movements[3]});
@@ -91,7 +91,7 @@ void Game::deployNodes()
     file.close();
 }
 
-void Game::deployRegularPellets()
+void Game::deploy_regular_pellets()
 {
     QFile file(":/coordinates/coordinates/regularPelletsCoordinates.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -104,18 +104,18 @@ void Game::deployRegularPellets()
         if (line.startsWith("//") || line.isEmpty())
             continue;
         /* so skip a line if it is either a commentary or an empty one */
-        std::istringstream convertingStream(line.toStdString());
+        std::istringstream converting_stream(line.toStdString());
         qreal x, y;
-        convertingStream >> x >> y;
+        converting_stream >> x >> y;
 
         //then fill the vector and add to the scene
-        regularPellets.push_back(new RegularPellet({x, y}));
-        scene.addItem(regularPellets.back());
+        regular_pellets.push_back(new RegularPellet({x, y}));
+        scene.addItem(regular_pellets.back());
     }
     file.close();
 }
 
-void Game::deploySuperPellets()
+void Game::deploy_super_pellets()
 {
     QFile file(":/coordinates/coordinates/superPelletsCoordinates.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -128,21 +128,21 @@ void Game::deploySuperPellets()
         if (line.startsWith("//") || line.isEmpty())
             continue;
         /* so skip a line if it is either a commentary or an empty one */
-        std::istringstream convertingStream(line.toStdString());
+        std::istringstream converting_stream(line.toStdString());
         qreal x, y;
-        convertingStream >> x >> y;
+        converting_stream >> x >> y;
 
         //then fill the vector and add to the scene
-        superPellets.push_back(new SuperPellet({x, y}));
-        scene.addItem(superPellets.back());
+        super_pellets.push_back(new SuperPellet({x, y}));
+        scene.addItem(super_pellets.back());
     }
     file.close();
 }
 
-void Game::createPlayer()
+void Game::create_player()
 {
     // create the player
-    player = new Player(nodes, score, lifeCounter, regularPellets, superPellets, [&]() { view.close(); }, enemies);
+    player = new Player(nodes, score, life_counter, regular_pellets, super_pellets, [&]() { view.close(); }, enemies);
     // unfortunately player must get the reference to this game in order to call close function
 
     // make the player focusable and set it to be the current focus
@@ -152,7 +152,7 @@ void Game::createPlayer()
     scene.addItem(player);
 }
 
-void Game::createGhosts()
+void Game::create_ghosts()
 {
     // creating ghosts
     enemies.emplace_back(new Blinky(*player, nodes));
@@ -165,10 +165,10 @@ void Game::createGhosts()
     scene.addItem(enemies[3]);
 }
 
-void Game::initView()
+void Game::init_view()
 {
     view.setScene(&scene);
     view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view.setFixedSize(gameWindow);
+    view.setFixedSize(GameWindow);
 }

@@ -4,16 +4,16 @@
 #include "player.h"
 
 Blinky::Blinky(Player const& player, std::vector<Node> const& nodes)
-    : Enemy(player, nodes, getRegularSprites(), delayToLeaveHideout) {}
+    : Enemy(player, nodes, get_regular_sprites(), DelayToLeaveHideout) {}
 
-auto Blinky::makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) const -> MovementDirection
+auto Blinky::make_turn_decision(std::vector<MovementDirection> const& possible_movements) const -> MovementDirection
 {
-    DistanceCalculator const distanceCalculator(possibleMovements, pos(), player.pos());
+    DistanceCalculator const distance_calculator(possible_movements, pos(), player.pos());
 
-    return !isFrightened() ? distanceCalculator.calculateShortestDirection() : distanceCalculator.calculateLongestDirection();
+    return !is_frightened() ? distance_calculator.calculate_shortest_direction() : distance_calculator.calculate_longest_direction();
 }
 
-auto Blinky::getRegularSprites() -> SpriteMap<MovementDirection>
+auto Blinky::get_regular_sprites() -> SpriteMap<MovementDirection>
 {
     return {{MovementDirection::LEFT, {QPixmap(":/sprites/sprites/rghostL1.png"), QPixmap(":/sprites/sprites/rghostL2.png")}},
             {MovementDirection::RIGHT, {QPixmap(":/sprites/sprites/rghost1.png"), QPixmap(":/sprites/sprites/rghost2.png")}},

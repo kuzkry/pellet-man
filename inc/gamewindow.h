@@ -3,6 +3,6 @@
 
 #include <QSize>
 
-constexpr QSize gameWindow = {450, 480};
+constexpr QSize GameWindow = {450, 480};
 
 #endif // GAMEWINDOW_H

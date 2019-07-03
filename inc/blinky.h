@@ -9,11 +9,11 @@ public:
     Blinky(Player const& player, const std::vector<Node>& nodes);
 
 private:
-    auto makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) const -> MovementDirection override;
+    auto make_turn_decision(std::vector<MovementDirection> const& possible_movements) const -> MovementDirection override;
 
-    static auto getRegularSprites() -> SpriteMap<MovementDirection>;
+    static auto get_regular_sprites() -> SpriteMap<MovementDirection>;
 
-    static constexpr std::chrono::milliseconds delayToLeaveHideout{1600};
+    static constexpr std::chrono::milliseconds DelayToLeaveHideout{1600};
 };
 
 #endif // BLINKY_H

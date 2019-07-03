@@ -17,13 +17,13 @@ struct Node;
 class Character : public QObject, public QGraphicsPixmapItem
 {
 protected:
-    static constexpr std::size_t spriteCount = 2;
+    static constexpr std::size_t SpriteCount = 2;
 
     template <typename Key>
-    using SpriteMap = std::unordered_map<Key, std::array<QPixmap, spriteCount>>;
+    using SpriteMap = std::unordered_map<Key, std::array<QPixmap, SpriteCount>>;
 
 public:
-    Character(std::vector<Node> const& nodes, SpriteMap<MovementDirection> regularSprites, QPointF initialPosition);
+    Character(std::vector<Node> const& nodes, SpriteMap<MovementDirection> regular_sprites, QPointF initial_position);
     ~Character() override = default;
 
     virtual void init() = 0;
@@ -33,35 +33,35 @@ protected:
 
     void animate();
     template <typename Key>
-    void setSprite(SpriteMap<Key> const& spriteMap, Key key);
-    auto findCurrentNode() const -> std::vector<Node>::const_iterator;
-    void setInitialPixmap(MovementDirection direction);
-    void setInitialPosition();
+    void set_sprite(SpriteMap<Key> const& sprite_map, Key key);
+    auto find_current_node() const -> std::vector<Node>::const_iterator;
+    void set_initial_pixmap(MovementDirection direction);
+    void set_initial_position();
 
     std::vector<Node> const& nodes;
-    SpriteMap<MovementDirection> const regularSprites;
-    MovementDirection currentDirection;
-    QTimer movementTimer, animationTimer, initialDelayTimer;
-    QPointF const initialPosition;
+    SpriteMap<MovementDirection> const regular_sprites;
+    MovementDirection current_direction;
+    QTimer movement_timer, animation_timer, initial_delay_timer;
+    QPointF const initial_position;
 
 protected slots:
-    virtual void allowToMove() = 0;
-    virtual void changeSprite() = 0;
+    virtual void allow_to_move() = 0;
+    virtual void change_sprite() = 0;
     virtual void move() = 0;
 
 private:
-    auto isInNode(Node const& node) const -> bool;
-    auto nextSpriteIndex() const noexcept -> std::size_t;
-    void teleportOnMapEdge();
+    auto is_in_node(Node const& node) const -> bool;
+    auto next_sprite_index() const noexcept -> std::size_t;
+    void teleport_on_map_edge();
 
-    std::size_t spriteIndex = 0;
+    std::size_t sprite_index = 0;
 };
 
 template <typename Key>
-inline void Character::setSprite(SpriteMap<Key> const& spriteMap, Key const key)
+inline void Character::set_sprite(SpriteMap<Key> const& sprite_map, Key const key)
 {
-    setPixmap(spriteMap.find(key)->second[spriteIndex]);
-    spriteIndex = nextSpriteIndex();
+    setPixmap(sprite_map.find(key)->second[sprite_index]);
+    sprite_index = next_sprite_index();
 }
 
 #endif // CHARACTER_H

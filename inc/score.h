@@ -11,7 +11,7 @@ public:
     void big_increase();
     void huge_increase();
     void little_increase();
-    void resetMultiplier();
+    void reset_multiplier();
 
 private:
     unsigned short multiplier;
