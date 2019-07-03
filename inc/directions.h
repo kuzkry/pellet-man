@@ -3,7 +3,7 @@
 
 enum class MovementDirection {UP, DOWN, RIGHT, LEFT};
 
-inline MovementDirection opposite(MovementDirection const direction) noexcept {
+constexpr MovementDirection opposite(MovementDirection const direction) noexcept {
     switch (direction)
     {
     case MovementDirection::UP: return MovementDirection::DOWN;
