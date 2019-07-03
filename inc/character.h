@@ -12,7 +12,7 @@
 #include <unordered_map>
 #include <vector>
 
-struct Node;
+class Node;
 
 class Character : public QObject, public QGraphicsPixmapItem
 {

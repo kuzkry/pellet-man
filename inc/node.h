@@ -7,8 +7,9 @@
 
 #include <unordered_map>
 
-struct Node : public QPointF
+class Node : public QPointF
 {
+public:
     Node(QPointF point,
          bool possibleUpward, bool possibleLeftward,
          bool possibleDownward, bool possibleRightward);
