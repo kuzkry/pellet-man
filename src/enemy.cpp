@@ -3,69 +3,69 @@
 #include "node.h"
 #include "player.h"
 
-Enemy::Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<MovementDirection> regularSprites, std::chrono::milliseconds const delayToLeaveHideout)
-    : Character(nodes, rescalePixmaps(std::move(regularSprites)), initialPosition),
+Enemy::Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<MovementDirection> regular_sprites, std::chrono::milliseconds const delay_to_leave_hideout)
+    : Character(nodes, rescale_pixmaps(std::move(regular_sprites)), InitialPosition),
       player(player),
-      frightenedSprites(rescalePixmaps(getFrightenedSprites())),
-      delayToLeaveHideout(delayToLeaveHideout)
+      frightened_sprites(rescale_pixmaps(get_frightened_sprites())),
+      delay_to_leave_hideout(delay_to_leave_hideout)
 {
-    QObject::connect(&movementTimer, SIGNAL(timeout()), this, SLOT(move()));
-    QObject::connect(&frightenedModeTimer, SIGNAL(timeout()), this, SLOT(disableRunawayState()));
-    QObject::connect(&blinkingModeTimer, SIGNAL(timeout()), this, SLOT(blink()));
-    QObject::connect(&initialDelayTimer, SIGNAL(timeout()), this, SLOT(releaseFromHideout()));
-    QObject::connect(&animationTimer, SIGNAL(timeout()), this, SLOT(changeSprite()));
+    QObject::connect(&movement_timer, SIGNAL(timeout()), this, SLOT(move()));
+    QObject::connect(&frightened_mode_timer, SIGNAL(timeout()), this, SLOT(disable_runaway_state()));
+    QObject::connect(&blinking_mode_timer, SIGNAL(timeout()), this, SLOT(blink()));
+    QObject::connect(&initial_delay_timer, SIGNAL(timeout()), this, SLOT(release_from_hideout()));
+    QObject::connect(&animation_timer, SIGNAL(timeout()), this, SLOT(change_sprite()));
 }
 
 void Enemy::deinit()
 {
-    initialDelayTimer.stop();
-    movementTimer.stop();
-    frightenedModeTimer.stop();
-    blinkingModeTimer.stop();
-    animationTimer.stop();
+    initial_delay_timer.stop();
+    movement_timer.stop();
+    frightened_mode_timer.stop();
+    blinking_mode_timer.stop();
+    animation_timer.stop();
 }
 
 void Enemy::init()
 {
-    currentDirection = MovementDirection::UP;
+    current_direction = MovementDirection::UP;
     deinit();
-    setInitialPixmap(currentDirection);
-    setInitialPosition();
+    set_initial_pixmap(current_direction);
+    set_initial_position();
     frightened = false;
-    initialDelayTimer.start(delayToLeaveHideout);
-    animationTimer.start(animationTime);
+    initial_delay_timer.start(delay_to_leave_hideout);
+    animation_timer.start(AnimationTime);
 }
 
-void Enemy::enableRunawayState()
+void Enemy::enable_runaway_state()
 {
-    frightState = FrightState::INITIAL_BLUE;
+    fright_state = FrightState::INITIAL_BLUE;
     frightened = true;
-    frightenedModeTimer.start(runAwayTime);
-    blinkingModeTimer.start(runAwayTime - blinkingInterval);
+    frightened_mode_timer.start(RunawayTime);
+    blinking_mode_timer.start(RunawayTime - BlinkingInterval);
 }
 
-auto Enemy::getFrightenedSprites() -> SpriteMap<FrightState>
+auto Enemy::get_frightened_sprites() -> SpriteMap<FrightState>
 {
     return {{FrightState::INITIAL_BLUE, {QPixmap(":/sprites/sprites/zombieghost1.png"), QPixmap(":/sprites/sprites/zombieghost2.png")}},
             {FrightState::TRANSFORMING_WHITE, {QPixmap(":/sprites/sprites/leavethisplace1.png"), QPixmap(":/sprites/sprites/leavethisplace1.png")}}};
 }
 
-auto Enemy::nextDirection(Node const& node) const -> MovementDirection
+auto Enemy::next_direction(Node const& node) const -> MovementDirection
 {
-    std::vector<MovementDirection> possibleDirections;
-    possibleDirections.reserve(node.movementPossibilities.size());
-    for (auto const& [direction, isDirectionValid] : node.movementPossibilities)
+    std::vector<MovementDirection> possible_directions;
+    possible_directions.reserve(node.movement_possibilities.size());
+    for (auto const& [direction, is_direction_valid] : node.movement_possibilities)
     {
-        if (isDirectionValid && direction != opposite(currentDirection))
-            possibleDirections.push_back(direction);
+        if (is_direction_valid && direction != opposite(current_direction))
+            possible_directions.push_back(direction);
     }
 
-    return makeTurnDecision(possibleDirections);
+    return make_turn_decision(possible_directions);
 }
 
-auto Enemy::nextFrightState() const noexcept -> FrightState
+auto Enemy::next_fright_state() const noexcept -> FrightState
 {
-    switch (frightState)
+    switch (fright_state)
     {
     case FrightState::INITIAL_BLUE: return FrightState::TRANSFORMING_WHITE;
     case FrightState::TRANSFORMING_WHITE: return FrightState::INITIAL_BLUE;
@@ -74,57 +74,57 @@ auto Enemy::nextFrightState() const noexcept -> FrightState
 }
 
 template <typename Key>
-auto Enemy::rescalePixmaps(SpriteMap<Key> spriteMap) -> SpriteMap<Key> {
-    for (auto& value : spriteMap)
+auto Enemy::rescale_pixmaps(SpriteMap<Key> sprite_map) -> SpriteMap<Key> {
+    for (auto& value : sprite_map)
     {
         for (auto& pixmap : value.second)
             pixmap = pixmap.scaled(26, 26);
     }
-    return spriteMap;
+    return sprite_map;
 }
 
-void Enemy::allowToMove()
+void Enemy::allow_to_move()
 {
-    initialDelayTimer.stop();
-    currentDirection = std::rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
-    movementTimer.start(movementTime);
+    initial_delay_timer.stop();
+    current_direction = std::rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
+    movement_timer.start(MovementTime);
 }
 
-void Enemy::changeSprite()
+void Enemy::change_sprite()
 {
-    if (!frightened)
-        setSprite(regularSprites, currentDirection);
+    if (!is_frightened())
+        set_sprite(regular_sprites, current_direction);
     else
-        setSprite(frightenedSprites, frightState);
+        set_sprite(frightened_sprites, fright_state);
 }
 
 void Enemy::move()
 {
-    auto const it = findCurrentNode();
+    auto const it = find_current_node();
     if (it != nodes.cend())
-        currentDirection = nextDirection(*it);
+        current_direction = next_direction(*it);
 
     animate();
 }
 
 void Enemy::blink()
 {
-    frightState = nextFrightState();
-    blinkingModeTimer.start(singleBlinkTime);
+    fright_state = next_fright_state();
+    blinking_mode_timer.start(SingleBlinkTime);
 }
 
-void Enemy::disableRunawayState()
+void Enemy::disable_runaway_state()
 {
-    frightenedModeTimer.stop();
-    blinkingModeTimer.stop();
+    frightened_mode_timer.stop();
+    blinking_mode_timer.stop();
     frightened = false;
 }
 
-void Enemy::releaseFromHideout()
+void Enemy::release_from_hideout()
 {
-    initialDelayTimer.start(movementTime);
-    if (pos() == initialChasePoint)
-        allowToMove();
+    initial_delay_timer.start(MovementTime);
+    if (pos() == InitialChasePoint)
+        allow_to_move();
     else
         animate();
 }

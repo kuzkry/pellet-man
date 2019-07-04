@@ -13,54 +13,54 @@ class Enemy : public Character
 {
     Q_OBJECT
 public:
-    Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<MovementDirection> regularSprites, std::chrono::milliseconds delayToLeaveHideout);
+    Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<MovementDirection> regular_sprites, std::chrono::milliseconds delay_to_leave_hideout);
 
     void deinit() override;
     void init() override;
 
-    void enableRunawayState();
-    auto isFrightened() const noexcept -> bool;
+    void enable_runaway_state();
+    auto is_frightened() const noexcept -> bool;
 
 protected:
     enum class FrightState {INITIAL_BLUE, TRANSFORMING_WHITE};
 
-    virtual auto makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) const -> MovementDirection = 0;
+    virtual auto make_turn_decision(std::vector<MovementDirection> const& possibleMovements) const -> MovementDirection = 0;
 
     Player const& player;
 
 private:
-    static constexpr QPointF initialPosition = {210, 210};
-    static constexpr QPointF initialChasePoint = {210, 168};
-    static constexpr QSize pixmapScaling = {26, 26};
-    static constexpr std::chrono::milliseconds movementTime{10};
-    static constexpr std::chrono::milliseconds animationTime{10};
-    static constexpr std::chrono::milliseconds singleBlinkTime{20 * movementTime};
-    static constexpr std::chrono::milliseconds blinkingInterval{2000};
-    static constexpr std::chrono::milliseconds runAwayTime{8000};
+    static constexpr QPointF InitialPosition = {210, 210};
+    static constexpr QPointF InitialChasePoint = {210, 168};
+    static constexpr QSize PixmapScaling = {26, 26};
+    static constexpr std::chrono::milliseconds MovementTime{10};
+    static constexpr std::chrono::milliseconds AnimationTime{10};
+    static constexpr std::chrono::milliseconds SingleBlinkTime{20 * MovementTime};
+    static constexpr std::chrono::milliseconds BlinkingInterval{2000};
+    static constexpr std::chrono::milliseconds RunawayTime{8000};
 
-    static auto getFrightenedSprites() -> SpriteMap<FrightState>;
-    auto nextDirection(Node const& node) const -> MovementDirection;
-    auto nextFrightState() const noexcept -> FrightState;
+    static auto get_frightened_sprites() -> SpriteMap<FrightState>;
+    auto next_direction(Node const& node) const -> MovementDirection;
+    auto next_fright_state() const noexcept -> FrightState;
     template <typename Key>
-    static auto rescalePixmaps(SpriteMap<Key> spriteMap) -> SpriteMap<Key>;
+    static auto rescale_pixmaps(SpriteMap<Key> sprite_map) -> SpriteMap<Key>;
 
-    QTimer blinkingModeTimer, frightenedModeTimer;
-    SpriteMap<FrightState> const frightenedSprites;
-    std::chrono::milliseconds const delayToLeaveHideout;
-    FrightState frightState;
+    QTimer blinking_mode_timer, frightened_mode_timer;
+    SpriteMap<FrightState> const frightened_sprites;
+    std::chrono::milliseconds const delay_to_leave_hideout;
+    FrightState fright_state;
     bool frightened;
 
 private slots:
-    void allowToMove() override;
-    void changeSprite() override;
+    void allow_to_move() override;
+    void change_sprite() override;
     void move() override;
 
     void blink();
-    void disableRunawayState();
-    void releaseFromHideout();
+    void disable_runaway_state();
+    void release_from_hideout();
 };
 
-inline auto Enemy::isFrightened() const noexcept -> bool
+inline auto Enemy::is_frightened() const noexcept -> bool
 {
     return frightened;
 }

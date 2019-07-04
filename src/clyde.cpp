@@ -4,20 +4,20 @@
 #include "player.h"
 
 Clyde::Clyde(Player const& player, std::vector<Node> const& nodes)
-    : Enemy(player, nodes, getRegularSprites(), delayToLeaveHideout) {}
+    : Enemy(player, nodes, get_regular_sprites(), DelayToLeaveHideout) {}
 
-auto Clyde::makeTurnDecision(std::vector<MovementDirection> const& possibleMovements) const -> MovementDirection
+auto Clyde::make_turn_decision(std::vector<MovementDirection> const& possible_movements) const -> MovementDirection
 {
-    DistanceCalculator const distanceCalculator(possibleMovements, pos(), player.pos());
+    DistanceCalculator const distance_calculator(possible_movements, pos(), player.pos());
 
-    constexpr auto tilesAhead = 8;
-    qreal const nonChasingArea = player.pixmap().width() * tilesAhead,
-                distanceFromPlayer = distanceCalculator.calculateDistance(pos(), player.pos());
+    constexpr auto TilesAhead = 8;
+    qreal const non_chasing_area = player.pixmap().width() * TilesAhead,
+                distance_from_player = distance_calculator.calculate_distance(pos(), player.pos());
 
-    return nonChasingArea < distanceFromPlayer && !isFrightened() ? distanceCalculator.calculateShortestDirection() : distanceCalculator.calculateLongestDirection();
+    return non_chasing_area < distance_from_player && !is_frightened() ? distance_calculator.calculate_shortest_direction() : distance_calculator.calculate_longest_direction();
 }
 
-auto Clyde::getRegularSprites() -> SpriteMap<MovementDirection>
+auto Clyde::get_regular_sprites() -> SpriteMap<MovementDirection>
 {
     return {{MovementDirection::LEFT, {QPixmap(":/sprites/sprites/oghostL1.png"), QPixmap(":/sprites/sprites/oghostL2.png")}},
             {MovementDirection::RIGHT, {QPixmap(":/sprites/sprites/oghost1.png"), QPixmap(":/sprites/sprites/oghost2.png")}},

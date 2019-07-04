@@ -5,14 +5,14 @@
 
 #include <utility>
 
-Character::Character(std::vector<Node> const& nodes, SpriteMap<MovementDirection> regularSprites, QPointF const initialPosition)
+Character::Character(std::vector<Node> const& nodes, SpriteMap<MovementDirection> regular_sprites, QPointF const initial_position)
     : nodes(nodes),
-      regularSprites(std::move(regularSprites)),
-      initialPosition(initialPosition) {}
+      regular_sprites(std::move(regular_sprites)),
+      initial_position(initial_position) {}
 
 void Character::animate()
 {
-    switch (currentDirection)
+    switch (current_direction)
     {
     case MovementDirection::LEFT:
         setPos(x() - 1, y());
@@ -28,38 +28,38 @@ void Character::animate()
         break;
     }
 
-    teleportOnMapEdge();
+    teleport_on_map_edge();
 }
 
-auto Character::findCurrentNode() const -> std::vector<Node>::const_iterator
+auto Character::find_current_node() const -> std::vector<Node>::const_iterator
 {
-    return std::find_if(nodes.cbegin(), nodes.cend(), [this](auto& node) { return isInNode(node); });
+    return std::find_if(nodes.cbegin(), nodes.cend(), [this](auto& node) { return is_in_node(node); });
 }
 
-void Character::setInitialPixmap(MovementDirection const direction)
+void Character::set_initial_pixmap(MovementDirection const direction)
 {
-    setPixmap(regularSprites.find(direction)->second[0]);
+    setPixmap(regular_sprites.find(direction)->second[0]);
 }
 
-void Character::setInitialPosition()
+void Character::set_initial_position()
 {
-    setPos(initialPosition);
+    setPos(initial_position);
 }
 
-auto Character::isInNode(Node const& node) const -> bool
+auto Character::is_in_node(Node const& node) const -> bool
 {
     return pos() == node;
 }
 
-auto Character::nextSpriteIndex() const noexcept -> std::size_t
+auto Character::next_sprite_index() const noexcept -> std::size_t
 {
-    return (spriteIndex + 1) % spriteCount;
+    return (sprite_index + 1) % SpriteCount;
 }
 
-void Character::teleportOnMapEdge()
+void Character::teleport_on_map_edge()
 {
     if (x() + pixmap().width() < 0)
-        setPos(gameWindow.width(), y());
-    else if (x() > gameWindow.width())
+        setPos(GameWindow.width(), y());
+    else if (x() > GameWindow.width())
         setPos(-pixmap().width(), y());
 }

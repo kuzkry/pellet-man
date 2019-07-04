@@ -11,10 +11,10 @@ class Node : public QPointF
 {
 public:
     Node(QPointF point,
-         bool possibleUpward, bool possibleLeftward,
-         bool possibleDownward, bool possibleRightward);
+         bool possible_upward, bool possible_leftward,
+         bool possible_downward, bool possible_rightward);
 
-    std::unordered_map<MovementDirection, bool> movementPossibilities;
+    std::unordered_map<MovementDirection, bool> movement_possibilities;
 };
 
 #endif // NODE_H

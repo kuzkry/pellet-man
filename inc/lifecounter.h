@@ -9,13 +9,13 @@ public:
     LifeCounter();
 
     void decrease();
-    auto getLives() const noexcept -> unsigned short;
+    auto get_lives() const noexcept -> unsigned short;
 
 private:
     unsigned short lives;
 };
 
-inline auto LifeCounter::getLives() const noexcept -> unsigned short
+inline auto LifeCounter::get_lives() const noexcept -> unsigned short
 {
     return lives;
 }

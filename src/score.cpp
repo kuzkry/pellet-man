@@ -30,7 +30,7 @@ void Score::little_increase()
     setPlainText(QString("Score: ") + QString::number(score));
 }
 
-void Score::resetMultiplier()
+void Score::reset_multiplier()
 {
     multiplier = 1;
 }

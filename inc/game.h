@@ -22,24 +22,24 @@ public:
     void run();
 
 private:
-    void initScene();
-    void initScore();
-    void initLifeCounter();
-    void deployNodes();
-    void deployRegularPellets();
-    void deploySuperPellets();
-    void createPlayer();
-    void createGhosts();
-    void initView();
+    void init_scene();
+    void init_score();
+    void init_life_counter();
+    void deploy_nodes();
+    void deploy_regular_pellets();
+    void deploy_super_pellets();
+    void create_player();
+    void create_ghosts();
+    void init_view();
 
     QGraphicsView view;
     QGraphicsScene scene;
     Score score;
-    LifeCounter lifeCounter;
+    LifeCounter life_counter;
     Player* player;
     std::vector<Node> nodes;
-    std::vector<RegularPellet*> regularPellets;
-    std::vector<SuperPellet*> superPellets;
+    std::vector<RegularPellet*> regular_pellets;
+    std::vector<SuperPellet*> super_pellets;
     std::vector<Enemy*> enemies;
 };
 

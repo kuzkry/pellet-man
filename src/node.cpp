@@ -1,10 +1,10 @@
 #include "node.h"
 
 Node::Node(QPointF const point,
-           bool possibleUpward, bool possibleLeftward,
-           bool possibleDownward, bool possibleRightward)
+           bool possible_upward, bool possible_leftward,
+           bool possible_downward, bool possible_rightward)
     : QPointF(point),
-      movementPossibilities({{MovementDirection::UP, possibleUpward},
-                             {MovementDirection::LEFT, possibleLeftward},
-                             {MovementDirection::DOWN, possibleDownward},
-                             {MovementDirection::RIGHT, possibleRightward}}) {}
+      movement_possibilities({{MovementDirection::UP, possible_upward},
+                             {MovementDirection::LEFT, possible_leftward},
+                             {MovementDirection::DOWN, possible_downward},
+                             {MovementDirection::RIGHT, possible_rightward}}) {}

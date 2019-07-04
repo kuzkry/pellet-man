@@ -4,29 +4,29 @@
 #include <functional>
 #include <limits>
 
-DistanceCalculator::DistanceCalculator(std::vector<MovementDirection> const& possibleDirections, QPointF const currentPos, QPointF const targetPos)
-    : possibleDirections(possibleDirections),
-      currentPos(currentPos),
-      targetPos(targetPos) {}
+DistanceCalculator::DistanceCalculator(std::vector<MovementDirection> const& possible_directions, QPointF const current_pos, QPointF const target_pos)
+    : possible_directions(possible_directions),
+      current_pos(current_pos),
+      target_pos(target_pos) {}
 
-auto DistanceCalculator::calculateShortestDirection() const -> MovementDirection
+auto DistanceCalculator::calculate_shortest_direction() const -> MovementDirection
 {
     qreal const min_distance = std::numeric_limits<qreal>::max();
     return calculate(min_distance, std::less<qreal>());
 }
 
-auto DistanceCalculator::calculateLongestDirection() const -> MovementDirection
+auto DistanceCalculator::calculate_longest_direction() const -> MovementDirection
 {
     qreal const max_distance = std::numeric_limits<qreal>::min();
     return calculate(max_distance, std::greater<qreal>());
 }
 
-auto DistanceCalculator::calculateDistance(QPointF const from, QPointF const to) -> qreal
+auto DistanceCalculator::calculate_distance(QPointF const from, QPointF const to) -> qreal
 {
     return std::sqrt(std::pow(from.x() - to.x(), 2) + std::pow(from.y() - to.y(), 2));
 }
 
-auto DistanceCalculator::generateNextPosition(QPointF const pos, MovementDirection const direction, qreal const offset) -> QPointF
+auto DistanceCalculator::generate_next_position(QPointF const pos, MovementDirection const direction, qreal const offset) -> QPointF
 {
     switch (direction)
     {
@@ -39,24 +39,24 @@ auto DistanceCalculator::generateNextPosition(QPointF const pos, MovementDirecti
 }
 
 template <typename Comp>
-auto DistanceCalculator::calculate(qreal const boundaryValue, Comp const comp) const -> MovementDirection
+auto DistanceCalculator::calculate(qreal const boundary_value, Comp const comp) const -> MovementDirection
 {
     MovementDirection ret = MovementDirection::UP;
-    qreal prev_distance = boundaryValue;
-    for (MovementDirection const movementDirection : possibleDirections)
+    qreal prev_distance = boundary_value;
+    for (MovementDirection const movement_direction : possible_directions)
     {
-        qreal const distance = calculateDistance(generateNextPosition(currentPos, movementDirection), targetPos);
+        qreal const distance = calculate_distance(generate_next_position(current_pos, movement_direction), target_pos);
         if (comp(distance, prev_distance))
         {
             prev_distance = distance;
-            ret = movementDirection;
+            ret = movement_direction;
         }
     }
     return ret;
 }
 
-auto DistanceCalculator::generateNextPosition(QPointF const pos, MovementDirection const direction) -> QPointF
+auto DistanceCalculator::generate_next_position(QPointF const pos, MovementDirection const direction) -> QPointF
 {
-    constexpr qreal smallOffset = 1;
-    return generateNextPosition(pos, direction, smallOffset);
+    constexpr qreal SmallOffset = 1;
+    return generate_next_position(pos, direction, SmallOffset);
 }
