@@ -1,29 +1,19 @@
 #include "player.h"
 
-#include "clyde.h"
-#include "blinky.h"
-#include "inky.h"
-#include "lifecounter.h"
+#include "enemy.h"
 #include "node.h"
-#include "pinky.h"
 #include "regularpellet.h"
-#include "score.h"
 #include "superpellet.h"
 
-#include <QGraphicsScene>
 #include <QKeyEvent>
 
 #include <algorithm>
 
 Player::Player(std::vector<Node> const& nodes,
-               Score& score,
-               LifeCounter& life_counter,
-               std::vector<RegularPellet*>& regular_pellets,
-               std::vector<SuperPellet*>& super_pellets,
+               std::vector<RegularPellet*> const& regular_pellets,
+               std::vector<SuperPellet*> const& super_pellets,
                std::vector<Enemy*> const& enemies)
     : Character(nodes, get_sprites(), InitialPosition),
-      score(score),
-      life_counter(life_counter),
       regular_pellets(regular_pellets),
       super_pellets(super_pellets),
       enemies(enemies)
@@ -82,72 +72,19 @@ void Player::check_collisions()
     // if one of the colliding items is Pac-Man, destroy that dot
     for (QGraphicsItem* const item : all_items)
     {
-        if (auto const it = std::find(regular_pellets.cbegin(), regular_pellets.cend(), item); it != regular_pellets.cend())
+        if (auto const pellet = std::find(regular_pellets.cbegin(), regular_pellets.cend(), item); pellet != regular_pellets.cend())
         {
-            score.little_increase(); // increase the score by 10
-
-            // remove them from the scene (still on the heap)
-            scene()->removeItem(*it);
-
-            // delete them from the heap to save memory
-            delete *it;
-
-            // remove from a vector
-            regular_pellets.erase(it);
+            emit regular_pellet_eaten(*pellet);
         }
-        else if (auto const it = std::find(super_pellets.cbegin(), super_pellets.cend(), item); it != super_pellets.cend())
+        else if (auto const pellet = std::find(super_pellets.cbegin(), super_pellets.cend(), item); pellet != super_pellets.cend())
         {
-            score.big_increase(); // increase the score by 50
-
-            // remove them from the scene (still on the heap)
-            scene()->removeItem(*it);
-
-            // delete them from the heap to save memory
-            delete *it;
-
-            // remove from a vector
-            super_pellets.erase(it);
-
-            // checking if any of enemies is frightened (if not, that means that player will not get extra points
-            if (!is_any_of_enemies_frightened())
-                score.reset_multiplier();
-
-            // frighten enemies - requires getting rid of const to call enable_runaway_state
-            std::for_each(const_cast<std::vector<Enemy*>&>(enemies).begin(),
-                          const_cast<std::vector<Enemy*>&>(enemies).end(),
-                          [](Enemy* enemy){enemy->enable_runaway_state();});
+            emit super_pellet_eaten(*pellet);
         }
-        else if (auto const enemy_it = std::find(enemies.cbegin(), enemies.cend(), item); enemy_it != enemies.cend())
+        else if (auto const enemy = std::find(enemies.cbegin(), enemies.cend(), item); enemy != enemies.cend())
         {
-            if (!(*enemy_it)->is_frightened())
-            {
-                life_counter.decrease();
-                if (life_counter.get_lives() == 0) {
-                    emit died();
-                    return;
-                }
-                else
-                {
-                    std::for_each(enemies.cbegin(),
-                                  enemies.cend(),
-                                  [](Enemy* enemy){enemy->init();});
-                    init();
-                }
-            }
-            else
-            {
-                score.huge_increase();
-                (*enemy_it)->init();
-            }
+            emit enemy_hit(*enemy);
         }
     }
-    if (regular_pellets.empty() && super_pellets.empty())
-        emit won();
-}
-
-auto Player::is_any_of_enemies_frightened() const -> bool
-{
-    return std::any_of(enemies.begin(), enemies.end(), [](Enemy const* enemy) { return enemy->is_frightened(); });
 }
 
 auto Player::get_sprites() -> SpriteMap<MovementDirection>

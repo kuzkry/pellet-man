@@ -7,6 +7,7 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsView>
+#include <QObject>
 
 #include <chrono>
 #include <vector>
@@ -16,8 +17,9 @@ class Player;
 class RegularPellet;
 class SuperPellet;
 
-class Game
+class Game : public QObject
 {
+    Q_OBJECT
 public:
     Game();
     void run();
@@ -26,6 +28,8 @@ private:
     enum class EndGameReason{DEFEAT, VICTORY};
     static constexpr std::chrono::seconds DelayToCloseGame{3};
 
+    void init_characters();
+    void deinit_characters();
     void init_scene();
     void init_score();
     void init_life_counter();
@@ -46,6 +50,12 @@ private:
     std::vector<RegularPellet*> regular_pellets;
     std::vector<SuperPellet*> super_pellets;
     std::vector<Enemy*> enemies;
+
+private slots:
+    void end_game_if_all_pellets_have_been_eaten();
+    void handle_eating_regular_pellet(RegularPellet*);
+    void handle_eating_super_pellet(SuperPellet*);
+    void handle_enemy_hit(Enemy*);
 };
 
 #endif // GAME_H

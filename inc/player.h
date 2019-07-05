@@ -6,10 +6,8 @@
 #include <chrono>
 
 class Enemy;
-class LifeCounter;
 class QKeyEvent;
 class RegularPellet;
-class Score;
 class SuperPellet;
 
 class Player : public Character
@@ -17,12 +15,9 @@ class Player : public Character
     Q_OBJECT
 public:
     Player(std::vector<Node> const& nodes,
-           Score& score,
-           LifeCounter& life_counter,
-           std::vector<RegularPellet*>& regular_pellets,
-           std::vector<SuperPellet*>& super_pellets,
+           std::vector<RegularPellet*> const& regular_pellets,
+           std::vector<SuperPellet*> const& super_pellets,
            std::vector<Enemy*> const& enemies);
-    //last two are const to avoid inattentively usages of this (have to const_cast though)
 
     void deinit() override;
     void init() override;
@@ -30,9 +25,10 @@ public:
     auto get_current_direction() const noexcept -> MovementDirection;
 
 signals:
-    void died() const;
+    void enemy_hit(Enemy*);
     void interrupted() const;
-    void won() const;
+    void regular_pellet_eaten(RegularPellet*);
+    void super_pellet_eaten(SuperPellet*);
 
 private:
     static constexpr QPointF InitialPosition = {210, 347};
@@ -51,10 +47,8 @@ private:
     void try_to_set_opposite_movement() noexcept;
 
     MovementDirection pending_direction;
-    Score& score;
-    LifeCounter& life_counter;
-    std::vector<RegularPellet*>& regular_pellets;
-    std::vector<SuperPellet*>& super_pellets;
+    std::vector<RegularPellet*> const& regular_pellets;
+    std::vector<SuperPellet*> const& super_pellets;
     std::vector<Enemy*> const& enemies;
     bool moving;
 

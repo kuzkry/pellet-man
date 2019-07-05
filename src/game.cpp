@@ -35,10 +35,22 @@ Game::Game()
 
 void Game::run()
 {
-    player->init();
-    for (Enemy* enemy : enemies)
-        enemy->init();
+    init_characters();
     view.show();
+}
+
+void Game::init_characters()
+{
+    player->init();
+    for (Enemy* const enemy : enemies)
+        enemy->init();
+}
+
+void Game::deinit_characters()
+{
+    player->deinit();
+    for (Enemy* const enemy : enemies)
+        enemy->deinit();
 }
 
 void Game::init_scene()
@@ -143,16 +155,19 @@ void Game::deploy_super_pellets()
 
 void Game::create_player()
 {
-    player = new Player(nodes, score, life_counter, regular_pellets, super_pellets, enemies);
+    player = new Player(nodes, regular_pellets, super_pellets, enemies);
     // make the player focusable and set it to be the current focus
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
     // add the player to the scene
     scene.addItem(player);
 
-    QObject::connect(player, &Player::won, [this]() { set_game_end(EndGameReason::VICTORY); });
-    QObject::connect(player, &Player::died, [this]() { set_game_end(EndGameReason::DEFEAT); });
     QObject::connect(player, SIGNAL(interrupted()), &view, SLOT(close()));
+    QObject::connect(player, SIGNAL(regular_pellet_eaten(RegularPellet*)), this, SLOT(handle_eating_regular_pellet(RegularPellet*)));
+    QObject::connect(player, SIGNAL(regular_pellet_eaten(RegularPellet*)), this, SLOT(end_game_if_all_pellets_have_been_eaten()));
+    QObject::connect(player, SIGNAL(super_pellet_eaten(SuperPellet*)), this, SLOT(handle_eating_super_pellet(SuperPellet*)));
+    QObject::connect(player, SIGNAL(super_pellet_eaten(SuperPellet*)), this, SLOT(end_game_if_all_pellets_have_been_eaten()));
+    QObject::connect(player, SIGNAL(enemy_hit(Enemy*)), this, SLOT(handle_enemy_hit(Enemy*)));
 }
 
 void Game::create_ghosts()
@@ -177,9 +192,7 @@ void Game::init_view()
 
 void Game::set_game_end(EndGameReason const reason)
 {
-    player->deinit();
-    for (Enemy* enemy : enemies)
-        enemy->deinit();
+    deinit_characters();
 
     QGraphicsTextItem* text = nullptr;
     switch (reason)
@@ -195,4 +208,58 @@ void Game::set_game_end(EndGameReason const reason)
     text->setDefaultTextColor(Qt::red);
     text->setFont(QFont("times", 34));
     scene.addItem(text);
+
+    QTimer::singleShot(DelayToCloseGame, &view, SLOT(close()));
+}
+
+void Game::end_game_if_all_pellets_have_been_eaten()
+{
+    if (regular_pellets.empty() && super_pellets.empty())
+        set_game_end(EndGameReason::VICTORY);
+}
+
+void Game::handle_eating_regular_pellet(RegularPellet* const pellet)
+{
+    score.little_increase();
+
+    auto const it = std::find(regular_pellets.cbegin(), regular_pellets.cend(), pellet);
+    if (it == regular_pellets.cend())
+        throw std::invalid_argument("pellet hasn't been found");
+
+    scene.removeItem(pellet);
+    delete pellet;
+    regular_pellets.erase(it);
+}
+
+void Game::handle_eating_super_pellet(SuperPellet* const pellet)
+{
+    score.big_increase();
+
+    auto const it = std::find(super_pellets.cbegin(), super_pellets.cend(), pellet);
+    if (it == super_pellets.cend())
+        throw std::invalid_argument("pellet hasn't been found");
+
+    scene.removeItem(pellet);
+    delete pellet;
+    super_pellets.erase(it);
+
+    for (Enemy* enemy : enemies)
+        enemy->enable_runaway_state();
+}
+
+void Game::handle_enemy_hit(Enemy* const enemy)
+{
+    if (enemy->is_frightened())
+    {
+        score.huge_increase();
+        enemy->init();
+    }
+    else
+    {
+        life_counter.decrease();
+        if (life_counter.get_lives() != 0)
+            init_characters();
+        else
+            set_game_end(EndGameReason::DEFEAT);
+    }
 }
