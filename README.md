@@ -4,8 +4,7 @@ A *Pac-Man* clone written in C++ and Qt during the 3rd year of studies at Lodz U
 ***
 ### Getting Started
 
-Project can be set up using Qt Creator (load *pellet-man.pro* file) or by invoking qmake on this project directory.
-It has to be compiled on the user's machine.
+Project can be set up using Qt Creator (load *pellet-man.pro* file) or by invoking qmake on this project directory. It has to be compiled on the user's machine.
 
 ### Prerequisites
 
@@ -14,7 +13,7 @@ It has to be compiled on the user's machine.
 - C++11 compiler
 
 ### Controls
-Arrow keys
+Arrow keys  
 Esc to quit the game
 
 ### License
