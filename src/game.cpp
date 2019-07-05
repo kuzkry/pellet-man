@@ -158,14 +158,13 @@ void Game::create_player()
 void Game::create_ghosts()
 {
     // creating ghosts
-    enemies.emplace_back(new Blinky(*player, nodes));
-    scene.addItem(enemies[0]);
-    enemies.emplace_back(new Pinky(*player, nodes));
-    scene.addItem(enemies[1]);
-    enemies.emplace_back(new Inky(*player, nodes, dynamic_cast<Blinky&>(*enemies[0])));
-    scene.addItem(enemies[2]);
-    enemies.emplace_back(new Clyde(*player, nodes));
-    scene.addItem(enemies[3]);
+    auto const blinky = new Blinky(*player, nodes);
+    auto const pinky = new Pinky(*player, nodes);
+    auto const inky = new Inky(*player, nodes, *blinky);
+    auto const clyde = new Clyde(*player, nodes);
+    enemies = {blinky, pinky, inky, clyde};
+    for (Enemy* const enemy : enemies)
+        scene.addItem(enemy);
 }
 
 void Game::init_view()
