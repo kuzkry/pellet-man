@@ -8,6 +8,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 
+#include <chrono>
 #include <vector>
 
 class Enemy;
@@ -22,6 +23,9 @@ public:
     void run();
 
 private:
+    enum class EndGameReason{DEFEAT, VICTORY};
+    static constexpr std::chrono::seconds DelayToCloseGame{3};
+
     void init_scene();
     void init_score();
     void init_life_counter();
@@ -31,6 +35,7 @@ private:
     void create_player();
     void create_ghosts();
     void init_view();
+    void set_game_end(EndGameReason);
 
     QGraphicsView view;
     QGraphicsScene scene;

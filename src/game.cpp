@@ -12,6 +12,8 @@
 #include <QBrush>
 #include <QImage>
 #include <QFile>
+#include <QFont>
+#include <QGraphicsTextItem>
 #include <QTextStream>
 #include <QtGlobal>
 
@@ -141,15 +143,16 @@ void Game::deploy_super_pellets()
 
 void Game::create_player()
 {
-    // create the player
-    player = new Player(nodes, score, life_counter, regular_pellets, super_pellets, [&]() { view.close(); }, enemies);
-    // unfortunately player must get the reference to this game in order to call close function
-
+    player = new Player(nodes, score, life_counter, regular_pellets, super_pellets, enemies);
     // make the player focusable and set it to be the current focus
     player->setFlag(QGraphicsItem::ItemIsFocusable);
     player->setFocus();
     // add the player to the scene
     scene.addItem(player);
+
+    QObject::connect(player, &Player::won, [this]() { set_game_end(EndGameReason::VICTORY); });
+    QObject::connect(player, &Player::died, [this]() { set_game_end(EndGameReason::DEFEAT); });
+    QObject::connect(player, SIGNAL(interrupted()), &view, SLOT(close()));
 }
 
 void Game::create_ghosts()
@@ -171,4 +174,26 @@ void Game::init_view()
     view.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view.setFixedSize(GameWindow);
+}
+
+void Game::set_game_end(EndGameReason const reason)
+{
+    player->deinit();
+    for (Enemy* enemy : enemies)
+        enemy->deinit();
+
+    QGraphicsTextItem* text = nullptr;
+    switch (reason)
+    {
+    case EndGameReason::VICTORY:
+        text = new QGraphicsTextItem("YOU WIN!");
+        break;
+    case EndGameReason::DEFEAT:
+        text = new QGraphicsTextItem("YOU LOSE!");
+        break;
+    }
+    text->setPos(120, 210);
+    text->setDefaultTextColor(Qt::red);
+    text->setFont(QFont("times", 34));
+    scene.addItem(text);
 }
