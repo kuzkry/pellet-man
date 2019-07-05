@@ -141,7 +141,7 @@ void Player::check_collisions()
             }
         }
     }
-    if (!regular_pellets.size() && !super_pellets.size())
+    if (regular_pellets.empty() && super_pellets.empty())
         emit won();
 }
 
