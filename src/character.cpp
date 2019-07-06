@@ -5,7 +5,7 @@
 
 #include <utility>
 
-Character::Character(std::vector<Node> const& nodes, SpriteMap<MovementDirection> regular_sprites, QPointF const initial_position)
+Character::Character(std::vector<Node> const& nodes, SpriteMap<Direction> regular_sprites, QPointF const initial_position)
     : regular_sprites(std::move(regular_sprites)),
       initial_position(initial_position),
       nodes(nodes) {}
@@ -15,7 +15,7 @@ auto Character::find_current_node() const -> std::vector<Node>::const_iterator
     return std::find_if(nodes.cbegin(), nodes.cend(), [this](auto& node) { return is_in_node(node); });
 }
 
-void Character::set_initial_pixmap(MovementDirection const direction)
+void Character::set_initial_pixmap(Direction const direction)
 {
     setPixmap(regular_sprites.find(direction)->second[0]);
 }
@@ -29,16 +29,16 @@ void Character::set_next_position()
 {
     switch (current_direction)
     {
-    case MovementDirection::LEFT:
+    case Direction::LEFT:
         setPos(x() - 1, y());
         break;
-    case MovementDirection::RIGHT:
+    case Direction::RIGHT:
         setPos(x() + 1, y());
         break;
-    case MovementDirection::UP:
+    case Direction::UP:
         setPos(x(), y() - 1);
         break;
-    case MovementDirection::DOWN:
+    case Direction::DOWN:
         setPos(x(), y() + 1);
         break;
     }

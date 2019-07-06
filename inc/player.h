@@ -24,7 +24,7 @@ public:
     void deinit() override;
     void init() override;
 
-    auto get_current_direction() const noexcept -> MovementDirection;
+    auto get_current_direction() const noexcept -> Direction;
 
 signals:
     void enemy_hit(Enemy*);
@@ -42,16 +42,16 @@ private:
 
     void check_collisions();
     auto is_any_of_enemies_frightened() const -> bool;
-    auto get_sprites() -> SpriteMap<MovementDirection>;
-    void set_movement(MovementDirection new_direction) noexcept;
-    void set_movement_in_node(Node const& node);
+    auto get_sprites() -> SpriteMap<Direction>;
+    void set_direction(Direction new_direction) noexcept;
+    void set_direction_at_node(Node const& node);
     void stop() noexcept;
-    void try_to_set_opposite_movement() noexcept;
+    void try_to_set_opposite_direction() noexcept;
 
     std::vector<RegularPellet*> const& regular_pellets;
     std::vector<SuperPellet*> const& super_pellets;
     std::vector<Enemy*> const& enemies;
-    MovementDirection pending_direction;
+    Direction pending_direction;
     bool moving;
 
 private slots:
@@ -60,7 +60,7 @@ private slots:
     void animate_sprites() override;
 };
 
-inline auto Player::get_current_direction() const noexcept -> MovementDirection
+inline auto Player::get_current_direction() const noexcept -> Direction
 {
     return current_direction;
 }

@@ -32,7 +32,7 @@ void Player::deinit()
 
 void Player::init()
 {
-    current_direction = pending_direction = MovementDirection::LEFT;
+    current_direction = pending_direction = Direction::LEFT;
     deinit();
     set_initial_pixmap(current_direction);
     set_initial_position();
@@ -46,16 +46,16 @@ void Player::keyPressEvent(QKeyEvent* event)
     switch (event->key())
     {
     case Qt::Key_Left:
-        pending_direction = MovementDirection::LEFT;
+        pending_direction = Direction::LEFT;
         break;
     case Qt::Key_Right:
-        pending_direction = MovementDirection::RIGHT;
+        pending_direction = Direction::RIGHT;
         break;
     case Qt::Key_Up:
-        pending_direction = MovementDirection::UP;
+        pending_direction = Direction::UP;
         break;
     case Qt::Key_Down:
-        pending_direction = MovementDirection::DOWN;
+        pending_direction = Direction::DOWN;
         break;
     case Qt::Key_Escape:
         emit interrupted();
@@ -85,34 +85,34 @@ void Player::check_collisions()
     }
 }
 
-auto Player::get_sprites() -> SpriteMap<MovementDirection>
+auto Player::get_sprites() -> SpriteMap<Direction>
 {
-    return {{MovementDirection::LEFT, {QPixmap(":/sprites/sprites/pacopenleft.png"), QPixmap(":/sprites/sprites/pacmidleft.png")}},
-            {MovementDirection::RIGHT, {QPixmap(":/sprites/sprites/pacopenright.png"), QPixmap(":/sprites/sprites/pacmidright.png")}},
-            {MovementDirection::UP, {QPixmap(":/sprites/sprites/pacopenup.png"), QPixmap(":/sprites/sprites/pacmidup.png")}},
-            {MovementDirection::DOWN, {QPixmap(":/sprites/sprites/pacopendown.png"), QPixmap(":/sprites/sprites/pacmiddown.png")}}};
+    return {{Direction::LEFT, {QPixmap(":/sprites/sprites/pacopenleft.png"), QPixmap(":/sprites/sprites/pacmidleft.png")}},
+            {Direction::RIGHT, {QPixmap(":/sprites/sprites/pacopenright.png"), QPixmap(":/sprites/sprites/pacmidright.png")}},
+            {Direction::UP, {QPixmap(":/sprites/sprites/pacopenup.png"), QPixmap(":/sprites/sprites/pacmidup.png")}},
+            {Direction::DOWN, {QPixmap(":/sprites/sprites/pacopendown.png"), QPixmap(":/sprites/sprites/pacmiddown.png")}}};
 }
 
-void Player::set_movement(MovementDirection const new_direction) noexcept
+void Player::set_direction(Direction const new_direction) noexcept
 {
     current_direction = new_direction;
     moving = true;
 }
 
-void Player::set_movement_in_node(Node const& node)
+void Player::set_direction_at_node(Node const& node)
 {
-    std::vector<MovementDirection> possible_directions;
-    possible_directions.reserve(node.movement_possibilities.size());
-    for (auto const& [direction, is_direction_valid] : node.movement_possibilities)
+    std::vector<Direction> possible_directions;
+    possible_directions.reserve(node.possible_directions.size());
+    for (auto const& [direction, is_direction_valid] : node.possible_directions)
     {
         if (is_direction_valid)
             possible_directions.push_back(direction);
     }
 
     if (std::find(possible_directions.cbegin(), possible_directions.cend(), pending_direction) != possible_directions.cend()) // check if a pending move can be performed
-        set_movement(pending_direction);
+        set_direction(pending_direction);
     else if (std::find(possible_directions.cbegin(), possible_directions.cend(), current_direction) != possible_directions.cend()) // check if Pac-Man can continue going in his current direction
-        set_movement(current_direction);
+        set_direction(current_direction);
     else // otherwise Pac-Man hits a wall
         stop();
 }
@@ -122,10 +122,10 @@ void Player::stop() noexcept
     moving = false;
 }
 
-void Player::try_to_set_opposite_movement() noexcept
+void Player::try_to_set_opposite_direction() noexcept
 {
     if (pending_direction == opposite(current_direction))
-        set_movement(pending_direction);
+        set_direction(pending_direction);
 }
 
 void Player::allow_to_move()
@@ -139,9 +139,9 @@ void Player::animate_movement()
 {
     auto const it = find_current_node();
     if (it != nodes.cend())
-        set_movement_in_node(*it);
+        set_direction_at_node(*it);
     else
-        try_to_set_opposite_movement();
+        try_to_set_opposite_direction();
 
     if (moving)
         set_next_position();

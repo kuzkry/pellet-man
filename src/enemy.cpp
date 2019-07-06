@@ -3,7 +3,7 @@
 #include "node.h"
 #include "player.h"
 
-Enemy::Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<MovementDirection> regular_sprites, std::chrono::milliseconds const delay_to_leave_hideout)
+Enemy::Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<Direction> regular_sprites, std::chrono::milliseconds const delay_to_leave_hideout)
     : Character(nodes, rescale_pixmaps(std::move(regular_sprites)), InitialPosition),
       player(player),
       frightened_sprites(rescale_pixmaps(get_frightened_sprites())),
@@ -29,7 +29,7 @@ void Enemy::init()
 {
     deinit();
     disable_runaway_state();
-    current_direction = MovementDirection::UP;
+    current_direction = Direction::UP;
     set_initial_pixmap(current_direction);
     set_initial_position();
     initial_delay_timer.start(delay_to_leave_hideout);
@@ -54,17 +54,17 @@ auto Enemy::get_frightened_sprites() -> SpriteMap<FrightState>
             {FrightState::TRANSFORMING_WHITE, {QPixmap(":/sprites/sprites/leavethisplace1.png"), QPixmap(":/sprites/sprites/leavethisplace1.png")}}};
 }
 
-auto Enemy::direction() const -> MovementDirection
+auto Enemy::direction() const -> Direction
 {
     auto const it = find_current_node();
     return it != nodes.cend() ? direction(*it) : current_direction;
 }
 
-auto Enemy::direction(Node const& node) const -> MovementDirection
+auto Enemy::direction(Node const& node) const -> Direction
 {
-    std::vector<MovementDirection> possible_directions;
-    possible_directions.reserve(node.movement_possibilities.size());
-    for (auto const& [direction, is_direction_valid] : node.movement_possibilities)
+    std::vector<Direction> possible_directions;
+    possible_directions.reserve(node.possible_directions.size());
+    for (auto const& [direction, is_direction_valid] : node.possible_directions)
     {
         if (is_direction_valid && direction != opposite(current_direction))
             possible_directions.push_back(direction);
@@ -96,7 +96,7 @@ auto Enemy::rescale_pixmaps(SpriteMap<Key> sprite_map) -> SpriteMap<Key> {
 void Enemy::allow_to_move()
 {
     initial_delay_timer.stop();
-    current_direction = std::rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
+    current_direction = std::rand() % 2 ? Direction::RIGHT : Direction::LEFT;
     movement_animation_timer.start(MovementTime);
 }
 

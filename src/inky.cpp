@@ -10,7 +10,7 @@ Inky::Inky(Player const& player, std::vector<Node> const& nodes, Blinky const& b
     : Enemy(player, nodes, get_regular_sprites(), DelayToLeaveHideout),
       blinky(blinky) {}
 
-auto Inky::make_turn_decision(std::vector<MovementDirection> const& possible_movements) const -> MovementDirection
+auto Inky::make_turn_decision(std::vector<Direction> const& possible_directions) const -> Direction
 {
     if (!is_frightened())
     {
@@ -24,16 +24,16 @@ auto Inky::make_turn_decision(std::vector<MovementDirection> const& possible_mov
                     target_position_y = blinky_pos.y() + (blinky_pos.y() < future_player_pos.y() ? euclidean_vector.second : -euclidean_vector.second);
         QPointF const target_position(target_position_x, target_position_y);
 
-        DistanceCalculator const distance_calculator(possible_movements, pos(), target_position);
+        DistanceCalculator const distance_calculator(possible_directions, pos(), target_position);
         return distance_calculator.calculate_shortest_direction();
     }
-    return DistanceCalculator(possible_movements, pos(), player.pos()).calculate_longest_direction();
+    return DistanceCalculator(possible_directions, pos(), player.pos()).calculate_longest_direction();
 }
 
-auto Inky::get_regular_sprites() -> SpriteMap<MovementDirection>
+auto Inky::get_regular_sprites() -> SpriteMap<Direction>
 {
-    return {{MovementDirection::LEFT, {QPixmap(":/sprites/sprites/cghostL1.png"), QPixmap(":/sprites/sprites/cghostL2.png")}},
-            {MovementDirection::RIGHT, {QPixmap(":/sprites/sprites/cghost1.png"), QPixmap(":/sprites/sprites/cghost2.png")}},
-            {MovementDirection::UP, {QPixmap(":/sprites/sprites/cghostU1.png"), QPixmap(":/sprites/sprites/cghostU2.png")}},
-            {MovementDirection::DOWN, {QPixmap(":/sprites/sprites/cghostD1.png"), QPixmap(":/sprites/sprites/cghostD2.png")}}};
+    return {{Direction::LEFT, {QPixmap(":/sprites/sprites/cghostL1.png"), QPixmap(":/sprites/sprites/cghostL2.png")}},
+            {Direction::RIGHT, {QPixmap(":/sprites/sprites/cghost1.png"), QPixmap(":/sprites/sprites/cghost2.png")}},
+            {Direction::UP, {QPixmap(":/sprites/sprites/cghostU1.png"), QPixmap(":/sprites/sprites/cghostU2.png")}},
+            {Direction::DOWN, {QPixmap(":/sprites/sprites/cghostD1.png"), QPixmap(":/sprites/sprites/cghostD2.png")}}};
 }

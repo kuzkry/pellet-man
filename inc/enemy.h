@@ -14,7 +14,7 @@ class Enemy : public QObject, public Character
 {
     Q_OBJECT
 public:
-    Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<MovementDirection> regular_sprites, std::chrono::milliseconds delay_to_leave_hideout);
+    Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<Direction> regular_sprites, std::chrono::milliseconds delay_to_leave_hideout);
 
     void deinit() override;
     void init() override;
@@ -28,7 +28,7 @@ signals:
 protected:
     enum class FrightState {INITIAL_BLUE, TRANSFORMING_WHITE};
 
-    virtual auto make_turn_decision(std::vector<MovementDirection> const& possibleMovements) const -> MovementDirection = 0;
+    virtual auto make_turn_decision(std::vector<Direction> const& possible_directions) const -> Direction = 0;
 
     Player const& player;
 
@@ -43,8 +43,8 @@ private:
     static constexpr std::chrono::milliseconds RunawayTime{8000};
 
     static auto get_frightened_sprites() -> SpriteMap<FrightState>;
-    auto direction() const -> MovementDirection;
-    auto direction(Node const& node) const -> MovementDirection;
+    auto direction() const -> Direction;
+    auto direction(Node const& node) const -> Direction;
     auto next_fright_state() const noexcept -> FrightState;
     template <typename Key>
     static auto rescale_pixmaps(SpriteMap<Key> sprite_map) -> SpriteMap<Key>;

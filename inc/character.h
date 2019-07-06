@@ -22,7 +22,7 @@ protected:
     using SpriteMap = std::unordered_map<Key, std::array<QPixmap, SpriteCount>>;
 
 public:
-    Character(std::vector<Node> const& nodes, SpriteMap<MovementDirection> regular_sprites, QPointF initial_position);
+    Character(std::vector<Node> const& nodes, SpriteMap<Direction> regular_sprites, QPointF initial_position);
     ~Character() override = default;
 
     virtual void init() = 0;
@@ -31,17 +31,17 @@ protected:
     virtual void deinit() = 0;
 
     auto find_current_node() const -> std::vector<Node>::const_iterator;
-    void set_initial_pixmap(MovementDirection direction);
+    void set_initial_pixmap(Direction direction);
     void set_initial_position();
     void set_next_position();
     template <typename Key>
     void set_sprite(SpriteMap<Key> const& sprite_map, Key key);
 
     QTimer movement_animation_timer, sprite_animation_timer, initial_delay_timer;
-    SpriteMap<MovementDirection> const regular_sprites;
+    SpriteMap<Direction> const regular_sprites;
     QPointF const initial_position;
     std::vector<Node> const& nodes;
-    MovementDirection current_direction;
+    Direction current_direction;
 
 protected slots:
     virtual void allow_to_move() = 0;

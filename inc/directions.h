@@ -1,17 +1,17 @@
 #ifndef DIRECTIONS_H
 #define DIRECTIONS_H
 
-enum class MovementDirection {UP, DOWN, RIGHT, LEFT};
+enum class Direction {UP, DOWN, RIGHT, LEFT};
 
-constexpr MovementDirection opposite(MovementDirection const direction) noexcept {
+constexpr Direction opposite(Direction const direction) noexcept {
     switch (direction)
     {
-    case MovementDirection::UP: return MovementDirection::DOWN;
-    case MovementDirection::DOWN: return MovementDirection::UP;
-    case MovementDirection::RIGHT: return MovementDirection::LEFT;
-    case MovementDirection::LEFT: return MovementDirection::RIGHT;
+    case Direction::UP: return Direction::DOWN;
+    case Direction::DOWN: return Direction::UP;
+    case Direction::RIGHT: return Direction::LEFT;
+    case Direction::LEFT: return Direction::RIGHT;
     }
-    return MovementDirection::UP;
+    return Direction::UP;
 }
 
 #endif // DIRECTIONS_H
