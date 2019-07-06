@@ -17,6 +17,8 @@
 #include <QTextStream>
 #include <QtGlobal>
 
+#include <cstdlib>
+#include <ctime>
 #include <sstream>
 #include <stdexcept>
 
@@ -172,6 +174,8 @@ void Game::create_player()
 
 void Game::create_ghosts()
 {
+    std::srand(static_cast<unsigned>(std::time(nullptr)));
+
     // creating ghosts
     auto const blinky = new Blinky(*player, nodes);
     auto const pinky = new Pinky(*player, nodes);
