@@ -30,14 +30,14 @@ public:
 protected:
     virtual void deinit() = 0;
 
-    void animate();
-    template <typename Key>
-    void set_sprite(SpriteMap<Key> const& sprite_map, Key key);
     auto find_current_node() const -> std::vector<Node>::const_iterator;
     void set_initial_pixmap(MovementDirection direction);
     void set_initial_position();
+    void set_next_position();
+    template <typename Key>
+    void set_sprite(SpriteMap<Key> const& sprite_map, Key key);
 
-    QTimer movement_timer, animation_timer, initial_delay_timer;
+    QTimer movement_animation_timer, sprite_animation_timer, initial_delay_timer;
     SpriteMap<MovementDirection> const regular_sprites;
     QPointF const initial_position;
     std::vector<Node> const& nodes;
@@ -45,8 +45,8 @@ protected:
 
 protected slots:
     virtual void allow_to_move() = 0;
-    virtual void change_sprite() = 0;
-    virtual void move() = 0;
+    virtual void animate_movement() = 0;
+    virtual void animate_sprites() = 0;
 
 private:
     auto is_in_node(Node const& node) const -> bool;

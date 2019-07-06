@@ -10,7 +10,22 @@ Character::Character(std::vector<Node> const& nodes, SpriteMap<MovementDirection
       initial_position(initial_position),
       nodes(nodes) {}
 
-void Character::animate()
+auto Character::find_current_node() const -> std::vector<Node>::const_iterator
+{
+    return std::find_if(nodes.cbegin(), nodes.cend(), [this](auto& node) { return is_in_node(node); });
+}
+
+void Character::set_initial_pixmap(MovementDirection const direction)
+{
+    setPixmap(regular_sprites.find(direction)->second[0]);
+}
+
+void Character::set_initial_position()
+{
+    setPos(initial_position);
+}
+
+void Character::set_next_position()
 {
     switch (current_direction)
     {
@@ -29,21 +44,6 @@ void Character::animate()
     }
 
     teleport_on_map_edge();
-}
-
-auto Character::find_current_node() const -> std::vector<Node>::const_iterator
-{
-    return std::find_if(nodes.cbegin(), nodes.cend(), [this](auto& node) { return is_in_node(node); });
-}
-
-void Character::set_initial_pixmap(MovementDirection const direction)
-{
-    setPixmap(regular_sprites.find(direction)->second[0]);
-}
-
-void Character::set_initial_position()
-{
-    setPos(initial_position);
 }
 
 auto Character::is_in_node(Node const& node) const -> bool

@@ -43,7 +43,8 @@ private:
     static constexpr std::chrono::milliseconds RunawayTime{8000};
 
     static auto get_frightened_sprites() -> SpriteMap<FrightState>;
-    auto next_direction(Node const& node) const -> MovementDirection;
+    auto direction() const -> MovementDirection;
+    auto direction(Node const& node) const -> MovementDirection;
     auto next_fright_state() const noexcept -> FrightState;
     template <typename Key>
     static auto rescale_pixmaps(SpriteMap<Key> sprite_map) -> SpriteMap<Key>;
@@ -55,8 +56,8 @@ private:
 
 private slots:
     void allow_to_move() override;
-    void change_sprite() override;
-    void move() override;
+    void animate_movement() override;
+    void animate_sprites() override;
 
     void blink();
     void disable_runaway_state();

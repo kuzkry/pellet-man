@@ -56,8 +56,8 @@ private:
 
 private slots:
     void allow_to_move() override;
-    void change_sprite() override;
-    void move() override;
+    void animate_movement() override;
+    void animate_sprites() override;
 };
 
 inline auto Player::get_current_direction() const noexcept -> MovementDirection

@@ -19,15 +19,15 @@ Player::Player(std::vector<Node> const& nodes,
       enemies(enemies)
 {
     QObject::connect(&initial_delay_timer, SIGNAL(timeout()), this, SLOT(allow_to_move()));
-    QObject::connect(&movement_timer, SIGNAL(timeout()), this, SLOT(move()));
-    QObject::connect(&animation_timer, SIGNAL(timeout()), this, SLOT(change_sprite()));
+    QObject::connect(&movement_animation_timer, SIGNAL(timeout()), this, SLOT(animate_movement()));
+    QObject::connect(&sprite_animation_timer, SIGNAL(timeout()), this, SLOT(animate_sprites()));
 }
 
 void Player::deinit()
 {
     initial_delay_timer.stop();
-    animation_timer.stop();
-    movement_timer.stop();
+    sprite_animation_timer.stop();
+    movement_animation_timer.stop();
 }
 
 void Player::init()
@@ -38,7 +38,7 @@ void Player::init()
     set_initial_position();
     moving = false;
     initial_delay_timer.start(InitialDelay);
-    animation_timer.start(AnimationTime);
+    sprite_animation_timer.start(AnimationTime);
 }
 
 void Player::keyPressEvent(QKeyEvent* event)
@@ -131,11 +131,11 @@ void Player::try_to_set_opposite_movement() noexcept
 void Player::allow_to_move()
 {
     initial_delay_timer.stop();
-    movement_timer.start(MovementTime);
+    movement_animation_timer.start(MovementTime);
     moving = true;
 }
 
-void Player::move()
+void Player::animate_movement()
 {
     auto const it = find_current_node();
     if (it != nodes.cend())
@@ -144,12 +144,12 @@ void Player::move()
         try_to_set_opposite_movement();
 
     if (moving)
-        animate();
+        set_next_position();
 
     check_collisions();
 }
 
-void Player::change_sprite()
+void Player::animate_sprites()
 {
     set_sprite(regular_sprites, current_direction);
 }

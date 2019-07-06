@@ -9,20 +9,20 @@ Enemy::Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<Mov
       frightened_sprites(rescale_pixmaps(get_frightened_sprites())),
       delay_to_leave_hideout(delay_to_leave_hideout)
 {
-    QObject::connect(&movement_timer, SIGNAL(timeout()), this, SLOT(move()));
+    QObject::connect(&movement_animation_timer, SIGNAL(timeout()), this, SLOT(animate_movement()));
     QObject::connect(&frightened_mode_timer, SIGNAL(timeout()), this, SLOT(disable_runaway_state()));
     QObject::connect(&blinking_mode_timer, SIGNAL(timeout()), this, SLOT(blink()));
     QObject::connect(&initial_delay_timer, SIGNAL(timeout()), this, SLOT(release_from_hideout()));
-    QObject::connect(&animation_timer, SIGNAL(timeout()), this, SLOT(change_sprite()));
+    QObject::connect(&sprite_animation_timer, SIGNAL(timeout()), this, SLOT(animate_sprites()));
 }
 
 void Enemy::deinit()
 {
     initial_delay_timer.stop();
-    movement_timer.stop();
+    movement_animation_timer.stop();
     frightened_mode_timer.stop();
     blinking_mode_timer.stop();
-    animation_timer.stop();
+    sprite_animation_timer.stop();
 }
 
 void Enemy::init()
@@ -33,7 +33,7 @@ void Enemy::init()
     set_initial_pixmap(current_direction);
     set_initial_position();
     initial_delay_timer.start(delay_to_leave_hideout);
-    animation_timer.start(AnimationTime);
+    sprite_animation_timer.start(AnimationTime);
 }
 
 void Enemy::enable_runaway_state()
@@ -54,7 +54,13 @@ auto Enemy::get_frightened_sprites() -> SpriteMap<FrightState>
             {FrightState::TRANSFORMING_WHITE, {QPixmap(":/sprites/sprites/leavethisplace1.png"), QPixmap(":/sprites/sprites/leavethisplace1.png")}}};
 }
 
-auto Enemy::next_direction(Node const& node) const -> MovementDirection
+auto Enemy::direction() const -> MovementDirection
+{
+    auto const it = find_current_node();
+    return it != nodes.cend() ? direction(*it) : current_direction;
+}
+
+auto Enemy::direction(Node const& node) const -> MovementDirection
 {
     std::vector<MovementDirection> possible_directions;
     possible_directions.reserve(node.movement_possibilities.size());
@@ -91,24 +97,21 @@ void Enemy::allow_to_move()
 {
     initial_delay_timer.stop();
     current_direction = std::rand() % 2 ? MovementDirection::RIGHT : MovementDirection::LEFT;
-    movement_timer.start(MovementTime);
+    movement_animation_timer.start(MovementTime);
 }
 
-void Enemy::change_sprite()
+void Enemy::animate_movement()
+{
+    current_direction = direction();
+    set_next_position();
+}
+
+void Enemy::animate_sprites()
 {
     if (!is_frightened())
         set_sprite(regular_sprites, current_direction);
     else
         set_sprite(frightened_sprites, fright_state);
-}
-
-void Enemy::move()
-{
-    auto const it = find_current_node();
-    if (it != nodes.cend())
-        current_direction = next_direction(*it);
-
-    animate();
 }
 
 void Enemy::blink()
@@ -130,5 +133,5 @@ void Enemy::release_from_hideout()
     if (pos() == InitialChasePoint)
         allow_to_move();
     else
-        animate();
+        set_next_position();
 }
