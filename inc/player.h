@@ -6,6 +6,7 @@
 #include <QObject>
 
 #include <chrono>
+#include <optional>
 
 class Enemy;
 class QKeyEvent;
@@ -41,18 +42,16 @@ private:
     void keyPressEvent(QKeyEvent* event) override;
 
     void check_collisions();
+    auto direction() const -> std::optional<Direction>;
     auto is_any_of_enemies_frightened() const -> bool;
     auto get_sprites() -> SpriteMap<Direction>;
-    void set_direction(Direction new_direction) noexcept;
-    void set_direction_at_node(Node const& node);
-    void stop() noexcept;
-    void try_to_set_opposite_direction() noexcept;
+    auto try_direction_at_node(Node const& node) const -> std::optional<Direction>;
+    auto try_opposite_direction() const -> std::optional<Direction>;
 
     std::vector<RegularPellet*> const& regular_pellets;
     std::vector<SuperPellet*> const& super_pellets;
     std::vector<Enemy*> const& enemies;
     Direction pending_direction;
-    bool moving;
 
 private slots:
     void allow_to_move() override;

@@ -36,7 +36,6 @@ void Player::init()
     deinit();
     set_initial_pixmap(current_direction);
     set_initial_position();
-    moving = false;
     initial_delay_timer.start(InitialDelay);
     sprite_animation_timer.start(AnimationTime);
 }
@@ -85,6 +84,17 @@ void Player::check_collisions()
     }
 }
 
+auto Player::direction() const -> std::optional<Direction>
+{
+    if (auto const opposite_direction = try_opposite_direction(); opposite_direction.has_value())
+        return opposite_direction;
+
+    if (auto const it = find_current_node(); it != nodes.cend())
+        return try_direction_at_node(*it);
+
+    return current_direction;
+}
+
 auto Player::get_sprites() -> SpriteMap<Direction>
 {
     return {{Direction::LEFT, {QPixmap(":/sprites/sprites/pacopenleft.png"), QPixmap(":/sprites/sprites/pacmidleft.png")}},
@@ -93,13 +103,7 @@ auto Player::get_sprites() -> SpriteMap<Direction>
             {Direction::DOWN, {QPixmap(":/sprites/sprites/pacopendown.png"), QPixmap(":/sprites/sprites/pacmiddown.png")}}};
 }
 
-void Player::set_direction(Direction const new_direction) noexcept
-{
-    current_direction = new_direction;
-    moving = true;
-}
-
-void Player::set_direction_at_node(Node const& node)
+auto Player::try_direction_at_node(Node const& node) const -> std::optional<Direction>
 {
     std::vector<Direction> possible_directions;
     possible_directions.reserve(node.possible_directions.size());
@@ -110,41 +114,33 @@ void Player::set_direction_at_node(Node const& node)
     }
 
     if (std::find(possible_directions.cbegin(), possible_directions.cend(), pending_direction) != possible_directions.cend()) // check if a pending move can be performed
-        set_direction(pending_direction);
+        return pending_direction;
     else if (std::find(possible_directions.cbegin(), possible_directions.cend(), current_direction) != possible_directions.cend()) // check if Pac-Man can continue going in his current direction
-        set_direction(current_direction);
+        return current_direction;
     else // otherwise Pac-Man hits a wall
-        stop();
+        return std::nullopt;
 }
 
-void Player::stop() noexcept
+auto Player::try_opposite_direction() const -> std::optional<Direction>
 {
-    moving = false;
-}
-
-void Player::try_to_set_opposite_direction() noexcept
-{
-    if (pending_direction == opposite(current_direction))
-        set_direction(pending_direction);
+    return pending_direction == opposite(current_direction) ? std::optional<Direction>(pending_direction) : std::nullopt;
 }
 
 void Player::allow_to_move()
 {
     initial_delay_timer.stop();
     movement_animation_timer.start(MovementTime);
-    moving = true;
 }
 
 void Player::animate_movement()
 {
-    auto const it = find_current_node();
-    if (it != nodes.cend())
-        set_direction_at_node(*it);
-    else
-        try_to_set_opposite_direction();
+    auto const next_direction = direction();
 
-    if (moving)
+    if (next_direction.has_value())
+    {
+        current_direction = *next_direction;
         set_next_position();
+    }
 
     check_collisions();
 }
