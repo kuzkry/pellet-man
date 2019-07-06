@@ -61,7 +61,7 @@ void Game::init_scene()
     QImage const background(":/sprites/sprites/map.jpg");
     if (background.size() != GameWindow)
     {
-        std::ostringstream error_msg("size of provided background different than ");
+        std::ostringstream error_msg("size of provided background different than ", std::ios_base::ate);
         error_msg << background.width() << 'x' << background.height();
         throw std::runtime_error(error_msg.str());
     }
