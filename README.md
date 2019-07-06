@@ -1,6 +1,7 @@
 # Pellet-man
 
-A Pac-Man clone written in C++ and Qt during the 3rd year of studies at Lodz University of Technology.
+A Pac-Man clone written in C++ and Qt during the 3rd year of studies at Lodz University of Technology.  
+Project has been refactored after a couple of years (still lacks tests though).
 
 ### Getting Started
 
