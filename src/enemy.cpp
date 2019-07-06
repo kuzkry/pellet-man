@@ -39,9 +39,13 @@ void Enemy::init()
 void Enemy::enable_runaway_state()
 {
     fright_state = FrightState::INITIAL_BLUE;
-    frightened = true;
     frightened_mode_timer.start(RunawayTime);
     blinking_mode_timer.start(RunawayTime - BlinkingInterval);
+}
+
+auto Enemy::is_frightened() const -> bool
+{
+    return frightened_mode_timer.isActive();
 }
 
 auto Enemy::get_frightened_sprites() -> SpriteMap<FrightState>
@@ -117,7 +121,6 @@ void Enemy::disable_runaway_state()
 {
     frightened_mode_timer.stop();
     blinking_mode_timer.stop();
-    frightened = false;
     emit entered_chase_mode();
 }
 

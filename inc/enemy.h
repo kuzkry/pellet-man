@@ -20,7 +20,7 @@ public:
     void init() override;
 
     void enable_runaway_state();
-    auto is_frightened() const noexcept -> bool;
+    auto is_frightened() const -> bool;
 
 signals:
     void entered_chase_mode();
@@ -52,7 +52,6 @@ private:
     SpriteMap<FrightState> const frightened_sprites;
     std::chrono::milliseconds const delay_to_leave_hideout;
     FrightState fright_state;
-    bool frightened;
 
 private slots:
     void allow_to_move() override;
@@ -63,10 +62,5 @@ private slots:
     void disable_runaway_state();
     void release_from_hideout();
 };
-
-inline auto Enemy::is_frightened() const noexcept -> bool
-{
-    return frightened;
-}
 
 #endif // ENEMY_H
