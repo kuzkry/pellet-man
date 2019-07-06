@@ -1,7 +1,7 @@
 #include "pellet.h"
 
-Pellet::Pellet(int x, int y)
+Pellet::Pellet(QPointF const pos, QPixmap const pixmap)
 {
-    setX(x); setY(y);
-    setPixmap(QPixmap(":/sprites/sprites/pellet.png").scaled(15,15));
+    setPos(pos);
+    setPixmap(pixmap);
 }

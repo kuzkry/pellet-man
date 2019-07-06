@@ -5,28 +5,15 @@
 
 class Pinky : public Enemy
 {
-    Q_OBJECT
 public:
-    Pinky(const Player &player, const std::vector<Node*> &nodes);
-private:
-    MovementDirection makeTurnDecision(std::map<MovementDirection, bool> &possibleMovements, bool frightened);
-    void startInitialDelayTimer()
-    {
-        initialDelayTimer->start(initialDelay);
-    }
-    void setInitialPixmap()
-    {
-        setPixmap(QPixmap(":/sprites/sprites/pghostU1.png").scaled(26, 26));
-    }
+    Pinky(Player const& player, std::vector<Node> const& nodes);
 
-    unsigned short int initialDelay;
-private slots:
-    void allowToMove();
-    void blink();
-    void change();
-    void disableRunawayState();
-    void move();
-    void releaseFromGhostHouse();
+private:
+    auto make_turn_decision(std::vector<Direction> const& possible_directions) const -> Direction override;
+
+    static auto get_regular_sprites() -> SpriteMap<Direction>;
+
+    static constexpr std::chrono::milliseconds DelayToLeaveHideout{2100};
 };
 
 #endif // PINKY_H

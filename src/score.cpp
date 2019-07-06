@@ -1,37 +1,85 @@
 #include "score.h"
+
+#include "enemy.h"
+#include "gameconstants.h"
+
 #include <QFont>
 
-Score::Score() : multiplier(0), score(0)
+#include <algorithm>
+#include <cstddef>
+#include <limits>
+
+namespace {
+
+// needs to provide a constexpr function (std::pow is not constexpr for the time being)
+constexpr auto pow(unsigned const base, unsigned const exp) noexcept -> unsigned
 {
-    // draw the text
-    setPlainText(QString("Score: ") + QString::number(score)); // Score: 0
+    return exp != 0 ? base * pow(base, exp - 1) : 1;
+}
+
+constexpr auto calculate_bonus_points(unsigned const multiplier) noexcept -> unsigned
+{
+    return 200 * pow(2, multiplier - 1);
+}
+
+constexpr auto calculate_max_points_during_single_pellet_time() noexcept -> std::uintmax_t
+{
+    std::uintmax_t max = 0;
+    for (unsigned multiplier = 1; multiplier <= EnemyCount; ++multiplier)
+        max += calculate_bonus_points(multiplier);
+    return max;
+}
+
+constexpr auto calculate_max_points_for_max_survivability_of_multiplier() noexcept -> std::uintmax_t
+{
+    std::uintmax_t max = 0;
+    for (unsigned multiplier = 1; multiplier <= (SuperPelletCount - 1) * (EnemyCount - 1) + EnemyCount; ++multiplier)
+        max += calculate_bonus_points(multiplier);
+    return max;
+}
+
+constexpr auto calculate_max_earnable_bonus() noexcept -> std::uintmax_t
+{
+    return std::max(SuperPelletCount * calculate_max_points_during_single_pellet_time(), calculate_max_points_for_max_survivability_of_multiplier());
+}
+
+} // namespace
+
+Score::Score(std::vector<Enemy*> const& enemies) : enemies(enemies)
+{
+    constexpr std::uintmax_t max_earnable_bonus = calculate_max_earnable_bonus();
+    constexpr std::uintmax_t max_earnable_score = max_earnable_bonus + RegularPelletCount * RegularPelletScore + SuperPelletCount * SuperPelletCount;
+    static_assert(std::numeric_limits<decltype(score)>::max() >= max_earnable_score, "given score parameters may cause overflow of the score variable");
+
     setDefaultTextColor(Qt::white);
-    setFont(QFont("times",12));
+    setFont(QFont("times", 12));
+    set_score();
 }
 
-void Score::big_increase()
+void Score::increase(IncrementCause const cause)
 {
-    score += 50;
-    setPlainText(QString("Score: ") + QString::number(score));
+    switch (cause)
+    {
+    case IncrementCause::REGULAR_PELLET:
+        score += RegularPelletScore;
+        break;
+    case IncrementCause::SUPER_PELLET:
+        score += SuperPelletScore;
+        break;
+    case IncrementCause::ENEMY_EATEN:
+        score += calculate_bonus_points(multiplier++);
+        break;
+    }
+    set_score();
 }
 
-void Score::huge_increase()
+void Score::try_to_reset_multiplier()
 {
-    if (multiplier == 1) score += 200;
-    else if (multiplier == 2) score += 400;
-    else if (multiplier == 3) score += 800;
-    else if (multiplier == 4) score += 1600;
-    setPlainText(QString("Score: ") + QString::number(score));
-    ++multiplier;
+    if (std::none_of(enemies.cbegin(), enemies.cend(), [](Enemy* const enemy) { return enemy->is_frightened(); }))
+        multiplier = 1;
 }
 
-void Score::little_increase()
+void Score::set_score()
 {
-    score += 10;
-    setPlainText(QString("Score: ") + QString::number(score));
-}
-
-void Score::resetMultiplier()
-{
-    multiplier = 1;
+    setPlainText("Score: " + QString::number(score));
 }

@@ -1,6 +1,7 @@
 # Pellet-man
 
-A *Pac-Man* clone written in C++ and Qt during the 3rd year of studies at Lodz University of Technology.
+A *Pac-Man* clone written in C++ and Qt during the 3rd year of studies at Lodz University of Technology.  
+Project has been refactored after a couple of years (still lacks tests though).
 ***
 ### Getting Started
 
@@ -10,7 +11,7 @@ Project can be set up using Qt Creator (load *pellet-man.pro* file) or by invoki
 
 - qmake
 - Qt framework (libraries used: Qt5Widgets Qt5Gui, Qt5Core) [tested on 5.12 version]
-- C++11 compiler
+- C++17 compiler
 
 ### Controls
 Arrow keys  

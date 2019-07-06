@@ -1,13 +1,13 @@
-#include <QApplication>
 #include "game.h"
 
-int main(int argc, char *argv[])
+#include <QApplication>
+
+auto main(int argc, char* argv[]) -> int
 {
-    srand(time(NULL));
     QApplication a(argc, argv);
 
-    Game *game = new Game(); // for some reason it cannot be wrapped in any smart pointer
-    game->show();
+    Game game;
+    game.run();
 
     return a.exec();
 }

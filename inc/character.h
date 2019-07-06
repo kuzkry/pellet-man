@@ -1,45 +1,66 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include <QObject>
+#include "directions.h"
+
 #include <QGraphicsPixmapItem>
+#include <QPointF>
 #include <QTimer>
-#include <memory>
+
+#include <array>
+#include <unordered_map>
 #include <vector>
-#include "node.h"
 
-class Character : public QObject, public QGraphicsPixmapItem
+class Node;
+
+class Character : public QGraphicsPixmapItem
 {
-public:
-    Character(const std::vector<Node*> &nodes) : nodes(nodes) {}
-    virtual ~Character() {}
 protected:
-    enum MovementDirection{up,left,down,right};
+    static constexpr unsigned SpriteCount = 2;
 
-    virtual void checkPositionWithRespectToNodes() = 0;
-    virtual void disable() = 0;
+    template <typename Key>
+    using SpriteMap = std::unordered_map<Key, std::array<QPixmap, SpriteCount>>;
+
+public:
+    Character(std::vector<Node> const& nodes, SpriteMap<Direction> regular_sprites, QPointF initial_position);
+    ~Character() override = default;
+
     virtual void init() = 0;
-    bool isInNode(const Node &node)
-    {
-        if(x() == node.x && y() == node.y)
-        {
-            return true;
-        }
-        return false;
-    }
 
-    const std::vector<Node*> &nodes;
-    MovementDirection currentDirection;
-    std::unique_ptr<QTimer> initialDelayTimer;
-    std::unique_ptr<QTimer> movementTimer;
-    bool moving;
-    // positions are already inherited (use x() or y())
+protected:
+    virtual void deinit() = 0;
+
+    auto find_current_node() const -> std::vector<Node>::const_iterator;
+    void set_initial_pixmap(Direction direction);
+    void set_initial_position();
+    void set_next_position();
+    template <typename Key>
+    void set_sprite(SpriteMap<Key> const& sprite_map, Key key);
+
+    QTimer movement_animation_timer, sprite_animation_timer, initial_delay_timer;
+    SpriteMap<Direction> const regular_sprites;
+    QPointF const initial_position;
+    std::vector<Node> const& nodes;
+    Direction current_direction;
+
 protected slots:
-    virtual void allowToMove() = 0;
-    virtual void move() = 0;
+    virtual void allow_to_move() = 0;
+    virtual void animate_movement() = 0;
+    virtual void animate_sprites() = 0;
+
+private:
+    auto is_in_node(Node const& node) const -> bool;
+    auto next_sprite_index() const noexcept -> unsigned;
+    void teleport_on_map_edge();
+
+    unsigned sprite_index = 0;
 };
 
-/* anyway these virtual functions are going to be early bind and virtuality will not work on them
-thus I put them in protected section */
+template <typename Key>
+inline void Character::set_sprite(SpriteMap<Key> const& sprite_map, Key const key)
+{
+    setPixmap(sprite_map.find(key)->second[sprite_index]);
+    sprite_index = next_sprite_index();
+}
 
 #endif // CHARACTER_H

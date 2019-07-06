@@ -1,19 +1,20 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include <QGraphicsRectItem>
+#include "directions.h"
 
-struct Node : public QGraphicsRectItem
+#include <QPointF>
+
+#include <unordered_map>
+
+class Node : public QPointF
 {
-    Node(int x, int y,
-         bool possibleUpward, bool possibleLeftward,
-         bool possibleDownward, bool possibleRightward)
-        :
-        x(x), y(y),
-        possibleUpward(possibleUpward), possibleLeftward(possibleLeftward),
-        possibleDownward(possibleDownward), possibleRightward(possibleRightward) {} //inline
-    int x,y;
-    bool possibleUpward, possibleLeftward, possibleDownward, possibleRightward;
+public:
+    Node(QPointF point,
+         bool possible_upward, bool possible_leftward,
+         bool possible_downward, bool possible_rightward);
+
+    std::unordered_map<Direction, bool> const possible_directions;
 };
 
 #endif // NODE_H

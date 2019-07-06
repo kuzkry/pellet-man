@@ -1,73 +1,67 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include <map>
 #include "character.h"
-#include "player.h"
+
+#include <QObject>
+#include <QSize>
+
+#include <chrono>
 
 class Player;
 
-class Enemy : public Character
+class Enemy : public QObject, public Character
 {
+    Q_OBJECT
 public:
-    Enemy(const Player &player, const std::vector<Node*> &nodes) : Character(nodes), player(player),
-        movementTime(10), singleBlinkTime(20 * movementTime), blinkingInterval(2000), runAwayTime(8000) {}
-    void checkPositionWithRespectToNodes();
-    void disable()
-    {
-        initialDelayTimer->stop();
-        movementTimer->stop();
-        frightenedModeTimer->stop();
-        blinkingModeTimer->stop();
-    }
-    void enableRunawayState();
-    void init();
-    bool isFrightened() const
-    {
-        return frightened;
-    }
-    virtual void setInitialPixmap() = 0;
+    Enemy(Player const& player, std::vector<Node> const& nodes, SpriteMap<Direction> regular_sprites, std::chrono::milliseconds delay_to_leave_hideout);
+
+    void deinit() override;
+    void init() override;
+
+    void enable_runaway_state();
+    auto is_frightened() const -> bool;
+
+signals:
+    void entered_chase_mode();
+
 protected:
-    struct DistanceAndDirectionBinder
-    {
-        DistanceAndDirectionBinder(double distance, MovementDirection direction)
-            : distance(distance), direction(direction) {}
-        bool operator<(const DistanceAndDirectionBinder &ref) const
-        {
-            if(distance < ref.distance) return true;
-            return false;
-        }
-        bool operator>(const DistanceAndDirectionBinder &ref) const
-        {
-            if(distance > ref.distance) return true;
-            return false;
-        }
-        const float distance;
-        const MovementDirection direction;
-    };
+    enum class FrightState {INITIAL_BLUE, TRANSFORMING_WHITE};
 
-    MovementDirection chooseMostSuitableTurnOption(std::map<MovementDirection, bool> &possibleMovements,
-                                                   const DistanceAndDirectionBinder *binder) const;
-    virtual MovementDirection makeTurnDecision(
-            std::map<MovementDirection, bool> &possibleMovements, bool frightened) = 0;
-    static int sortDistanceAndDirectionBindersInAscendingOrder(const void *p1, const void *p2);
-    static int sortDistanceAndDirectionBindersInDescendingOrder(const void *p1, const void *p2);
+    virtual auto make_turn_decision(std::vector<Direction> const& possible_directions) const -> Direction = 0;
 
-    const Player &player;
-    bool frightened, blinking;
-    std::unique_ptr<QTimer> frightenedModeTimer;
-    std::unique_ptr<QTimer> blinkingModeTimer;
-    unsigned short int movementTime, singleBlinkTime, blinkingInterval, runAwayTime;
+    Player const& player;
+
 private:
-    virtual void startInitialDelayTimer() = 0;
-protected slots:
-    virtual void blink() = 0;
-    virtual void change() = 0;
-    virtual void disableRunawayState() = 0;
-    virtual void releaseFromGhostHouse() = 0;
-};
+    static constexpr QPointF InitialPosition = {210, 210};
+    static constexpr QPointF InitialChasePoint = {210, 168};
+    static constexpr QSize PixmapScaling = {26, 26};
+    static constexpr std::chrono::milliseconds MovementTime{10};
+    static constexpr std::chrono::milliseconds AnimationTime{10};
+    static constexpr std::chrono::milliseconds SingleBlinkTime{20 * MovementTime};
+    static constexpr std::chrono::milliseconds BlinkingInterval{2000};
+    static constexpr std::chrono::milliseconds RunawayTime{8000};
 
-/* anyway these virtual functions are going to be early bind and virtuality will not work on them
-thus I put most of them in protected section */
+    static auto get_frightened_sprites() -> SpriteMap<FrightState>;
+    auto direction() const -> Direction;
+    auto direction(Node const& node) const -> Direction;
+    auto next_fright_state() const noexcept -> FrightState;
+    template <typename Key>
+    static auto rescale_pixmaps(SpriteMap<Key> sprite_map) -> SpriteMap<Key>;
+
+    QTimer blinking_mode_timer, frightened_mode_timer;
+    SpriteMap<FrightState> const frightened_sprites;
+    std::chrono::milliseconds const delay_to_leave_hideout;
+    FrightState fright_state;
+
+private slots:
+    void allow_to_move() override;
+    void animate_movement() override;
+    void animate_sprites() override;
+
+    void blink();
+    void disable_runaway_state();
+    void release_from_hideout();
+};
 
 #endif // ENEMY_H

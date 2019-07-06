@@ -3,17 +3,32 @@
 
 #include <QGraphicsTextItem>
 
+#include <vector>
+
+class Enemy;
+
 class Score: public QGraphicsTextItem
 {
+    Q_OBJECT
 public:
-    Score();
-    void big_increase();
-    void huge_increase();
-    void little_increase();
-    void resetMultiplier();
+    Score(std::vector<Enemy*> const& enemies);
+
+    enum IncrementCause {REGULAR_PELLET, SUPER_PELLET, ENEMY_EATEN};
+
+    void increase(IncrementCause);
+
+public slots:
+    void try_to_reset_multiplier();
+
 private:
-    unsigned short int multiplier;
-    unsigned short int score;
+    static constexpr unsigned RegularPelletScore = 10;
+    static constexpr unsigned SuperPelletScore = 50;
+
+    void set_score();
+
+    std::vector<Enemy*> const& enemies;
+    unsigned score = 0;
+    unsigned multiplier = 1;
 };
 
 #endif // SCORE_H
