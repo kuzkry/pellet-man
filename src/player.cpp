@@ -43,7 +43,6 @@ void Player::init()
 
 void Player::keyPressEvent(QKeyEvent* event)
 {
-    // move the player left and right
     switch (event->key())
     {
     case Qt::Key_Left:
@@ -66,10 +65,9 @@ void Player::keyPressEvent(QKeyEvent* event)
 
 void Player::check_collisions()
 {
-    // get a list of all the items currently colliding with all dots and enemies
+    // get a list of all the items currently colliding with all pellets and enemies
     QList<QGraphicsItem*> const all_items = collidingItems();
 
-    // if one of the colliding items is Pac-Man, destroy that dot
     for (QGraphicsItem* const item : all_items)
     {
         if (auto const pellet = std::find(regular_pellets.cbegin(), regular_pellets.cend(), item); pellet != regular_pellets.cend())

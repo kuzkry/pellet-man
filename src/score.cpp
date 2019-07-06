@@ -9,7 +9,6 @@
 
 Score::Score(std::vector<Enemy*> const& enemies) : enemies(enemies)
 {
-    // draw the text
     setPlainText(QString("Score: ") + QString::number(score)); // Score: 0
     setDefaultTextColor(Qt::white);
     setFont(QFont("times", 12));

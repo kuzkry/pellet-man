@@ -57,7 +57,6 @@ void Game::deinit_characters()
 
 void Game::init_scene()
 {
-    // create the scene
     scene.setSceneRect(0, 0, GameWindow.width(), GameWindow.height());
     QImage const background(":/sprites/sprites/map.jpg");
     if (background.size() != GameWindow)
@@ -71,7 +70,6 @@ void Game::init_scene()
 
 void Game::deploy_nodes()
 {
-    //node values (position x, position y, upward, leftward, downward, rightward)
     QFile file(":/coordinates/coordinates/nodesCoordinates.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         throw std::runtime_error("couldn't load nodes");
@@ -82,7 +80,7 @@ void Game::deploy_nodes()
         QString line = in.readLine();
         if (line.startsWith("//") || line.isEmpty())
             continue;
-        /* so skip a line if it is either a commentary or an empty one */
+
         std::istringstream converting_stream(line.toStdString());
         qreal x, y;
         bool movements[4];
@@ -90,7 +88,7 @@ void Game::deploy_nodes()
         for (unsigned short i = 0; i < 4; ++i)
             converting_stream >> movements[i];
 
-        //then fill the vector and add to the scene
+        // then fill the vector and add to the scene
         nodes.push_back(Node{{x, y}, movements[0], movements[1], movements[2], movements[3]});
     }
 }
@@ -107,12 +105,12 @@ void Game::deploy_regular_pellets()
         QString line = in.readLine();
         if (line.startsWith("//") || line.isEmpty())
             continue;
-        /* so skip a line if it is either a commentary or an empty one */
+
         std::istringstream converting_stream(line.toStdString());
         qreal x, y;
         converting_stream >> x >> y;
 
-        //then fill the vector and add to the scene
+        // then fill the vector and add to the scene
         regular_pellets.push_back(new RegularPellet({x, y}));
         scene.addItem(regular_pellets.back());
     }
@@ -130,12 +128,12 @@ void Game::deploy_super_pellets()
         QString line = in.readLine();
         if (line.startsWith("//") || line.isEmpty())
             continue;
-        /* so skip a line if it is either a commentary or an empty one */
+
         std::istringstream converting_stream(line.toStdString());
         qreal x, y;
         converting_stream >> x >> y;
 
-        //then fill the vector and add to the scene
+        // then fill the vector and add to the scene
         super_pellets.push_back(new SuperPellet({x, y}));
         scene.addItem(super_pellets.back());
     }
@@ -144,10 +142,8 @@ void Game::deploy_super_pellets()
 void Game::create_player()
 {
     player = new Player(nodes, regular_pellets, super_pellets, enemies);
-    // make the player focusable and set it to be the current focus
     player->setFlag(QGraphicsItem::ItemIsFocusable);
-    player->setFocus();
-    // add the player to the scene
+    player->setFocus(); // Player can now receive keyboard input
     scene.addItem(player);
 
     QObject::connect(player, SIGNAL(interrupted()), &view, SLOT(close()));
@@ -162,7 +158,6 @@ void Game::create_ghosts()
 {
     std::srand(static_cast<unsigned>(std::time(nullptr)));
 
-    // creating ghosts
     auto const blinky = new Blinky(*player, nodes);
     auto const pinky = new Pinky(*player, nodes);
     auto const inky = new Inky(*player, nodes, *blinky);
