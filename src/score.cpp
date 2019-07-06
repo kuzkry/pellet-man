@@ -1,10 +1,13 @@
 #include "score.h"
 
+#include "enemy.h"
+
 #include <QFont>
 
+#include <algorithm>
 #include <cmath>
 
-Score::Score() : score(0), multiplier(0)
+Score::Score(std::vector<Enemy*> const& enemies) : enemies(enemies)
 {
     // draw the text
     setPlainText(QString("Score: ") + QString::number(score)); // Score: 0
@@ -30,7 +33,8 @@ void Score::little_increase()
     setPlainText(QString("Score: ") + QString::number(score));
 }
 
-void Score::reset_multiplier()
+void Score::try_to_reset_multiplier()
 {
-    multiplier = 1;
+    if (std::none_of(enemies.cbegin(), enemies.cend(), [](Enemy* const enemy) { return enemy->is_frightened(); }))
+        multiplier = 1;
 }

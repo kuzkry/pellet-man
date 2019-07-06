@@ -27,11 +27,11 @@ void Enemy::deinit()
 
 void Enemy::init()
 {
-    current_direction = MovementDirection::UP;
     deinit();
+    disable_runaway_state();
+    current_direction = MovementDirection::UP;
     set_initial_pixmap(current_direction);
     set_initial_position();
-    frightened = false;
     initial_delay_timer.start(delay_to_leave_hideout);
     animation_timer.start(AnimationTime);
 }
@@ -118,6 +118,7 @@ void Enemy::disable_runaway_state()
     frightened_mode_timer.stop();
     blinking_mode_timer.stop();
     frightened = false;
+    emit entered_chase_mode();
 }
 
 void Enemy::release_from_hideout()

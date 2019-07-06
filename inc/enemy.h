@@ -22,6 +22,9 @@ public:
     void enable_runaway_state();
     auto is_frightened() const noexcept -> bool;
 
+signals:
+    void entered_chase_mode();
+
 protected:
     enum class FrightState {INITIAL_BLUE, TRANSFORMING_WHITE};
 

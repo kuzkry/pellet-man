@@ -3,19 +3,27 @@
 
 #include <QGraphicsTextItem>
 
+#include <vector>
+
+class Enemy;
+
 class Score: public QGraphicsTextItem
 {
+    Q_OBJECT
 public:
-    Score();
+    Score(std::vector<Enemy*> const& enemies);
 
     void big_increase();
     void huge_increase();
     void little_increase();
-    void reset_multiplier();
+
+public slots:
+    void try_to_reset_multiplier();
 
 private:
-    unsigned score;
-    unsigned short multiplier;
+    std::vector<Enemy*> const& enemies;
+    unsigned score = 0;
+    unsigned multiplier = 1;
 };
 
 #endif // SCORE_H

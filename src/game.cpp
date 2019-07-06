@@ -22,16 +22,16 @@
 #include <sstream>
 #include <stdexcept>
 
-Game::Game()
+Game::Game() : score(enemies)
 {
     init_scene();
-    init_score();
-    init_life_counter();
     deploy_nodes();
     deploy_regular_pellets();
     deploy_super_pellets();
     create_player();
     create_ghosts();
+    init_score();
+    init_life_counter();
     init_view();
 }
 
@@ -67,17 +67,6 @@ void Game::init_scene()
         throw std::runtime_error(error_msg.str());
     }
     scene.setBackgroundBrush(QBrush(background));
-}
-
-void Game::init_score()
-{
-    scene.addItem(&score);
-}
-
-void Game::init_life_counter()
-{
-    life_counter.setPos(life_counter.x() + scene.width() - 62, life_counter.y());
-    scene.addItem(&life_counter);
 }
 
 void Game::deploy_nodes()
@@ -181,6 +170,19 @@ void Game::create_ghosts()
     enemies = {blinky, pinky, inky, clyde};
     for (Enemy* const enemy : enemies)
         scene.addItem(enemy);
+}
+
+void Game::init_score()
+{
+    scene.addItem(&score);
+    for (Enemy* const enemy : enemies)
+        QObject::connect(enemy, SIGNAL(entered_chase_mode()), &score, SLOT(try_to_reset_multiplier()));
+}
+
+void Game::init_life_counter()
+{
+    life_counter.setPos(life_counter.x() + scene.width() - 62, life_counter.y());
+    scene.addItem(&life_counter);
 }
 
 void Game::init_view()
