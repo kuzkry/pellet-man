@@ -21,6 +21,8 @@ public slots:
     void try_to_reset_multiplier();
 
 private:
+    void set_score();
+
     std::vector<Enemy*> const& enemies;
     unsigned score = 0;
     unsigned multiplier = 1;
