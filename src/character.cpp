@@ -1,6 +1,6 @@
 #include "character.h"
 
-#include "gamewindow.h"
+#include "gameconstants.h"
 #include "node.h"
 
 #include <utility>

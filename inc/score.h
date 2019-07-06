@@ -21,6 +21,9 @@ public slots:
     void try_to_reset_multiplier();
 
 private:
+    static constexpr unsigned RegularPelletScore = 10;
+    static constexpr unsigned SuperPelletScore = 50;
+
     void set_score();
 
     std::vector<Enemy*> const& enemies;

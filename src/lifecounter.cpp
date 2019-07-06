@@ -5,7 +5,7 @@
 
 LifeCounter::LifeCounter()
 {
-    lives = 3;
+    static_assert(InitialLives != 0, "initial life count mustn't be zero");
 
     setPlainText(QString("Lives: ") + QString::number(lives));
     setDefaultTextColor(Qt::white);

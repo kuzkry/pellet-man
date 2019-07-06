@@ -50,7 +50,7 @@ HEADERS += \
     inc/distancecalculator.h \
     inc/enemy.h \
     inc/game.h \
-    inc/gamewindow.h \
+    inc/gameconstants.h \
     inc/inky.h \
     inc/lifecounter.h \
     inc/node.h \

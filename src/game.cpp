@@ -2,7 +2,7 @@
 
 #include "clyde.h"
 #include "blinky.h"
-#include "gamewindow.h"
+#include "gameconstants.h"
 #include "inky.h"
 #include "pinky.h"
 #include "player.h"
@@ -114,6 +114,15 @@ void Game::deploy_regular_pellets()
         regular_pellets.push_back(new RegularPellet({x, y}));
         scene.addItem(regular_pellets.back());
     }
+
+    if (regular_pellets.size() != RegularPelletCount)
+    {
+        std::ostringstream error_msg("expected number of regular pellets ", std::ios_base::ate);
+        error_msg << '[' << RegularPelletCount << ']'
+                  << " differs from provided "
+                  << '[' << regular_pellets.size() << ']';
+        throw std::runtime_error(error_msg.str());
+    }
 }
 
 void Game::deploy_super_pellets()
@@ -136,6 +145,15 @@ void Game::deploy_super_pellets()
         // then fill the vector and add to the scene
         super_pellets.push_back(new SuperPellet({x, y}));
         scene.addItem(super_pellets.back());
+    }
+
+    if (super_pellets.size() != SuperPelletCount)
+    {
+        std::ostringstream error_msg("expected number of super pellets ", std::ios_base::ate);
+        error_msg << '[' << SuperPelletCount << ']'
+                  << " differs from provided "
+                  << '[' << super_pellets.size() << ']';
+        throw std::runtime_error(error_msg.str());
     }
 }
 
@@ -163,6 +181,16 @@ void Game::create_ghosts()
     auto const inky = new Inky(*player, nodes, *blinky);
     auto const clyde = new Clyde(*player, nodes);
     enemies = {blinky, pinky, inky, clyde};
+
+    if (enemies.size() != EnemyCount)
+    {
+        std::ostringstream error_msg;
+        error_msg << enemies.size()
+                  << " enemies has been created, expected quantity is "
+                  << EnemyCount;
+        throw std::logic_error(error_msg.str());
+    }
+
     for (Enemy* const enemy : enemies)
         scene.addItem(enemy);
 }

@@ -12,7 +12,9 @@ public:
     auto get_lives() const noexcept -> unsigned short;
 
 private:
-    unsigned short lives;
+    static constexpr unsigned short InitialLives = 3;
+
+    unsigned short lives = InitialLives;
 };
 
 inline auto LifeCounter::get_lives() const noexcept -> unsigned short
