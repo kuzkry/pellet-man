@@ -6,9 +6,9 @@
 #include <utility>
 
 Character::Character(std::vector<Node> const& nodes, SpriteMap<MovementDirection> regular_sprites, QPointF const initial_position)
-    : nodes(nodes),
-      regular_sprites(std::move(regular_sprites)),
-      initial_position(initial_position) {}
+    : regular_sprites(std::move(regular_sprites)),
+      initial_position(initial_position),
+      nodes(nodes) {}
 
 void Character::animate()
 {
@@ -51,7 +51,7 @@ auto Character::is_in_node(Node const& node) const -> bool
     return pos() == node;
 }
 
-auto Character::next_sprite_index() const noexcept -> std::size_t
+auto Character::next_sprite_index() const noexcept -> unsigned
 {
     return (sprite_index + 1) % SpriteCount;
 }

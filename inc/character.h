@@ -16,7 +16,7 @@ class Node;
 class Character : public QGraphicsPixmapItem
 {
 protected:
-    static constexpr std::size_t SpriteCount = 2;
+    static constexpr unsigned SpriteCount = 2;
 
     template <typename Key>
     using SpriteMap = std::unordered_map<Key, std::array<QPixmap, SpriteCount>>;
@@ -37,11 +37,11 @@ protected:
     void set_initial_pixmap(MovementDirection direction);
     void set_initial_position();
 
-    std::vector<Node> const& nodes;
-    SpriteMap<MovementDirection> const regular_sprites;
-    MovementDirection current_direction;
     QTimer movement_timer, animation_timer, initial_delay_timer;
+    SpriteMap<MovementDirection> const regular_sprites;
     QPointF const initial_position;
+    std::vector<Node> const& nodes;
+    MovementDirection current_direction;
 
 protected slots:
     virtual void allow_to_move() = 0;
@@ -50,10 +50,10 @@ protected slots:
 
 private:
     auto is_in_node(Node const& node) const -> bool;
-    auto next_sprite_index() const noexcept -> std::size_t;
+    auto next_sprite_index() const noexcept -> unsigned;
     void teleport_on_map_edge();
 
-    std::size_t sprite_index = 0;
+    unsigned sprite_index = 0;
 };
 
 template <typename Key>

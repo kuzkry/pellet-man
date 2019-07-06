@@ -48,10 +48,10 @@ private:
     void stop() noexcept;
     void try_to_set_opposite_movement() noexcept;
 
-    MovementDirection pending_direction;
     std::vector<RegularPellet*> const& regular_pellets;
     std::vector<SuperPellet*> const& super_pellets;
     std::vector<Enemy*> const& enemies;
+    MovementDirection pending_direction;
     bool moving;
 
 private slots:
