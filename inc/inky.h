@@ -14,8 +14,9 @@ private:
 
     static auto get_regular_sprites() -> SpriteMap<MovementDirection>;
 
-    Blinky const& blinky;
     static constexpr std::chrono::milliseconds DelayToLeaveHideout{2600};
+
+    Blinky const& blinky;
 };
 
 #endif // INKY_H
