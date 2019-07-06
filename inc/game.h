@@ -5,11 +5,13 @@
 #include "node.h"
 #include "score.h"
 
+#include <QFile>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QObject>
 
 #include <chrono>
+#include <iterator>
 #include <vector>
 
 class Enemy;
@@ -34,6 +36,8 @@ private:
     void deploy_nodes();
     void deploy_regular_pellets();
     void deploy_super_pellets();
+    template <typename T>
+    void deploy_pellets(QFile& file, std::back_insert_iterator<T> it);
     void create_player();
     void create_ghosts();
     void init_score();

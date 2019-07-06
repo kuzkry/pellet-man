@@ -11,7 +11,6 @@
 
 #include <QBrush>
 #include <QImage>
-#include <QFile>
 #include <QFont>
 #include <QGraphicsTextItem>
 #include <QTextStream>
@@ -21,6 +20,7 @@
 #include <ctime>
 #include <sstream>
 #include <stdexcept>
+#include <type_traits>
 
 Game::Game() : score(enemies)
 {
@@ -99,21 +99,7 @@ void Game::deploy_regular_pellets()
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         throw std::runtime_error("couldn't load regular pellets");
 
-    QTextStream in(&file);
-    while (!in.atEnd())
-    {
-        QString line = in.readLine();
-        if (line.startsWith("//") || line.isEmpty())
-            continue;
-
-        std::istringstream converting_stream(line.toStdString());
-        qreal x, y;
-        converting_stream >> x >> y;
-
-        // then fill the vector and add to the scene
-        regular_pellets.push_back(new RegularPellet({x, y}));
-        scene.addItem(regular_pellets.back());
-    }
+    deploy_pellets(file, std::back_inserter(regular_pellets));
 
     if (regular_pellets.size() != RegularPelletCount)
     {
@@ -131,21 +117,7 @@ void Game::deploy_super_pellets()
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         throw std::runtime_error("couldn't load super pellets");
 
-    QTextStream in(&file);
-    while (!in.atEnd())
-    {
-        QString line = in.readLine();
-        if (line.startsWith("//") || line.isEmpty())
-            continue;
-
-        std::istringstream converting_stream(line.toStdString());
-        qreal x, y;
-        converting_stream >> x >> y;
-
-        // then fill the vector and add to the scene
-        super_pellets.push_back(new SuperPellet({x, y}));
-        scene.addItem(super_pellets.back());
-    }
+    deploy_pellets(file, std::back_inserter(super_pellets));
 
     if (super_pellets.size() != SuperPelletCount)
     {
@@ -154,6 +126,28 @@ void Game::deploy_super_pellets()
                   << " differs from provided "
                   << '[' << super_pellets.size() << ']';
         throw std::runtime_error(error_msg.str());
+    }
+}
+
+template <typename T>
+void Game::deploy_pellets(QFile& file, std::back_insert_iterator<T> it)
+{
+    QTextStream in(&file);
+    while (!in.atEnd())
+    {
+        QString const line = in.readLine();
+        if (line.startsWith("//") || line.isEmpty())
+            continue;
+
+        std::istringstream converting_stream(line.toStdString());
+        qreal x, y;
+        converting_stream >> x >> y;
+
+        // then fill the vector and add to the scene
+        using pellet_type = std::remove_pointer_t<typename decltype(it)::container_type::value_type>;
+        pellet_type* const pellet = new pellet_type({x, y});
+        it = pellet;
+        scene.addItem(pellet);
     }
 }
 
