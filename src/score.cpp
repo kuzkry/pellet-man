@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-Score::Score() : multiplier(0), score(0)
+Score::Score() : score(0), multiplier(0)
 {
     // draw the text
     setPlainText(QString("Score: ") + QString::number(score)); // Score: 0
