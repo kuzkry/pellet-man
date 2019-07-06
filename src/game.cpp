@@ -104,7 +104,6 @@ void Game::deploy_nodes()
         //then fill the vector and add to the scene
         nodes.push_back(Node{{x, y}, movements[0], movements[1], movements[2], movements[3]});
     }
-    file.close();
 }
 
 void Game::deploy_regular_pellets()
@@ -128,7 +127,6 @@ void Game::deploy_regular_pellets()
         regular_pellets.push_back(new RegularPellet({x, y}));
         scene.addItem(regular_pellets.back());
     }
-    file.close();
 }
 
 void Game::deploy_super_pellets()
@@ -152,7 +150,6 @@ void Game::deploy_super_pellets()
         super_pellets.push_back(new SuperPellet({x, y}));
         scene.addItem(super_pellets.back());
     }
-    file.close();
 }
 
 void Game::create_player()
