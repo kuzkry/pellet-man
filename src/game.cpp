@@ -240,7 +240,7 @@ void Game::end_game_if_all_pellets_have_been_eaten()
 
 void Game::handle_eating_regular_pellet(RegularPellet* const pellet)
 {
-    score.little_increase();
+    score.increase(Score::IncrementCause::REGULAR_PELLET);
 
     auto const it = std::find(regular_pellets.cbegin(), regular_pellets.cend(), pellet);
     if (it == regular_pellets.cend())
@@ -253,7 +253,7 @@ void Game::handle_eating_regular_pellet(RegularPellet* const pellet)
 
 void Game::handle_eating_super_pellet(SuperPellet* const pellet)
 {
-    score.big_increase();
+    score.increase(Score::IncrementCause::SUPER_PELLET);
 
     auto const it = std::find(super_pellets.cbegin(), super_pellets.cend(), pellet);
     if (it == super_pellets.cend())
@@ -271,7 +271,7 @@ void Game::handle_enemy_hit(Enemy* const enemy)
 {
     if (enemy->is_frightened())
     {
-        score.huge_increase();
+        score.increase(Score::IncrementCause::ENEMY_EATEN);
         enemy->init();
     }
     else

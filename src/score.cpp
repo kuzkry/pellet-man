@@ -56,21 +56,20 @@ Score::Score(std::vector<Enemy*> const& enemies) : enemies(enemies)
     set_score();
 }
 
-void Score::big_increase()
+void Score::increase(IncrementCause const cause)
 {
-    score += SuperPelletScore;
-    set_score();
-}
-
-void Score::huge_increase()
-{
-    score += calculate_bonus_points(multiplier++);
-    set_score();
-}
-
-void Score::little_increase()
-{
-    score += RegularPelletScore;
+    switch (cause)
+    {
+    case IncrementCause::REGULAR_PELLET:
+        score += RegularPelletScore;
+        break;
+    case IncrementCause::SUPER_PELLET:
+        score += SuperPelletScore;
+        break;
+    case IncrementCause::ENEMY_EATEN:
+        score += calculate_bonus_points(multiplier++);
+        break;
+    }
     set_score();
 }
 

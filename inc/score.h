@@ -13,9 +13,9 @@ class Score: public QGraphicsTextItem
 public:
     Score(std::vector<Enemy*> const& enemies);
 
-    void big_increase();
-    void huge_increase();
-    void little_increase();
+    enum IncrementCause {REGULAR_PELLET, SUPER_PELLET, ENEMY_EATEN};
+
+    void increase(IncrementCause);
 
 public slots:
     void try_to_reset_multiplier();
