@@ -3,6 +3,8 @@
 
 #include "character.h"
 
+#include <QObject>
+
 #include <chrono>
 
 class Enemy;
@@ -10,7 +12,7 @@ class QKeyEvent;
 class RegularPellet;
 class SuperPellet;
 
-class Player : public Character
+class Player : public QObject, public Character
 {
     Q_OBJECT
 public:

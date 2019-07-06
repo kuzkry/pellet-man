@@ -3,13 +3,14 @@
 
 #include "character.h"
 
+#include <QObject>
 #include <QSize>
 
 #include <chrono>
 
 class Player;
 
-class Enemy : public Character
+class Enemy : public QObject, public Character
 {
     Q_OBJECT
 public:

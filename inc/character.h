@@ -4,7 +4,6 @@
 #include "directions.h"
 
 #include <QGraphicsPixmapItem>
-#include <QObject>
 #include <QPointF>
 #include <QTimer>
 
@@ -14,7 +13,7 @@
 
 class Node;
 
-class Character : public QObject, public QGraphicsPixmapItem
+class Character : public QGraphicsPixmapItem
 {
 protected:
     static constexpr std::size_t SpriteCount = 2;
